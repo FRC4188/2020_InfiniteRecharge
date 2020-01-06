@@ -84,7 +84,7 @@ public class RobotContainer {
      * Returns instance of RobotContainer.
      */
     public static RobotContainer getInstance() {
-        if(inst == null) inst = new RobotContainer();
+        if (inst == null) inst = new RobotContainer();
         return inst;
     }
 
@@ -109,7 +109,7 @@ public class RobotContainer {
      * Returns y axis of Joystick on pilot controller.
      */
     public double getPilotY(Hand hand) {
-        if(Math.abs(pilot.getY(hand)) < Controller.DEADBAND) return 0;
+        if (Math.abs(pilot.getY(hand)) < Controller.DEADBAND) return 0;
         else return -pilot.getY(hand);
     }
 
@@ -117,7 +117,7 @@ public class RobotContainer {
      * Returns x axis of Joystick on pilot controller.
      */
     public double getPilotX(Hand hand) {
-        if(Math.abs(pilot.getX(hand)) < Controller.DEADBAND) return 0;
+        if (Math.abs(pilot.getX(hand)) < Controller.DEADBAND) return 0;
         else return pilot.getX(hand);
     }
 
@@ -132,7 +132,7 @@ public class RobotContainer {
      * Returns y axis of Joystick on copilot controller.
      */
     public double getCopilotY(Hand hand) {
-        if(Math.abs(copilot.getY(hand)) < Controller.DEADBAND) return 0;
+        if (Math.abs(copilot.getY(hand)) < Controller.DEADBAND) return 0;
         else return -copilot.getY(hand);
     }
 
@@ -140,7 +140,7 @@ public class RobotContainer {
      * Returns x axis of Joystick on copilot controller.
      */
     public double getCopilotX(Hand hand) {
-        if(Math.abs(copilot.getX(hand)) < Controller.DEADBAND) return 0;
+        if (Math.abs(copilot.getX(hand)) < Controller.DEADBAND) return 0;
         else return copilot.getX(hand);
     }
 

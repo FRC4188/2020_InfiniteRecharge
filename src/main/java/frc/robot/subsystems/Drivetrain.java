@@ -28,16 +28,16 @@ public class Drivetrain extends SubsystemBase {
     private AHRS ahrs = new AHRS();
 
     // constants
-    private final double MAX_VELOCITY = 2000; // rpm
-    private final double MAX_ACCELERATION = 1500; // rpm
-    private final double kP = 5e-5;
-    private final double kI = 1e-6;
-    private final double kD = 0;
-    private final double kV = 0;
-    private final double kI_ZONE = 0;
-    private final int    SLOT_ID = 0;
-    private final double MAX_OUT = 1.0;
-    private final double NEO_ENCODER_TO_FEET = 18.46 / 265.75;
+    private static final double MAX_VELOCITY = 2000; // rpm
+    private static final double MAX_ACCELERATION = 1500; // rpm
+    private static final double kP = 5e-5;
+    private static final double kI = 1e-6;
+    private static final double kD = 0;
+    private static final double kV = 0;
+    private static final double kI_ZONE = 0;
+    private static final int    SLOT_ID = 0;
+    private static final double MAX_OUT = 1.0;
+    private static final double NEO_ENCODER_TO_FEET = 18.46 / 265.75;
 
     // state vars
     private boolean leftInverted;
@@ -168,7 +168,7 @@ public class Drivetrain extends SubsystemBase {
      * from the current state set in the Drivetrain constructor.
      */
     public void setLeftInverted(boolean isInverted) {
-        if(leftInverted) isInverted = !isInverted;
+        if (leftInverted) isInverted = !isInverted;
         leftMotor.setInverted(isInverted);
         leftSlave1.setInverted(isInverted);
         leftSlave2.setInverted(isInverted);
@@ -179,7 +179,7 @@ public class Drivetrain extends SubsystemBase {
      * from the current state set in the Drivetrain constructor.
      */
     public void setRightInverted(boolean isInverted) {
-        if(rightInverted) isInverted = !isInverted;
+        if (rightInverted) isInverted = !isInverted;
         rightMotor.setInverted(isInverted);
         rightSlave1.setInverted(isInverted);
         rightSlave2.setInverted(isInverted);

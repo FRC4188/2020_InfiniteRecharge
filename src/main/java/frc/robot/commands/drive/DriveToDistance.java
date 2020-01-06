@@ -5,15 +5,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 
 /**
- * Drives to a given distance in feet using PID loop. All distances relative to
- * starting position.
+ * Drives to a given distance in feet using PID loop.
+ * All distances relative to starting position.
  */
 public class DriveToDistance extends CommandBase {
 
     private final Drivetrain drivetrain;
-    private final double kP = 0.3;
-    private final double kI = 0.0;
-    private final double kD = 0.0;
+    private static final double kP = 0.3;
+    private static final double kI = 0.0;
+    private static final double kD = 0.0;
     private PIDController leftPidC = new PIDController(kP, kI, kD);
     private PIDController rightPidC = new PIDController(kP, kI, kD);
     private double distance;
