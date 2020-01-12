@@ -1,21 +1,23 @@
 package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Drivetrain;
+import java.util.function.DoubleSupplier;
 
 /**
  * Manually controls drivetrain using pilot controller.
  */
 public class ManualDrive extends CommandBase {
 
-    @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
     private final Drivetrain drivetrain;
+    private DoubleSupplier xSpeed;
+    private DoubleSupplier zRotation;
 
-    public ManualDrive(Drivetrain d) {
-        drivetrain = d;
+    public ManualDrive(Drivetrain drivetrain, DoubleSupplier xSpeed, DoubleSupplier zRotation) {
         addRequirements(drivetrain);
+        this.drivetrain = drivetrain;
+        this.xSpeed = xSpeed;
+        this.zRotation = zRotation;
     }
 
     @Override
@@ -24,9 +26,7 @@ public class ManualDrive extends CommandBase {
 
     @Override
     public void execute() {
-        double xSpeed = RobotContainer.getInstance().getPilotY(Hand.kLeft);
-        double zRotation = RobotContainer.getInstance().getPilotX(Hand.kRight);
-        drivetrain.arcade(xSpeed, zRotation);
+        drivetrain.arcade(xSpeed.getAsDouble(), zRotation.getAsDouble());
     }
 
     @Override

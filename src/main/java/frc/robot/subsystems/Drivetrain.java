@@ -2,12 +2,14 @@ package frc.robot.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -23,25 +25,16 @@ public class Drivetrain extends SubsystemBase {
     private DifferentialDrive drive = new DifferentialDrive(leftMotor, rightMotor);
     private CANEncoder leftEncoder = leftMotor.getEncoder();
     private CANEncoder rightEncoder = rightMotor.getEncoder();
-    private CANPIDController leftPidC = leftMotor.getPIDController();
-    private CANPIDController rightPidC = rightMotor.getPIDController();
     private AHRS ahrs = new AHRS();
+    private DifferentialDriveOdometry odometry;
 
     // constants
-    private static final double MAX_VELOCITY = 2000; // rpm
-    private static final double MAX_ACCELERATION = 1500; // rpm
-    private static final double kP = 5e-5;
-    private static final double kI = 1e-6;
-    private static final double kD = 0;
-    private static final double kV = 0;
-    private static final double kI_ZONE = 0;
-    private static final int    SLOT_ID = 0;
-    private static final double MAX_OUT = 1.0;
-    private static final double NEO_ENCODER_TO_FEET = 18.46 / 265.75;
+    private static final double ENCODER_TO_METERS = 18.46 / 265.75;
 
     // state vars
-    private boolean leftInverted;
-    private boolean rightInverted;
+    private boolean leftInverted = true;
+    private boolean rightInverted = false;
+    private boolean gyroInverted = false;
 
     /**
      * Constructs new Drivetrain object and configures devices.
@@ -60,10 +53,10 @@ public class Drivetrain extends SubsystemBase {
 
         // configuration
         setBrake();
-        leftInverted = true;
-        leftInverted = false;
         setInverted(false);
-        controllerInit();
+
+        // initialize odometry
+        odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getGyroAngle()));
 
     }
 
@@ -72,30 +65,24 @@ public class Drivetrain extends SubsystemBase {
      */
     @Override
     public void periodic() {
+        updateShuffleboard();
+        updateOdometry();
+    }
+
+    /**
+     * Writes values to Shuffleboard.
+     */
+    private void updateShuffleboard() {
         SmartDashboard.putNumber("Left Position", getLeftPosition());
         SmartDashboard.putNumber("Right Position", getRightPosition());
     }
 
     /**
-     * Configures gains for Spark closed loop controllers.
+     * Tracks robot pose.
      */
-    private void controllerInit() {
-        leftPidC.setP(kP);
-        leftPidC.setI(kI);
-        leftPidC.setD(kD);
-        leftPidC.setIZone(kI_ZONE);
-        leftPidC.setFF(kV);
-        leftPidC.setOutputRange(-MAX_OUT, MAX_OUT);
-        leftPidC.setSmartMotionMaxVelocity(MAX_VELOCITY, SLOT_ID);
-        leftPidC.setSmartMotionMaxAccel(MAX_ACCELERATION, SLOT_ID);
-        rightPidC.setP(kP);
-        rightPidC.setI(kI);
-        rightPidC.setD(kD);
-        rightPidC.setIZone(kI_ZONE);
-        rightPidC.setFF(kV);
-        rightPidC.setOutputRange(-MAX_OUT, MAX_OUT);
-        rightPidC.setSmartMotionMaxVelocity(MAX_VELOCITY, SLOT_ID);
-        rightPidC.setSmartMotionMaxAccel(MAX_ACCELERATION, SLOT_ID);
+    private void updateOdometry() {
+        odometry.update(Rotation2d.fromDegrees(getGyroAngle()), getLeftPosition(),
+                getRightPosition());
     }
 
     /**
@@ -106,10 +93,11 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Controls the drivetrain using a tank model.
+     * Controls the left and right sides of the drivetrain directly with voltages.
      */
-    public void tank(double leftSpeed, double rightSpeed) {
-        drive.tankDrive(leftSpeed, rightSpeed, false);
+    public void tankVolts(double leftVolts, double rightVolts) {
+        leftMotor.set(leftVolts);
+        rightMotor.set(rightVolts);
     }
 
     /**
@@ -124,34 +112,6 @@ public class Drivetrain extends SubsystemBase {
      */
     public void setRight(double speed) {
         rightMotor.set(speed);
-    }
-
-    /**
-     * Sets left side of drivetrain to a given velocity in rpm.
-     */
-    public void setLeftVelocity(double velocity) {
-        leftPidC.setReference(velocity, ControlType.kVelocity);
-    }
-
-    /**
-     * Sets right side of drivetrain to a given velocity in rpm.
-     */
-    public void setRightVelocity(double velocity) {
-        rightPidC.setReference(velocity, ControlType.kVelocity);
-    }
-
-    /**
-     * Sets left side of drivetrain to a given voltage.
-     */
-    public void setLeftVoltage(double v) {
-        leftMotor.setVoltage(v);
-    }
-
-    /**
-     * Sets right side of drivetrain to a given voltage.
-     */
-    public void setRightVoltage(double v) {
-        rightMotor.setVoltage(v);
     }
 
     /**
@@ -225,45 +185,45 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Returns left encoder position in feet.
+     * Returns left encoder position in meters.
      */
     public double getLeftPosition() {
-        return leftEncoder.getPosition() * NEO_ENCODER_TO_FEET;
+        return leftEncoder.getPosition() * ENCODER_TO_METERS;
     }
 
     /**
-     * Returns right encoder position in feet.
+     * Returns right encoder position in meters.
      */
     public double getRightPosition() {
-        return rightEncoder.getPosition() * NEO_ENCODER_TO_FEET;
+        return rightEncoder.getPosition() * ENCODER_TO_METERS;
     }
 
     /**
      * Returns left encoder position in native talon units.
      */
-    public double getRawLeftPosition() {
+    public double getLeftRawPosition() {
         return leftEncoder.getPosition();
     }
 
     /**
      * Returns left encoder position in native talon units.
      */
-    public double getRawRightPosition() {
+    public double getRawRightRawPosition() {
         return rightEncoder.getPosition();
     }
 
     /**
-     * Returns left encoder velocity in feet per second.
+     * Returns left encoder velocity in meters per second.
      */
     public double getLeftVelocity() {
-        return leftEncoder.getVelocity() * NEO_ENCODER_TO_FEET * (1.0 / 60); // native is rpm
+        return leftEncoder.getVelocity() * ENCODER_TO_METERS * (1.0 / 60); // native is rpm
     }
 
     /**
-     * Returns right encoder velocity in feet per second.
+     * Returns right encoder velocity in meters per second.
      */
     public double getRightVelocity() {
-        return rightEncoder.getVelocity() * NEO_ENCODER_TO_FEET * (1.0 / 60); // native is rpm
+        return rightEncoder.getVelocity() * ENCODER_TO_METERS * (1.0 / 60); // native is rpm
     }
 
     /**
@@ -281,10 +241,24 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
+     * Returns the current wheel speeds of the robot.
+     */
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
+    }
+
+    /**
+     * Returns the currently estimated pose of the robot.
+     */
+    public Pose2d getPose() {
+        return odometry.getPoseMeters();
+    }
+
+    /**
      * Returns gyro angle in degrees.
      */
     public double getGyroAngle() {
-        return ahrs.getYaw();
+        return Math.IEEEremainder(ahrs.getYaw(), 360) * (gyroInverted ? -1.0 : 1.0);
     }
 
     /**

@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.commands.drive.DriveToDistance;
 import frc.robot.commands.drive.ManualDrive;
 import frc.robot.subsystems.Drivetrain;
 
@@ -69,40 +68,27 @@ public class RobotContainer {
     private POVButton copilotDpadDown = new POVButton(copilot, Controller.DPAD_DOWN);
     private POVButton copilotDpadLeft = new POVButton(copilot, Controller.DPAD_LEFT);
 
-    // declare instance
-    private static RobotContainer inst;
-
     /**
      * Initializes robot subsystems, OI devices, and commands.
      */
-    private RobotContainer() {
+    public RobotContainer() {
         setDefaultCommands();
         configureButtonBindings();
-    }
-
-    /**
-     * Returns instance of RobotContainer.
-     */
-    public static RobotContainer getInstance() {
-        if (inst == null) inst = new RobotContainer();
-        return inst;
     }
 
     /**
      * Sets the default command for each subsystem, if applicable.
      */
     private void setDefaultCommands() {
-
-        // simple arcade drive
-        drivetrain.setDefaultCommand(new ManualDrive(drivetrain));
-
+        drivetrain.setDefaultCommand(new ManualDrive(drivetrain,
+                () -> getPilotY(Hand.kLeft),
+                () -> getPilotX(Hand.kRight)));
     }
 
     /**
      * Binds commands to buttons on controllers.
      */
     private void configureButtonBindings() {
-        pilotA.whenPressed(new DriveToDistance(drivetrain, 10, 0.2));
     }
 
     /**
