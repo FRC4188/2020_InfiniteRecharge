@@ -1,43 +1,33 @@
 package frc.robot.subsystems;
 
-import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANEncoder;
-import com.revrobotics.CANPIDController;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.ControlType;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Drivetrain extends SubsystemBase {
 
     // device initialization
-    private CANSparkMax leftMotor = new CANSparkMax(1, MotorType.kBrushless);
-    private CANSparkMax leftSlave1 = new CANSparkMax(2, MotorType.kBrushless);
-    private CANSparkMax leftSlave2 = new CANSparkMax(3, MotorType.kBrushless);
-    private CANSparkMax rightMotor = new CANSparkMax(7, MotorType.kBrushless);
-    private CANSparkMax rightSlave1 = new CANSparkMax(5, MotorType.kBrushless);
-    private CANSparkMax rightSlave2 = new CANSparkMax(6, MotorType.kBrushless);
+    private WPI_TalonSRX leftMotor = new WPI_TalonSRX(5);
+    private WPI_TalonSRX leftSlave = new WPI_TalonSRX(6);
+    private WPI_TalonSRX rightMotor = new WPI_TalonSRX(8);
+    private WPI_TalonSRX rightSlave = new WPI_TalonSRX(7);
     private DifferentialDrive drive = new DifferentialDrive(leftMotor, rightMotor);
-    private CANEncoder leftEncoder = leftMotor.getEncoder();
-    private CANEncoder rightEncoder = rightMotor.getEncoder();
-    private CANPIDController leftPidC = leftMotor.getPIDController();
-    private CANPIDController rightPidC = rightMotor.getPIDController();
-    private AHRS ahrs = new AHRS();
+    private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
     // constants
-    private static final double MAX_VELOCITY = 2000; // rpm
-    private static final double MAX_ACCELERATION = 1500; // rpm
-    private static final double kP = 5e-5;
-    private static final double kI = 1e-6;
+    private static final double kP = 0.025;
+    private static final double kI = 0;
     private static final double kD = 0;
-    private static final double kV = 0;
-    private static final double kI_ZONE = 0;
     private static final int    SLOT_ID = 0;
     private static final double MAX_OUT = 1.0;
-    private static final double NEO_ENCODER_TO_FEET = 18.46 / 265.75;
+    private static final int    TIMEOUT = 10; // ms
+    private static final double ENCODER_TO_FEET = 18.46 / 265.75;
 
     // state vars
     private boolean leftInverted;
@@ -49,10 +39,14 @@ public class Drivetrain extends SubsystemBase {
     public Drivetrain() {
 
         // slave control
-        leftSlave1.follow(leftMotor);
-        leftSlave2.follow(leftMotor);
-        rightSlave1.follow(rightMotor);
-        rightSlave2.follow(rightMotor);
+        leftSlave.follow(leftMotor);
+        rightSlave.follow(rightMotor);
+
+        // setup encoders
+        leftMotor.configSelectedFeedbackSensor(
+                FeedbackDevice.CTRE_MagEncoder_Relative, SLOT_ID, TIMEOUT);
+        rightMotor.configSelectedFeedbackSensor(
+                FeedbackDevice.CTRE_MagEncoder_Relative, SLOT_ID, TIMEOUT);
 
         // reset devices
         resetEncoders();
@@ -60,9 +54,9 @@ public class Drivetrain extends SubsystemBase {
 
         // configuration
         setBrake();
-        leftInverted = true;
         leftInverted = false;
-        setInverted(false);
+        rightInverted = false;
+        setInverted(true);
         controllerInit();
 
     }
@@ -80,22 +74,20 @@ public class Drivetrain extends SubsystemBase {
      * Configures gains for Spark closed loop controllers.
      */
     private void controllerInit() {
-        leftPidC.setP(kP);
-        leftPidC.setI(kI);
-        leftPidC.setD(kD);
-        leftPidC.setIZone(kI_ZONE);
-        leftPidC.setFF(kV);
-        leftPidC.setOutputRange(-MAX_OUT, MAX_OUT);
-        leftPidC.setSmartMotionMaxVelocity(MAX_VELOCITY, SLOT_ID);
-        leftPidC.setSmartMotionMaxAccel(MAX_ACCELERATION, SLOT_ID);
-        rightPidC.setP(kP);
-        rightPidC.setI(kI);
-        rightPidC.setD(kD);
-        rightPidC.setIZone(kI_ZONE);
-        rightPidC.setFF(kV);
-        rightPidC.setOutputRange(-MAX_OUT, MAX_OUT);
-        rightPidC.setSmartMotionMaxVelocity(MAX_VELOCITY, SLOT_ID);
-        rightPidC.setSmartMotionMaxAccel(MAX_ACCELERATION, SLOT_ID);
+        leftMotor.configNominalOutputForward(0, TIMEOUT);
+        leftMotor.configNominalOutputReverse(0, TIMEOUT);
+        leftMotor.configPeakOutputForward(MAX_OUT, TIMEOUT);
+        leftMotor.configPeakOutputReverse(-MAX_OUT, TIMEOUT);
+        leftMotor.config_kP(SLOT_ID, kP, TIMEOUT);
+        leftMotor.config_kI(SLOT_ID, kI, TIMEOUT);
+        leftMotor.config_kD(SLOT_ID, kD, TIMEOUT);
+        rightMotor.configNominalOutputForward(0, TIMEOUT);
+        rightMotor.configNominalOutputReverse(0, TIMEOUT);
+        rightMotor.configPeakOutputForward(MAX_OUT, TIMEOUT);
+        rightMotor.configPeakOutputReverse(-MAX_OUT, TIMEOUT);
+        rightMotor.config_kP(SLOT_ID, kP, TIMEOUT);
+        rightMotor.config_kI(SLOT_ID, kI, TIMEOUT);
+        rightMotor.config_kD(SLOT_ID, kD, TIMEOUT);
     }
 
     /**
@@ -127,17 +119,17 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Sets left side of drivetrain to a given velocity in rpm.
+     * Sets left side of drivetrain to a given velocity in talon units.
      */
     public void setLeftVelocity(double velocity) {
-        leftPidC.setReference(velocity, ControlType.kVelocity);
+        leftMotor.set(ControlMode.Velocity, velocity);
     }
 
     /**
-     * Sets right side of drivetrain to a given velocity in rpm.
+     * Sets right side of drivetrain to a given velocity in talon units.
      */
     public void setRightVelocity(double velocity) {
-        rightPidC.setReference(velocity, ControlType.kVelocity);
+        rightMotor.set(ControlMode.Velocity, velocity);
     }
 
     /**
@@ -170,8 +162,7 @@ public class Drivetrain extends SubsystemBase {
     public void setLeftInverted(boolean isInverted) {
         if (leftInverted) isInverted = !isInverted;
         leftMotor.setInverted(isInverted);
-        leftSlave1.setInverted(isInverted);
-        leftSlave2.setInverted(isInverted);
+        leftSlave.setInverted(isInverted);
     }
 
     /**
@@ -181,117 +172,112 @@ public class Drivetrain extends SubsystemBase {
     public void setRightInverted(boolean isInverted) {
         if (rightInverted) isInverted = !isInverted;
         rightMotor.setInverted(isInverted);
-        rightSlave1.setInverted(isInverted);
-        rightSlave2.setInverted(isInverted);
+        rightSlave.setInverted(isInverted);
     }
 
     /**
      * Sets drivetrain to brake mode.
      */
     public void setBrake() {
-        leftMotor.setIdleMode(IdleMode.kBrake);
-        leftSlave1.setIdleMode(IdleMode.kBrake);
-        leftSlave2.setIdleMode(IdleMode.kBrake);
-        rightMotor.setIdleMode(IdleMode.kBrake);
-        rightSlave1.setIdleMode(IdleMode.kBrake);
-        rightSlave2.setIdleMode(IdleMode.kBrake);
+        leftMotor.setNeutralMode(NeutralMode.Brake);
+        leftSlave.setNeutralMode(NeutralMode.Brake);
+        rightMotor.setNeutralMode(NeutralMode.Brake);
+        rightSlave.setNeutralMode(NeutralMode.Brake);
     }
 
     /**
      * Sets drivetrain to coast mode.
      */
     public void setCoast() {
-        leftMotor.setIdleMode(IdleMode.kCoast);
-        leftSlave1.setIdleMode(IdleMode.kCoast);
-        leftSlave2.setIdleMode(IdleMode.kCoast);
-        rightMotor.setIdleMode(IdleMode.kCoast);
-        rightSlave1.setIdleMode(IdleMode.kCoast);
-        rightSlave2.setIdleMode(IdleMode.kCoast);
+        leftMotor.setNeutralMode(NeutralMode.Coast);
+        leftSlave.setNeutralMode(NeutralMode.Coast);
+        rightMotor.setNeutralMode(NeutralMode.Coast);
+        rightSlave.setNeutralMode(NeutralMode.Coast);
     }
 
     /**
      * Resets encoder values to 0 for both sides of drivetrain.
      */
     public void resetEncoders() {
-        leftEncoder.setPosition(0);
-        rightEncoder.setPosition(0);
+        leftMotor.setSelectedSensorPosition(0);
+        rightMotor.setSelectedSensorPosition(0);
     }
 
     /**
      * Resets gyro angle to zero.
      */
     public void resetGyro() {
-        ahrs.reset();
+        gyro.reset();
     }
 
     /**
      * Returns left encoder position in feet.
      */
     public double getLeftPosition() {
-        return leftEncoder.getPosition() * NEO_ENCODER_TO_FEET;
+        return leftMotor.getSelectedSensorPosition() * ENCODER_TO_FEET;
     }
 
     /**
      * Returns right encoder position in feet.
      */
     public double getRightPosition() {
-        return rightEncoder.getPosition() * NEO_ENCODER_TO_FEET;
+        return rightMotor.getSelectedSensorPosition() * ENCODER_TO_FEET;
     }
 
     /**
      * Returns left encoder position in native talon units.
      */
     public double getRawLeftPosition() {
-        return leftEncoder.getPosition();
+        return leftMotor.getSelectedSensorPosition();
     }
 
     /**
      * Returns left encoder position in native talon units.
      */
     public double getRawRightPosition() {
-        return rightEncoder.getPosition();
+        return rightMotor.getSelectedSensorPosition();
     }
 
     /**
      * Returns left encoder velocity in feet per second.
      */
     public double getLeftVelocity() {
-        return leftEncoder.getVelocity() * NEO_ENCODER_TO_FEET * (1.0 / 60); // native is rpm
+        return leftMotor.getSelectedSensorVelocity() * ENCODER_TO_FEET * 10; // native talon/100ms
     }
 
     /**
      * Returns right encoder velocity in feet per second.
      */
     public double getRightVelocity() {
-        return rightEncoder.getVelocity() * NEO_ENCODER_TO_FEET * (1.0 / 60); // native is rpm
+        return rightMotor.getSelectedSensorVelocity() * ENCODER_TO_FEET * 10; // native talon/100ms
     }
 
     /**
-     * Returns left encoder velocity in rpm.
+     * Returns left encoder velocity in talon units / 100ms.
      */
     public double getLeftRawVelocity() {
-        return leftEncoder.getVelocity();
+        return leftMotor.getSelectedSensorVelocity();
     }
 
     /**
-     * Returns right encoder velocity in rpm.
+     * Returns right encoder velocity in talon units / 100ms.
      */
     public double getRightRawVelocity() {
-        return rightEncoder.getVelocity();
+        return rightMotor.getSelectedSensorVelocity();
     }
 
     /**
      * Returns gyro angle in degrees.
      */
     public double getGyroAngle() {
-        return ahrs.getYaw();
+        return gyro.getAngle();
     }
 
     /**
      * Returns gyro rate in degrees per sec.
      */
     public double getGyroRate() {
-        return ahrs.getRate();
+        return gyro.getRate();
     }
 
 }
