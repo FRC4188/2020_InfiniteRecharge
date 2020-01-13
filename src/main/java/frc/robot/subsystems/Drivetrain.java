@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/**
+ * Class encapsulating drivetrain function.
+ */
 public class Drivetrain extends SubsystemBase {
 
     // device initialization

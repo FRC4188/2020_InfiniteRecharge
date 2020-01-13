@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 
+/**
+ * Subclass of XboxController to handle joystick scaling, deadbands, and button initialization.
+ */
 public class CspController extends XboxController {
 
     private static final double DEADBAND = 0.08;

@@ -16,7 +16,7 @@ import frc.robot.subsystems.Drivetrain;
 import java.util.List;
 
 /**
- * Manually controls drivetrain using pilot controller.
+ * Follows a trajectory using a RAMSETE controller.
  */
 public class FollowTrajectory extends RamseteCommand {
 
