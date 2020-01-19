@@ -27,6 +27,13 @@ public class RobotContainer {
     }
 
     /**
+     * Resets variables and sensors for each subsystem.
+     */
+    public void resetSubsystems() {
+        drivetrain.reset();
+    }
+
+    /**
      * Sets the default command for each subsystem, if applicable.
      */
     private void setDefaultCommands() {

@@ -25,7 +25,7 @@ public class Drivetrain extends SubsystemBase {
     private DifferentialDriveOdometry odometry;
 
     // constants
-    private static final double ENCODER_TO_METERS = 18.46 / 265.75;
+    private static final double ENCODER_TO_METERS = Math.PI * 0.1524 / 4096.0;
 
     // state vars
     private boolean leftInverted = true;
@@ -73,6 +73,7 @@ public class Drivetrain extends SubsystemBase {
     private void updateShuffleboard() {
         SmartDashboard.putNumber("Left Position", getLeftPosition());
         SmartDashboard.putNumber("Right Position", getRightPosition());
+        SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
     }
 
     /**
@@ -170,6 +171,14 @@ public class Drivetrain extends SubsystemBase {
         leftSlave.setNeutralMode(NeutralMode.Coast);
         rightMotor.setNeutralMode(NeutralMode.Coast);
         rightSlave.setNeutralMode(NeutralMode.Coast);
+    }
+
+    /**
+     * Resets necessary sensors for drivetrain.
+     */
+    public void reset() {
+        resetEncoders();
+        resetGyro();
     }
 
     /**
