@@ -1,15 +1,20 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/**
+ * Class encapsulating drivetrain function.
+ */
 public class Drivetrain extends SubsystemBase {
 
     // device initialization
@@ -19,19 +24,15 @@ public class Drivetrain extends SubsystemBase {
     private WPI_TalonSRX rightSlave = new WPI_TalonSRX(7);
     private DifferentialDrive drive = new DifferentialDrive(leftMotor, rightMotor);
     private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+    private DifferentialDriveOdometry odometry;
 
     // constants
-    private static final double kP = 0.025;
-    private static final double kI = 0;
-    private static final double kD = 0;
-    private static final int    SLOT_ID = 0;
-    private static final double MAX_OUT = 1.0;
-    private static final int    TIMEOUT = 10; // ms
-    private static final double ENCODER_TO_FEET = 18.46 / 265.75;
+    private static final double ENCODER_TO_METERS = 18.46 / 265.75;
 
     // state vars
-    private boolean leftInverted;
-    private boolean rightInverted;
+    private boolean leftInverted = true;
+    private boolean rightInverted = false;
+    private boolean gyroInverted = false;
 
     /**
      * Constructs new Drivetrain object and configures devices.
@@ -43,10 +44,8 @@ public class Drivetrain extends SubsystemBase {
         rightSlave.follow(rightMotor);
 
         // setup encoders
-        leftMotor.configSelectedFeedbackSensor(
-                FeedbackDevice.CTRE_MagEncoder_Relative, SLOT_ID, TIMEOUT);
-        rightMotor.configSelectedFeedbackSensor(
-                FeedbackDevice.CTRE_MagEncoder_Relative, SLOT_ID, TIMEOUT);
+        leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
 
         // reset devices
         resetEncoders();
@@ -54,10 +53,10 @@ public class Drivetrain extends SubsystemBase {
 
         // configuration
         setBrake();
-        leftInverted = false;
-        rightInverted = false;
-        setInverted(true);
-        controllerInit();
+        setInverted(false);
+
+        // initialize odometry
+        odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getGyroAngle()));
 
     }
 
@@ -66,28 +65,24 @@ public class Drivetrain extends SubsystemBase {
      */
     @Override
     public void periodic() {
+        updateShuffleboard();
+        updateOdometry();
+    }
+
+    /**
+     * Writes values to Shuffleboard.
+     */
+    private void updateShuffleboard() {
         SmartDashboard.putNumber("Left Position", getLeftPosition());
         SmartDashboard.putNumber("Right Position", getRightPosition());
     }
 
     /**
-     * Configures gains for Spark closed loop controllers.
+     * Tracks robot pose.
      */
-    private void controllerInit() {
-        leftMotor.configNominalOutputForward(0, TIMEOUT);
-        leftMotor.configNominalOutputReverse(0, TIMEOUT);
-        leftMotor.configPeakOutputForward(MAX_OUT, TIMEOUT);
-        leftMotor.configPeakOutputReverse(-MAX_OUT, TIMEOUT);
-        leftMotor.config_kP(SLOT_ID, kP, TIMEOUT);
-        leftMotor.config_kI(SLOT_ID, kI, TIMEOUT);
-        leftMotor.config_kD(SLOT_ID, kD, TIMEOUT);
-        rightMotor.configNominalOutputForward(0, TIMEOUT);
-        rightMotor.configNominalOutputReverse(0, TIMEOUT);
-        rightMotor.configPeakOutputForward(MAX_OUT, TIMEOUT);
-        rightMotor.configPeakOutputReverse(-MAX_OUT, TIMEOUT);
-        rightMotor.config_kP(SLOT_ID, kP, TIMEOUT);
-        rightMotor.config_kI(SLOT_ID, kI, TIMEOUT);
-        rightMotor.config_kD(SLOT_ID, kD, TIMEOUT);
+    private void updateOdometry() {
+        odometry.update(Rotation2d.fromDegrees(getGyroAngle()), getLeftPosition(),
+                getRightPosition());
     }
 
     /**
@@ -98,10 +93,11 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Controls the drivetrain using a tank model.
+     * Controls the left and right sides of the drivetrain directly with voltages.
      */
-    public void tank(double leftSpeed, double rightSpeed) {
-        drive.tankDrive(leftSpeed, rightSpeed, false);
+    public void tankVolts(double leftVolts, double rightVolts) {
+        leftMotor.set(leftVolts);
+        rightMotor.set(rightVolts);
     }
 
     /**
@@ -116,34 +112,6 @@ public class Drivetrain extends SubsystemBase {
      */
     public void setRight(double speed) {
         rightMotor.set(speed);
-    }
-
-    /**
-     * Sets left side of drivetrain to a given velocity in talon units.
-     */
-    public void setLeftVelocity(double velocity) {
-        leftMotor.set(ControlMode.Velocity, velocity);
-    }
-
-    /**
-     * Sets right side of drivetrain to a given velocity in talon units.
-     */
-    public void setRightVelocity(double velocity) {
-        rightMotor.set(ControlMode.Velocity, velocity);
-    }
-
-    /**
-     * Sets left side of drivetrain to a given voltage.
-     */
-    public void setLeftVoltage(double v) {
-        leftMotor.setVoltage(v);
-    }
-
-    /**
-     * Sets right side of drivetrain to a given voltage.
-     */
-    public void setRightVoltage(double v) {
-        rightMotor.setVoltage(v);
     }
 
     /**
@@ -211,17 +179,17 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Returns left encoder position in feet.
+     * Returns left encoder position in meters.
      */
     public double getLeftPosition() {
-        return leftMotor.getSelectedSensorPosition() * ENCODER_TO_FEET;
+        return leftMotor.getSelectedSensorPosition() * ENCODER_TO_METERS;
     }
 
     /**
-     * Returns right encoder position in feet.
+     * Returns right encoder position in meters.
      */
     public double getRightPosition() {
-        return rightMotor.getSelectedSensorPosition() * ENCODER_TO_FEET;
+        return rightMotor.getSelectedSensorPosition() * ENCODER_TO_METERS;
     }
 
     /**
@@ -239,17 +207,17 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Returns left encoder velocity in feet per second.
+     * Returns left encoder velocity in meters per second.
      */
     public double getLeftVelocity() {
-        return leftMotor.getSelectedSensorVelocity() * ENCODER_TO_FEET * 10; // native talon/100ms
+        return leftMotor.getSelectedSensorVelocity() * ENCODER_TO_METERS * 10; // native per 100ms
     }
 
     /**
-     * Returns right encoder velocity in feet per second.
+     * Returns right encoder velocity in meters per second.
      */
     public double getRightVelocity() {
-        return rightMotor.getSelectedSensorVelocity() * ENCODER_TO_FEET * 10; // native talon/100ms
+        return rightMotor.getSelectedSensorVelocity() * ENCODER_TO_METERS * 10; // native per 100ms
     }
 
     /**
@@ -267,10 +235,24 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
+     * Returns the current wheel speeds of the robot.
+     */
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(getLeftVelocity(), getRightVelocity());
+    }
+
+    /**
+     * Returns the currently estimated pose of the robot.
+     */
+    public Pose2d getPose() {
+        return odometry.getPoseMeters();
+    }
+
+    /**
      * Returns gyro angle in degrees.
      */
     public double getGyroAngle() {
-        return gyro.getAngle();
+        return Math.IEEEremainder(gyro.getAngle(), 360) * (gyroInverted ? -1.0 : 1.0);
     }
 
     /**
