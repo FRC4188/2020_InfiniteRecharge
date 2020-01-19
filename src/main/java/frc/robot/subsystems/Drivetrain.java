@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
@@ -18,11 +17,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Drivetrain extends SubsystemBase {
 
     // device initialization
-    private WPI_TalonSRX leftMotor = new WPI_TalonSRX(5);
-    private WPI_TalonSRX leftSlave = new WPI_TalonSRX(6);
-    private WPI_TalonSRX rightMotor = new WPI_TalonSRX(8);
-    private WPI_TalonSRX rightSlave = new WPI_TalonSRX(7);
-    private DifferentialDrive drive = new DifferentialDrive(leftMotor, rightMotor);
+    private WPI_TalonSRX leftMotor = new WPI_TalonSRX(6);
+    private WPI_TalonSRX leftSlave = new WPI_TalonSRX(5);
+    private WPI_TalonSRX rightMotor = new WPI_TalonSRX(7);
+    private WPI_TalonSRX rightSlave = new WPI_TalonSRX(8);
     private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     private DifferentialDriveOdometry odometry;
 
@@ -89,15 +87,26 @@ public class Drivetrain extends SubsystemBase {
      * Controls the drivetrain using an arcade model.
      */
     public void arcade(double xSpeed, double zRotation) {
-        drive.arcadeDrive(xSpeed, zRotation, false);
+		double leftOutput = xSpeed + zRotation;
+		double rightOutput = xSpeed - zRotation;
+		if(Math.abs(leftOutput) > 1.0 || Math.abs(rightOutput) > 1.0) {
+			if(Math.abs(rightOutput) > Math.abs(leftOutput)) {
+				leftOutput = (leftOutput / rightOutput) * Math.signum(leftOutput);
+				rightOutput = 1.0 * Math.signum(rightOutput);
+			} else  {
+                rightOutput = (rightOutput / leftOutput) * Math.signum(rightOutput);
+                leftOutput = 1.0 * Math.signum(leftOutput);
+            }
+        }
+        tankVolts(leftOutput * 12, rightOutput * 12);
     }
 
     /**
      * Controls the left and right sides of the drivetrain directly with voltages.
      */
     public void tankVolts(double leftVolts, double rightVolts) {
-        leftMotor.set(leftVolts);
-        rightMotor.set(rightVolts);
+        leftMotor.setVoltage(leftVolts);
+        rightMotor.setVoltage(rightVolts);
     }
 
     /**

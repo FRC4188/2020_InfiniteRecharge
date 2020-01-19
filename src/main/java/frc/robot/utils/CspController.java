@@ -72,7 +72,7 @@ public class CspController extends XboxController {
             else if (scale == Scaling.CUBED) return Math.pow(input, 3);
             else return input;
         } else {
-            return input;
+            return 0;
         }
     }
 
