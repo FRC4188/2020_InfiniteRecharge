@@ -53,6 +53,11 @@ public class FollowTrajectory extends RamseteCommand {
             config
     );
 
+    /**
+     * Constructs a new FollowTrajectory command to drive a specified path.
+     *
+     * @param drivetrain - Drivetrain subsystem to require.
+     */
     public FollowTrajectory(Drivetrain drivetrain) {
         super(trajectory,
                 drivetrain::getPose,

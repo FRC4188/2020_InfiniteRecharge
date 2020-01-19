@@ -32,7 +32,9 @@ public class RobotContainer {
     private void setDefaultCommands() {
         drivetrain.setDefaultCommand(new ManualDrive(drivetrain,
                 () -> pilot.getY(Hand.kLeft),
-                () -> pilot.getX(Hand.kRight)));
+                () -> pilot.getX(Hand.kRight),
+                () -> pilot.getBumper(Hand.kLeft)
+        ));
     }
 
     /**
