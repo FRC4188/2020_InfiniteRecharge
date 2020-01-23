@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
@@ -17,10 +17,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Drivetrain extends SubsystemBase {
 
     // device initialization
-    private WPI_TalonSRX leftMotor = new WPI_TalonSRX(6);
-    private WPI_TalonSRX leftSlave = new WPI_TalonSRX(5);
-    private WPI_TalonSRX rightMotor = new WPI_TalonSRX(7);
-    private WPI_TalonSRX rightSlave = new WPI_TalonSRX(8);
+    private WPI_TalonFX leftMotor = new WPI_TalonFX(1);
+    private WPI_TalonFX leftSlave = new WPI_TalonFX(2);
+    private WPI_TalonFX rightMotor = new WPI_TalonFX(3);
+    private WPI_TalonFX rightSlave = new WPI_TalonFX(4);
     private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     private DifferentialDriveOdometry odometry;
 
