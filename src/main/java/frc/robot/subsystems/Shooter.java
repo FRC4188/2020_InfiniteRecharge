@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -13,6 +14,9 @@ public class Shooter extends SubsystemBase {
     private WPI_TalonFX shooterMotor = new WPI_TalonFX(11);
     private WPI_TalonFX shooterSlave = new WPI_TalonFX(12);
 
+    // constants
+    private static final double ENCODER_TICKS_PER_REV = 2048;
+
     /**
      * Constructs new Shooter object and configures devices.
      */
@@ -20,6 +24,9 @@ public class Shooter extends SubsystemBase {
 
         // slave control
         shooterSlave.follow(shooterMotor);
+
+        // setup encoders
+        shooterMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 10);
 
         // configuration
         setCoast();
@@ -48,6 +55,13 @@ public class Shooter extends SubsystemBase {
     }
 
     /**
+     * Sets shooter motors to a given voltage.
+     */
+    public void setVoltage(double v) {
+        shooterMotor.setVoltage(v);
+    }
+
+    /**
      * Sets shooter motors to brake mode.
      */
     public void setBrake() {
@@ -61,6 +75,13 @@ public class Shooter extends SubsystemBase {
     public void setCoast() {
         shooterMotor.setNeutralMode(NeutralMode.Coast);
         shooterSlave.setNeutralMode(NeutralMode.Coast);
+    }
+
+    /**
+     * Gets shooter motor velocity in rpm.
+     */
+    public double getVelocity() {
+        return shooterMotor.getSelectedSensorVelocity() * 600 * ENCODER_TICKS_PER_REV;
     }
 
 }
