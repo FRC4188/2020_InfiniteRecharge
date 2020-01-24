@@ -3,7 +3,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.ManualDrive;
+import frc.robot.commands.shooter.RunShooterVelocity;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
 import frc.robot.utils.CspController;
 import frc.robot.utils.Waypoints;
 
@@ -14,6 +16,7 @@ public class RobotContainer {
 
     // subsystem initialization
     private final Drivetrain drivetrain = new Drivetrain();
+    private final Shooter shooter = new Shooter();
 
     // controller initialization
     private final CspController pilot = new CspController(0);
@@ -49,8 +52,7 @@ public class RobotContainer {
      * Binds commands to buttons on controllers.
      */
     private void configureButtonBindings() {
-        pilot.getAButtonObj().whenPressed(new FollowTrajectory(drivetrain, Waypoints.STRAIGHT));
-        pilot.getBButtonObj().whenPressed(new FollowTrajectory(drivetrain, Waypoints.S_CURVE));
+        pilot.getAButtonObj().whenPressed(new RunShooterVelocity(shooter, 4000));
     }
 
 }

@@ -4,23 +4,23 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
 
 /**
- * Runs shooter motors.
+ * Runs shooter motors at a given velocity.
  */
-public class RunShooter extends CommandBase {
+public class RunShooterVelocity extends CommandBase {
 
     private final Shooter shooter;
-    private double percent;
+    private double velocity;
 
     /**
-     * Constructs a new RunShooter command.
+     * Constructs a new RunShooterVelocity command.
      *
      * @param shooter - Shooter subsystem to require,
-     * @param percent - Percent to spin motors at [-1.0, 1.0].
+     * @param velocity - Velocity to spin motors to in rpm.
      */
-    public RunShooter(Shooter shooter, double percent) {
+    public RunShooterVelocity(Shooter shooter, double velocity) {
         addRequirements(shooter);
         this.shooter = shooter;
-        this.percent = percent;
+        this.velocity = velocity;
     }
 
     @Override
@@ -29,7 +29,7 @@ public class RunShooter extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.set(percent);
+        shooter.setVelocity(velocity);
     }
 
     @Override
