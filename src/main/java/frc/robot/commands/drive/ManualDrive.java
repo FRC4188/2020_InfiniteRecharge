@@ -1,5 +1,6 @@
 package frc.robot.commands.drive;
 
+import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import java.util.function.BooleanSupplier;
@@ -13,11 +14,14 @@ public class ManualDrive extends CommandBase {
     private final Drivetrain drivetrain;
 
     private DoubleSupplier xSpeedSupplier;
-    private DoubleSupplier zRotationsSupplier;
+    private DoubleSupplier zRotationSupplier;
     private BooleanSupplier fineControlSupplier;
 
     private static final double SPEED_CONST = 0.5;
     private static final double ROTATION_CONST = 0.5;
+
+    private SlewRateLimiter speedLimiter = new SlewRateLimiter(3);
+    private SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
 
 
     /**
@@ -33,7 +37,7 @@ public class ManualDrive extends CommandBase {
         addRequirements(drivetrain);
         this.drivetrain = drivetrain;
         this.xSpeedSupplier = xSpeed;
-        this.zRotationsSupplier = zRotation;
+        this.zRotationSupplier = zRotation;
         this.fineControlSupplier = fineControl;
     }
 
@@ -44,10 +48,10 @@ public class ManualDrive extends CommandBase {
     @Override
     public void execute() {
 
-        // get values from suppliers
+        // get values from suppliers and limit rate
         boolean fineControl = fineControlSupplier.getAsBoolean();
-        double xSpeed = xSpeedSupplier.getAsDouble();
-        double zRotation = zRotationsSupplier.getAsDouble();
+        double xSpeed = speedLimiter.calculate(xSpeedSupplier.getAsDouble());
+        double zRotation = rotLimiter.calculate(zRotationSupplier.getAsDouble());
 
         // modify output based on fine control boolean
         xSpeed = (fineControl) ? xSpeed * SPEED_CONST : xSpeed;

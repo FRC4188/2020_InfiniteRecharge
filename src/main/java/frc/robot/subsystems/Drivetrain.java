@@ -4,8 +4,12 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,20 +21,36 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Drivetrain extends SubsystemBase {
 
     // device initialization
-    private WPI_TalonFX leftMotor = new WPI_TalonFX(1);
-    private WPI_TalonFX leftSlave = new WPI_TalonFX(2);
-    private WPI_TalonFX rightMotor = new WPI_TalonFX(3);
-    private WPI_TalonFX rightSlave = new WPI_TalonFX(4);
-    private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
-    private DifferentialDriveOdometry odometry;
+    private final WPI_TalonFX leftMotor = new WPI_TalonFX(1);
+    private final WPI_TalonFX leftSlave = new WPI_TalonFX(2);
+    private final WPI_TalonFX rightMotor = new WPI_TalonFX(3);
+    private final WPI_TalonFX rightSlave = new WPI_TalonFX(4);
+    private final ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
     // constants
+    private static final double kS = 0; // volts
+    private static final double kV = 0; // volt seconds / meter
+    private static final double kA = 0; // volt seconds squared / meter
+    private static final double kP = 0;
+    private static final double MAX_VELOCITY = 3; // meters / second
+    private static final double MAX_ACCELERATION = 3; // meters / second squared
+    private static final double MAX_VOLTAGE = 10; // volts
+    private static final double MAX_ROTATION = 2 * Math.PI; // one rotation / sec
+    private static final double TRACKWIDTH = 0; // meters
     private static final double ENCODER_TO_METERS = Math.PI * 0.1524 / 4096.0;
+
+    // controls
+    private final DifferentialDriveOdometry odometry;
+    private final PIDController leftPid = new PIDController(kP, 0, 0);
+    private final PIDController rightPid = new PIDController(kP, 0, 0);
+    private final DifferentialDriveKinematics kinematics =
+            new DifferentialDriveKinematics(TRACKWIDTH);
+    private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
 
     // state vars
     private boolean leftInverted = true;
     private boolean rightInverted = false;
-    private boolean gyroInverted = false;
+    private boolean gyroInverted = true; // ccw positive
 
     /**
      * Constructs new Drivetrain object and configures devices.
@@ -85,24 +105,6 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Controls the drivetrain using an arcade model.
-     */
-    public void arcade(double xSpeed, double zRotation) {
-		double leftOutput = xSpeed + zRotation;
-		double rightOutput = xSpeed - zRotation;
-		if(Math.abs(leftOutput) > 1.0 || Math.abs(rightOutput) > 1.0) {
-			if(Math.abs(rightOutput) > Math.abs(leftOutput)) {
-				leftOutput = (leftOutput / rightOutput) * Math.signum(leftOutput);
-				rightOutput = 1.0 * Math.signum(rightOutput);
-			} else  {
-                rightOutput = (rightOutput / leftOutput) * Math.signum(rightOutput);
-                leftOutput = 1.0 * Math.signum(leftOutput);
-            }
-        }
-        tankVolts(leftOutput * 12, rightOutput * 12);
-    }
-
-    /**
      * Controls the left and right sides of the drivetrain directly with voltages.
      */
     public void tankVolts(double leftVolts, double rightVolts) {
@@ -111,17 +113,27 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Sets left side of drivetrain to a given speed [-1.0, 1.0].
+     * Sets desired wheel speeds using feedforward and feedback.
      */
-    public void setLeft(double speed) {
-        leftMotor.set(speed);
+    public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+        double leftFeedforward = feedforward.calculate(speeds.leftMetersPerSecond);
+        double rightFeedforward = feedforward.calculate(speeds.rightMetersPerSecond);
+        double leftOutput = leftPid.calculate(getLeftVelocity(), speeds.leftMetersPerSecond)
+                + leftFeedforward;
+        double rightOutput = rightPid.calculate(getRightVelocity(), speeds.rightMetersPerSecond)
+                + rightFeedforward;
+        tankVolts(leftOutput, rightOutput);
     }
 
     /**
-     * Sets right side of drivetrain to a given speed [-1.0, 1.0].
+     * Controls the drivetrain using an arcade model, with inputs [-1, 1].
      */
-    public void setRight(double speed) {
-        rightMotor.set(speed);
+    public void arcade(double xSpeed, double zRotation) {
+        double xSpeedMetersPerSec = xSpeed * MAX_VELOCITY;
+        double zRotRadPerSec = zRotation * MAX_ROTATION;
+        ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeedMetersPerSec, 0.0, zRotRadPerSec);
+        DifferentialDriveWheelSpeeds speeds = kinematics.toWheelSpeeds(chassisSpeeds);
+        setSpeeds(speeds);
     }
 
     /**
