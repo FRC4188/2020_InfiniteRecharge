@@ -58,7 +58,7 @@ public class ManualDrive extends CommandBase {
         zRotation = (fineControl) ? zRotation * ROTATION_CONST : zRotation;
 
         // command motor output
-        drivetrain.arcade(xSpeed, zRotation);
+        drivetrain.arcade(xSpeed, -zRotation);
 
     }
 

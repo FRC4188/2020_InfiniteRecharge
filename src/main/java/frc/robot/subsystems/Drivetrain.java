@@ -28,16 +28,20 @@ public class Drivetrain extends SubsystemBase {
     private final ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
     // constants
-    private static final double kS = 0; // volts
-    private static final double kV = 0; // volt seconds / meter
-    private static final double kA = 0; // volt seconds squared / meter
-    private static final double kP = 0;
-    private static final double MAX_VELOCITY = 3; // meters / second
+    private static final double kS = 0.134; // volts
+    private static final double kV = 2.12; // volt seconds / meter
+    private static final double kA = 0.363; // volt seconds squared / meter
+    private static final double kP = 5.5;
+    private static final double MAX_VELOCITY = 1; // meters / second
     private static final double MAX_ACCELERATION = 3; // meters / second squared
     private static final double MAX_VOLTAGE = 10; // volts
-    private static final double MAX_ROTATION = 2 * Math.PI; // one rotation / sec
-    private static final double TRACKWIDTH = 0; // meters
-    private static final double ENCODER_TO_METERS = Math.PI * 0.1524 / 4096.0;
+    private static final double ARCADE_MAX_VEL = 1; // meters / second
+    private static final double ARCADE_MAX_ROT = Math.PI / 4.0; // rads / second
+    private static final double TRACKWIDTH = 0.58; // meters
+    private static final double WHEEL_DIAMETER = 0.1524; // meters
+    private static final double GEAR_RATIO = (58.0 / 11.0) * (32.0 / 18.0);
+    private static final double TICKS_PER_REV = 2048; // encoder units
+    private static final double ENCODER_TO_METERS = (Math.PI * WHEEL_DIAMETER) / (GEAR_RATIO * TICKS_PER_REV);
 
     // controls
     private final DifferentialDriveOdometry odometry;
@@ -62,8 +66,8 @@ public class Drivetrain extends SubsystemBase {
         rightSlave.follow(rightMotor);
 
         // setup encoders
-        leftMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+        leftMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+        rightMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
         // reset devices
         resetEncoders();
@@ -92,7 +96,9 @@ public class Drivetrain extends SubsystemBase {
      */
     private void updateShuffleboard() {
         SmartDashboard.putNumber("Left Position", getLeftPosition());
+        SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
         SmartDashboard.putNumber("Right Position", getRightPosition());
+        SmartDashboard.putNumber("Right Velocity", getRightVelocity());
         SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
     }
 
@@ -113,9 +119,11 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Sets desired wheel speeds using feedforward and feedback.
+     * Sets desired wheel speeds using closed loop control.
      */
     public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+        SmartDashboard.putNumber("Left Setpoint", speeds.leftMetersPerSecond);
+        SmartDashboard.putNumber("Right Setpoint", speeds.rightMetersPerSecond);
         double leftFeedforward = feedforward.calculate(speeds.leftMetersPerSecond);
         double rightFeedforward = feedforward.calculate(speeds.rightMetersPerSecond);
         double leftOutput = leftPid.calculate(getLeftVelocity(), speeds.leftMetersPerSecond)
@@ -127,10 +135,12 @@ public class Drivetrain extends SubsystemBase {
 
     /**
      * Controls the drivetrain using an arcade model, with inputs [-1, 1].
+     * @param xSpeed forward percent output.
+     * @param zRotation rotational percent output - ccw positive.
      */
     public void arcade(double xSpeed, double zRotation) {
-        double xSpeedMetersPerSec = xSpeed * MAX_VELOCITY;
-        double zRotRadPerSec = zRotation * MAX_ROTATION;
+        double xSpeedMetersPerSec = xSpeed * ARCADE_MAX_VEL;
+        double zRotRadPerSec = zRotation * ARCADE_MAX_ROT;
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeedMetersPerSec, 0.0, zRotRadPerSec);
         DifferentialDriveWheelSpeeds speeds = kinematics.toWheelSpeeds(chassisSpeeds);
         setSpeeds(speeds);
