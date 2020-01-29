@@ -5,6 +5,7 @@ import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.ManualDrive;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utils.CspController;
+import frc.robot.utils.Waypoints;
 
 /**
  * Class containing setup for robot.
@@ -48,7 +49,7 @@ public class RobotContainer {
      * Binds commands to buttons on controllers.
      */
     private void configureButtonBindings() {
-        pilot.getAButtonObj().whenPressed(new FollowTrajectory(drivetrain));
+        pilot.getAButtonObj().whenPressed(new FollowTrajectory(drivetrain, Waypoints.STRAIGHT));
     }
 
 }

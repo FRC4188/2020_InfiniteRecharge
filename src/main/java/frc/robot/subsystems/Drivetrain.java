@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -50,6 +52,13 @@ public class Drivetrain extends SubsystemBase {
     private final DifferentialDriveKinematics kinematics =
             new DifferentialDriveKinematics(TRACKWIDTH);
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
+    private final DifferentialDriveVoltageConstraint voltageConstraint =
+            new DifferentialDriveVoltageConstraint(feedforward, kinematics, MAX_VOLTAGE);
+    private final TrajectoryConfig trajectoryConfig = 
+            new TrajectoryConfig(MAX_VELOCITY, MAX_ACCELERATION)
+            .setKinematics(kinematics)
+            .addConstraint(voltageConstraint);
+
 
     // state vars
     private boolean leftInverted = true;
@@ -135,8 +144,8 @@ public class Drivetrain extends SubsystemBase {
 
     /**
      * Controls the drivetrain using an arcade model, with inputs [-1, 1].
-     * @param xSpeed forward percent output.
-     * @param zRotation rotational percent output - ccw positive.
+     * @param xSpeed - Forward percent output.
+     * @param zRotation - Rotational percent output - ccw positive.
      */
     public void arcade(double xSpeed, double zRotation) {
         double xSpeedMetersPerSec = xSpeed * ARCADE_MAX_VEL;
@@ -286,6 +295,41 @@ public class Drivetrain extends SubsystemBase {
      */
     public Pose2d getPose() {
         return odometry.getPoseMeters();
+    }
+
+    /**
+     * Returns PIDController used to control left side of drivetrain.
+     */
+    public PIDController getLeftPid() {
+        return leftPid;
+    }
+
+    /**
+     * Returns PIDController used to control left side of drivetrain.
+     */
+    public PIDController getRightPid() {
+        return rightPid;
+    }
+
+    /**
+     * Returns drive kinematics object.
+     */
+    public DifferentialDriveKinematics getKinematics() {
+        return kinematics;
+    }
+
+    /**
+     * Returns feedforward object.
+     */
+    public SimpleMotorFeedforward getFeedforward() {
+        return feedforward;
+    }
+
+    /**
+     * Returns trajectory config that respects drivetrain constraints.
+     */
+    public TrajectoryConfig getTrajectoryConfig() {
+        return trajectoryConfig;
     }
 
     /**
