@@ -43,7 +43,8 @@ public class Drivetrain extends SubsystemBase {
     private static final double WHEEL_DIAMETER = 0.1524; // meters
     private static final double GEAR_RATIO = (58.0 / 11.0) * (32.0 / 18.0);
     private static final double TICKS_PER_REV = 2048; // encoder units
-    private static final double ENCODER_TO_METERS = (Math.PI * WHEEL_DIAMETER) / (GEAR_RATIO * TICKS_PER_REV);
+    private static final double ENCODER_TO_METERS =
+            (Math.PI * WHEEL_DIAMETER) / (GEAR_RATIO * TICKS_PER_REV);
 
     // controls
     private final DifferentialDriveOdometry odometry;
@@ -54,7 +55,7 @@ public class Drivetrain extends SubsystemBase {
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
     private final DifferentialDriveVoltageConstraint voltageConstraint =
             new DifferentialDriveVoltageConstraint(feedforward, kinematics, MAX_VOLTAGE);
-    private final TrajectoryConfig trajectoryConfig = 
+    private final TrajectoryConfig trajectoryConfig =
             new TrajectoryConfig(MAX_VELOCITY, MAX_ACCELERATION)
             .setKinematics(kinematics)
             .addConstraint(voltageConstraint);
