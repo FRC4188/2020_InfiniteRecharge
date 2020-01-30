@@ -50,6 +50,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         pilot.getAButtonObj().whenPressed(new FollowTrajectory(drivetrain, Waypoints.STRAIGHT));
+        pilot.getBButtonObj().whenPressed(new FollowTrajectory(drivetrain, Waypoints.S_CURVE));
     }
 
 }

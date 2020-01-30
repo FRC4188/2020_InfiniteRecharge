@@ -30,15 +30,15 @@ public class Drivetrain extends SubsystemBase {
     private final ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
     // constants
-    private static final double kS = 0.134; // volts
+    private static final double kS = 1.34; // volts
     private static final double kV = 2.12; // volt seconds / meter
     private static final double kA = 0.363; // volt seconds squared / meter
-    private static final double kP = 5.5;
-    private static final double MAX_VELOCITY = 1; // meters / second
-    private static final double MAX_ACCELERATION = 3; // meters / second squared
-    private static final double MAX_VOLTAGE = 10; // volts
-    private static final double ARCADE_MAX_VEL = 1; // meters / second
-    private static final double ARCADE_MAX_ROT = Math.PI / 4.0; // rads / second
+    private static final double kP = 3.5;
+    private static final double AUTO_MAX_VEL = 1; // meters / second
+    private static final double AUTO_MAX_ACCEL = 3; // meters / second squared
+    private static final double AUTO_MAX_VOLTAGE = 10; // volts
+    private static final double ARCADE_MAX_VEL = 3; // meters / second
+    private static final double ARCADE_MAX_ROT = 2 * Math.PI; // rads / second
     private static final double TRACKWIDTH = 0.58; // meters
     private static final double WHEEL_DIAMETER = 0.1524; // meters
     private static final double GEAR_RATIO = (58.0 / 11.0) * (32.0 / 18.0);
@@ -54,9 +54,9 @@ public class Drivetrain extends SubsystemBase {
             new DifferentialDriveKinematics(TRACKWIDTH);
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
     private final DifferentialDriveVoltageConstraint voltageConstraint =
-            new DifferentialDriveVoltageConstraint(feedforward, kinematics, MAX_VOLTAGE);
+            new DifferentialDriveVoltageConstraint(feedforward, kinematics, AUTO_MAX_VOLTAGE);
     private final TrajectoryConfig trajectoryConfig =
-            new TrajectoryConfig(MAX_VELOCITY, MAX_ACCELERATION)
+            new TrajectoryConfig(AUTO_MAX_VEL, AUTO_MAX_ACCEL)
             .setKinematics(kinematics)
             .addConstraint(voltageConstraint);
 
@@ -134,12 +134,10 @@ public class Drivetrain extends SubsystemBase {
     public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
         double leftVel = speeds.leftMetersPerSecond;
         double rightVel = speeds.rightMetersPerSecond;
-        double leftAccel = (leftVel - getLeftVelocity()) / 0.02;
-        double rightAccel = (rightVel - getRightVelocity()) / 0.02;
         SmartDashboard.putNumber("Left Vel Setpoint", leftVel);
         SmartDashboard.putNumber("Right Vel Setpoint", rightVel);
-        double leftFeedforward = feedforward.calculate(leftVel, leftAccel);
-        double rightFeedforward = feedforward.calculate(rightVel, rightAccel);
+        double leftFeedforward = feedforward.calculate(leftVel);
+        double rightFeedforward = feedforward.calculate(rightVel);
         double leftOutput = leftPid.calculate(getLeftVelocity(), leftVel)
                 + leftFeedforward;
         double rightOutput = rightPid.calculate(getRightVelocity(), rightVel)
@@ -148,7 +146,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Controls the drivetrain using an arcade model, with inputs [-1, 1].
+     * Controls the drivetrain using a closed loop arcade model, with inputs [-1, 1].
      * @param xSpeed - Forward percent output.
      * @param zRotation - Rotational percent output - ccw positive.
      */
@@ -158,6 +156,26 @@ public class Drivetrain extends SubsystemBase {
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeedMetersPerSec, 0.0, zRotRadPerSec);
         DifferentialDriveWheelSpeeds speeds = kinematics.toWheelSpeeds(chassisSpeeds);
         setSpeeds(speeds);
+    }
+
+    /**
+     * Controls the drivetrain using an open loop arcade model, with inputs [-1, 1].
+     * @param xSpeed - Forward percent output.
+     * @param zRotation - Rotational percent output - cw positive.
+     */
+    public void arcadeOpenLoop(double xSpeed, double zRotation) {
+		double leftOutput = xSpeed + zRotation;
+		double rightOutput = xSpeed - zRotation;
+		if(Math.abs(leftOutput) > 1.0 || Math.abs(rightOutput) > 1.0) {
+			if(Math.abs(rightOutput) > Math.abs(leftOutput)) {
+				leftOutput = (leftOutput / rightOutput) * Math.signum(leftOutput);
+				rightOutput = 1.0 * Math.signum(rightOutput);
+			} else  {
+                rightOutput = (rightOutput / leftOutput) * Math.signum(rightOutput);
+                leftOutput = 1.0 * Math.signum(leftOutput);
+            }
+        }
+        tankVolts(leftOutput * 12, rightOutput * 12);
     }
 
     /**
