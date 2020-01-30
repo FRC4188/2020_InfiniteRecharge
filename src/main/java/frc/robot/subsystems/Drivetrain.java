@@ -132,13 +132,17 @@ public class Drivetrain extends SubsystemBase {
      * Sets desired wheel speeds using closed loop control.
      */
     public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
-        SmartDashboard.putNumber("Left Setpoint", speeds.leftMetersPerSecond);
-        SmartDashboard.putNumber("Right Setpoint", speeds.rightMetersPerSecond);
-        double leftFeedforward = feedforward.calculate(speeds.leftMetersPerSecond);
-        double rightFeedforward = feedforward.calculate(speeds.rightMetersPerSecond);
-        double leftOutput = leftPid.calculate(getLeftVelocity(), speeds.leftMetersPerSecond)
+        double leftVel = speeds.leftMetersPerSecond;
+        double rightVel = speeds.rightMetersPerSecond;
+        double leftAccel = (leftVel - getLeftVelocity()) / 0.02;
+        double rightAccel = (rightVel - getRightVelocity()) / 0.02;
+        SmartDashboard.putNumber("Left Vel Setpoint", leftVel);
+        SmartDashboard.putNumber("Right Vel Setpoint", rightVel);
+        double leftFeedforward = feedforward.calculate(leftVel, leftAccel);
+        double rightFeedforward = feedforward.calculate(rightVel, rightAccel);
+        double leftOutput = leftPid.calculate(getLeftVelocity(), leftVel)
                 + leftFeedforward;
-        double rightOutput = rightPid.calculate(getRightVelocity(), speeds.rightMetersPerSecond)
+        double rightOutput = rightPid.calculate(getRightVelocity(), rightVel)
                 + rightFeedforward;
         tankVolts(leftOutput, rightOutput);
     }
