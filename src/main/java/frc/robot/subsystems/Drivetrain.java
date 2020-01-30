@@ -210,17 +210,18 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Resets necessary sensors for drivetrain.
+     * Resets necessary sensors and odometry for drivetrain.
      */
     public void reset() {
         resetEncoders();
         resetGyro();
+        resetOdometry();
     }
 
     /**
      * Resets encoder values to 0 for both sides of drivetrain.
      */
-    public void resetEncoders() {
+    private void resetEncoders() {
         leftMotor.setSelectedSensorPosition(0);
         rightMotor.setSelectedSensorPosition(0);
     }
@@ -228,8 +229,15 @@ public class Drivetrain extends SubsystemBase {
     /**
      * Resets gyro angle to zero.
      */
-    public void resetGyro() {
+    private void resetGyro() {
         gyro.reset();
+    }
+
+    /**
+     * Resets pose to zero.
+     */
+    private void resetOdometry() {
+        odometry.resetPosition(new Pose2d(), Rotation2d.fromDegrees(getGyroAngle()));
     }
 
     /**
