@@ -102,7 +102,7 @@ public class Shooter extends SubsystemBase {
      * Gets shooter motor velocity in rpm.
      */
     public double getVelocity() {
-        return shooterMotor.getSelectedSensorVelocity() * 600 * ENCODER_TICKS_PER_REV;
+        return (shooterMotor.getSelectedSensorVelocity() * 600) / ENCODER_TICKS_PER_REV;
     }
 
 }
