@@ -27,7 +27,6 @@ public class Shooter extends SubsystemBase {
     private static final int    TIMEOUT = 10; // ms
     private static final double ENCODER_TICKS_PER_REV = 2048;
     private static final double MAX_RPM = MAX_VELOCITY / ENCODER_TICKS_PER_REV;
-    public double speed;
 
     /**
      * Constructs new Shooter object and configures devices.
@@ -42,8 +41,6 @@ public class Shooter extends SubsystemBase {
         setCoast();
         controllerInit();
         configMotors();
-
-        SmartDashboard.putNumber("Set shooter speed (RPM)", 0.0);
     }
 
     /**
@@ -69,7 +66,6 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("ShooterSlave velocity", shooterSlave.getSelectedSensorVelocity() * 600 / ENCODER_TICKS_PER_REV);
         SmartDashboard.putNumber("ShooterMotor temp", shooterMotor.getTemperature());
         SmartDashboard.putNumber("ShooterSlave temp", shooterSlave.getTemperature());
-        speed = SmartDashboard.getNumber("Set shooter speed (RPM)", 0.0);
     }
 
     /** 
@@ -131,9 +127,5 @@ public class Shooter extends SubsystemBase {
      */
     public double getMaxVelocity(){
         return MAX_RPM;
-    }
-
-    public double getSpeed(){
-        return speed;
     }
 }

@@ -57,7 +57,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         pilot.getBButtonObj().whileHeld(new TurnBelt(magazine, 0.9));
-        pilot.getAButtonObj().whileHeld(new SpinShooter(shooter, shooter.getSpeed()));
+        pilot.getAButtonObj().whileHeld(new SpinShooter(shooter, limelight.formulaRPM()));
         pilot.getRbButtonObj().whileHeld(new CenterBay(drivetrain, limelight, pilot.getY(Hand.kLeft)));
     }
 
