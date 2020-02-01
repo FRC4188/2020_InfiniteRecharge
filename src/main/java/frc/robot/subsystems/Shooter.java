@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -12,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Shooter extends SubsystemBase {
 
     // device initialization
-    private WPI_TalonFX shooterMotor = new WPI_TalonFX(11);
-    private WPI_TalonFX shooterSlave = new WPI_TalonFX(12);
+    private WPI_TalonFX leftShooter = new WPI_TalonFX(11);
+    private WPI_TalonFX rightShooter = new WPI_TalonFX(12);
 
     // constants
     private static final double MAX_VELOCITY = 20000.0; // talon units per 100ms
@@ -21,8 +22,6 @@ public class Shooter extends SubsystemBase {
     private static final double kI = 0.0;
     private static final double kD = 0.0;
     private static final double kF = 1023 / MAX_VELOCITY;
-    private static final int    SLOT_ID = 0;
-    private static final int    TIMEOUT = 10; // ms
     private static final double ENCODER_TICKS_PER_REV = 2048;
 
     /**
@@ -30,16 +29,20 @@ public class Shooter extends SubsystemBase {
      */
     public Shooter() {
 
-        // slave control
-        shooterSlave.follow(shooterMotor);
-        shooterSlave.setInverted(true);
+        // inversion
+        leftShooter.setInverted(true);
 
         // setup encoders
-        shooterMotor.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 10);
+        leftShooter.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 10);
+        rightShooter.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 10);
+        rightShooter.setSensorPhase(true);
 
         // configuration
         setCoast();
         controllerInit();
+
+        // temporary testing
+        SmartDashboard.putNumber("Shooter rpm setpoint", 0.0);
 
     }
 
@@ -55,23 +58,30 @@ public class Shooter extends SubsystemBase {
      * Writes values to Shuffleboard.
      */
     private void updateShuffleboard() {
+        SmartDashboard.putNumber("Left shooter rpm", getLeftVelocity());
+        SmartDashboard.putNumber("Right shooter rpm", getRightVelocity());
     }
 
     /** 
      * Configures gains for SRX closed loop controller.
      */
     private void controllerInit() {
-        shooterMotor.config_kP(SLOT_ID, kP, TIMEOUT);
-        shooterMotor.config_kI(SLOT_ID, kI, TIMEOUT);
-        shooterMotor.config_kD(SLOT_ID, kD, TIMEOUT);
-        shooterMotor.config_kF(SLOT_ID, kF, TIMEOUT);
+        leftShooter.config_kP(0, kP, 10);
+        leftShooter.config_kI(0, kI, 10);
+        leftShooter.config_kD(0, kD, 10);
+        leftShooter.config_kF(0, kF, 10);
+        rightShooter.config_kP(0, kP, 10);
+        rightShooter.config_kI(0, kI, 10);
+        rightShooter.config_kD(0, kD, 10);
+        rightShooter.config_kF(0, kF, 10);
     }
 
     /**
      * Sets shooter motors to a given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        shooterMotor.set(percent);
+        leftShooter.set(percent);
+        rightShooter.set(percent);
     }
 
     /**
@@ -79,30 +89,45 @@ public class Shooter extends SubsystemBase {
      */
     public void setVelocity(double velocity) {
         velocity = (velocity * ENCODER_TICKS_PER_REV) / 600; // native is talon units per 100ms
-        shooterMotor.set(ControlMode.Velocity, velocity);
+        leftShooter.set(ControlMode.Velocity, velocity);
+        rightShooter.set(ControlMode.Velocity, velocity);
     }
 
     /**
      * Sets shooter motors to brake mode.
      */
     public void setBrake() {
-        shooterMotor.setNeutralMode(NeutralMode.Brake);
-        shooterSlave.setNeutralMode(NeutralMode.Brake);
+        leftShooter.setNeutralMode(NeutralMode.Brake);
+        rightShooter.setNeutralMode(NeutralMode.Brake);
     }
 
     /**
      * Sets shooter motors to coast mode.
      */
     public void setCoast() {
-        shooterMotor.setNeutralMode(NeutralMode.Coast);
-        shooterSlave.setNeutralMode(NeutralMode.Coast);
+        leftShooter.setNeutralMode(NeutralMode.Coast);
+        rightShooter.setNeutralMode(NeutralMode.Coast);
     }
 
     /**
-     * Gets shooter motor velocity in rpm.
+     * Gets left shooter motor velocity in rpm.
      */
-    public double getVelocity() {
-        return (shooterMotor.getSelectedSensorVelocity() * 600) / ENCODER_TICKS_PER_REV;
+    public double getLeftVelocity() {
+        return (leftShooter.getSelectedSensorVelocity() * 600) / ENCODER_TICKS_PER_REV;
+    }
+
+    /**
+     * Gets right shooter motor velocity in rpm.
+     */
+    public double getRightVelocity() {
+        return (rightShooter.getSelectedSensorVelocity() * 600) / ENCODER_TICKS_PER_REV;
+    }
+
+    /**
+     * Gets velocity setpoint from dashboard.
+     */
+    public double getDashSetpoint() {
+        return SmartDashboard.getNumber("Shooter rpm setpoint", 0.0);
     }
 
 }
