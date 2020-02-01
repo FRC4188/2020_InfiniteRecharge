@@ -1,9 +1,14 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import frc.robot.commands.drive.FollowTrajectory;
+import frc.robot.commands.drive.CenterBay;
 import frc.robot.commands.drive.ManualDrive;
+import frc.robot.commands.magazine.TurnBelt;
+import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Magazine;
+import frc.robot.subsystems.Shooter;
 import frc.robot.utils.CspController;
 
 /**
@@ -13,6 +18,9 @@ public class RobotContainer {
 
     // subsystem initialization
     private final Drivetrain drivetrain = new Drivetrain();
+    private final Magazine magazine = new Magazine();
+    private final Shooter shooter = new Shooter();
+    private final Limelight limelight = new Limelight();
 
     // controller initialization
     private final CspController pilot = new CspController(0);
@@ -48,7 +56,9 @@ public class RobotContainer {
      * Binds commands to buttons on controllers.
      */
     private void configureButtonBindings() {
-        pilot.getAButtonObj().whenPressed(new FollowTrajectory(drivetrain));
+        pilot.getBButtonObj().whileHeld(new TurnBelt(magazine, 0.9));
+        pilot.getAButtonObj().whileHeld(new SpinShooter(shooter, shooter.getSpeed()));
+        pilot.getRbButtonObj().whileHeld(new CenterBay(drivetrain, limelight, pilot.getY(Hand.kLeft)));
     }
 
 }
