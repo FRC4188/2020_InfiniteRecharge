@@ -17,11 +17,10 @@ public class Shooter extends SubsystemBase {
     private WPI_TalonFX rightShooter = new WPI_TalonFX(12);
 
     // constants
-    private static final double MAX_VELOCITY = 20000.0; // talon units per 100ms
-    private static final double kP = 0.2;
+    private static final double kP = 0.07;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
-    private static final double kF = 1023 / MAX_VELOCITY;
+    private static final double kF = 1023 / 20000.0;
     private static final double ENCODER_TICKS_PER_REV = 2048;
 
     /**
