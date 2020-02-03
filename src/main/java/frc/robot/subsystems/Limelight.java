@@ -11,7 +11,9 @@ public class Limelight extends SubsystemBase{
 
     // constants
     public final double CAMERA_HEIGHT = 240; // pixels
-    public final double CAMERA_FOV = Math.toRadians(49.7); // rads
+    public final double CAMERA_WIDTH = 320; // pixels
+    public final double CAMERA_FOV_HOR = Math.toRadians(59.6); // rads
+    public final double CAMERA_FOV_VER = Math.toRadians(49.7); // rads
     private final double FEET_TO_METERS = 0.3048;
     private final double RAD_TO_DEGREES = 180 / Math.PI;
     private final double formulaRatio = 55.029;
@@ -20,8 +22,9 @@ public class Limelight extends SubsystemBase{
     private final double shooterHeight = 43 / 12; // meters
     private final double portDist = 29.25 / 12; // the horizontal distance between the inner and outer ports in meters
     private final double heightDiff = portHeight - shooterHeight; // difference in height in meters
-    private final double camAng = 45; //degrees
-    private double vel, dist, angDist;
+    private final double camAng = 30; //degrees
+    private final double multiplier = 0.88; // offset for distance reader
+    private double dist, angDist, minBound, maxBound;
 
     // LED mode enum
     public enum LedMode {
@@ -54,7 +57,6 @@ public class Limelight extends SubsystemBase{
      */
     public Limelight() {
         limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-        SmartDashboard.putNumber("RPM Adjuster", 0.0);
     }
 
     @Override
@@ -64,8 +66,9 @@ public class Limelight extends SubsystemBase{
     }
 
     public void updateShuffleboard(){
-        vel = SmartDashboard.getNumber("RPM Adjuster", 0.0);
         SmartDashboard.putNumber("Formula RPM", formulaRPM());
+        SmartDashboard.putNumber("Direct line distance", dist);
+        SmartDashboard.putNumber("Horizontal distance", angDist);
     }
 
     /**
@@ -110,14 +113,12 @@ public class Limelight extends SubsystemBase{
     public double getDistance(double objectHeight) {
         double boxHeight = limelightTable.getEntry("tvert").getDouble(0.0); // pixels
         if(boxHeight == 0) return 0;
-        double percentHeight = boxHeight / CAMERA_HEIGHT;
-        double boxDegree = percentHeight * CAMERA_FOV;
-        double r = objectHeight / boxDegree;
-        return r; // from front of bot
+        double output = objectHeight/(2*Math.tan(boxHeight*CAMERA_FOV_VER/(2*CAMERA_HEIGHT)));
+        return output / multiplier; // from front of bot
     }
 
     public double formulaRPM(){
-        return (formulaRatio * angDist) + vel;
+        return (formulaRatio * angDist) + 4349.71;
     }
 
     /**
@@ -139,5 +140,18 @@ public class Limelight extends SubsystemBase{
     public void setDist(){
         dist = getDistance(tapeHeight);
         angDist = dist * Math.tan((getVerticalAngle() + camAng) / RAD_TO_DEGREES);
+    }
+
+    public void setBounds(){
+        minBound = formulaRPM() - 100;
+        maxBound = formulaRPM() + 100;
+    }
+
+    public double getMinBound(){
+        return minBound;
+    }
+
+    public double getMaxBound(){
+        return maxBound;
     }
 }

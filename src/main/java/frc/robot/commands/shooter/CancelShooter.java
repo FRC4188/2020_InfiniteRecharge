@@ -4,15 +4,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 
-public class SpinShooter extends CommandBase{
+public class CancelShooter extends CommandBase{
 
     private Shooter shooter;
-    private Limelight limelight;
 
-    public SpinShooter(Shooter shooter, Limelight limelight) {
-        addRequirements(shooter, limelight);
+    public CancelShooter(Shooter shooter) {
+        addRequirements(shooter);
         this.shooter = shooter;
-        this.limelight = limelight;
     }
 
     @Override
@@ -21,7 +19,7 @@ public class SpinShooter extends CommandBase{
 
     @Override
     public void execute() {
-        shooter.setVelocity(limelight.formulaRPM());
+        shooter.setCoast();
     }
 
     @Override
@@ -31,6 +29,5 @@ public class SpinShooter extends CommandBase{
 
     @Override
     public void end(boolean interrupted) {
-        shooter.setCoast();
     }
 }

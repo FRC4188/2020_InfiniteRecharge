@@ -1,9 +1,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.drive.CenterBay;
 import frc.robot.commands.drive.ManualDrive;
 import frc.robot.commands.magazine.TurnBelt;
+import frc.robot.commands.shooter.CancelShooter;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
@@ -19,12 +21,18 @@ public class RobotContainer {
     // subsystem initialization
     private final Drivetrain drivetrain = new Drivetrain();
     private final Magazine magazine = new Magazine();
-    private final Shooter shooter = new Shooter();
-    private final Limelight limelight = new Limelight();
+    private static final Shooter shooter = new Shooter();
+    private static final Limelight limelight = new Limelight();
 
     // controller initialization
     private final CspController pilot = new CspController(0);
     private final CspController copilot = new CspController(1);
+
+    // command groups
+    ParallelCommandGroup shoot = new ParallelCommandGroup(new SpinShooter(shooter, limelight), 
+        new TurnBelt(magazine));
+    ParallelCommandGroup cancelShoot = new ParallelCommandGroup(new TurnBelt(magazine, 0), 
+        new CancelShooter(shooter));
 
     /**
      * Initializes robot subsystems, controllers, and commands.
@@ -57,8 +65,19 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         pilot.getBButtonObj().whileHeld(new TurnBelt(magazine, 0.9));
-        pilot.getAButtonObj().whileHeld(new SpinShooter(shooter, limelight.formulaRPM()));
+        pilot.getBButtonObj().whenReleased(new TurnBelt(magazine, 0));
+        pilot.getAButtonObj().whileHeld(new SpinShooter(shooter, limelight));
+        pilot.getAButtonObj().whenReleased(new CancelShooter(shooter));
+        pilot.getYButtonObj().whileHeld(shoot);
+        pilot.getYButtonObj().whenReleased(cancelShoot);
         pilot.getRbButtonObj().whileHeld(new CenterBay(drivetrain, limelight, pilot.getY(Hand.kLeft)));
     }
 
+    public static Limelight getLimelight(){
+        return limelight;
+    }
+
+    public static Shooter getShooter(){
+        return shooter;
+    }
 }

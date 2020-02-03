@@ -6,8 +6,13 @@ import frc.robot.subsystems.Magazine;
 public class TurnBelt extends CommandBase{
 
     private Magazine magazine;
-    private double velocity; // [-1.0, 1.0]
+    private double velocity = -1;
     
+    public TurnBelt(Magazine magazine) {
+        addRequirements(magazine);
+        this.magazine = magazine;
+    }
+
     public TurnBelt(Magazine magazine, double velocity) {
         addRequirements(magazine);
         this.magazine = magazine;
@@ -20,7 +25,8 @@ public class TurnBelt extends CommandBase{
 
     @Override
     public void execute() {
-        magazine.set(velocity);
+        if (velocity == -1) magazine.set(magazine.getSpeed());
+        else magazine.set(velocity);
     }
 
     @Override
@@ -30,6 +36,7 @@ public class TurnBelt extends CommandBase{
 
     @Override
     public void end(boolean interrupted) {
+        velocity = -1;
         magazine.set(0);
     }
 }
