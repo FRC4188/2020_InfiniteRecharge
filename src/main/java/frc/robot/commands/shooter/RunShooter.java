@@ -1,14 +1,13 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 
-public class CancelShooter extends CommandBase{
+public class RunShooter extends CommandBase{
 
     private Shooter shooter;
 
-    public CancelShooter(Shooter shooter) {
+    public RunShooter(Shooter shooter) {
         addRequirements(shooter);
         this.shooter = shooter;
     }
@@ -19,7 +18,7 @@ public class CancelShooter extends CommandBase{
 
     @Override
     public void execute() {
-        shooter.setVelocity(0);
+        shooter.setVelocity();
     }
 
     @Override
@@ -29,5 +28,6 @@ public class CancelShooter extends CommandBase{
 
     @Override
     public void end(boolean interrupted) {
+        shooter.setCoast();
     }
 }

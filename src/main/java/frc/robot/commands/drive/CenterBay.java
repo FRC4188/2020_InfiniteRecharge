@@ -13,9 +13,9 @@ public class CenterBay extends CommandBase {
     Limelight limelight;
     double output;
 
-    final double kP = 0.02;
-    final double kD = 0.01;
-    final double DELTA_T = 0.02;
+    final double kP = 0.05;
+    final double kD = 0.4;
+    final double DELTA_T = 0.7;
 
     double lastError;
 

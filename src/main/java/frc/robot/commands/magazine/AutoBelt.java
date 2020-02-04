@@ -3,15 +3,13 @@ package frc.robot.commands.magazine;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Magazine;
 
-public class TurnBelt extends CommandBase{
+public class AutoBelt extends CommandBase{
 
     private Magazine magazine;
-    private double velocity;
-
-    public TurnBelt(Magazine magazine, double velocity) {
+    
+    public AutoBelt(Magazine magazine) {
         addRequirements(magazine);
         this.magazine = magazine;
-        this.velocity = velocity;
     }
 
     @Override
@@ -20,7 +18,7 @@ public class TurnBelt extends CommandBase{
 
     @Override
     public void execute() {
-        magazine.set(velocity);
+        magazine.set(magazine.getSpeed());
     }
 
     @Override
@@ -30,5 +28,6 @@ public class TurnBelt extends CommandBase{
 
     @Override
     public void end(boolean interrupted) {
+        magazine.set(0);
     }
 }

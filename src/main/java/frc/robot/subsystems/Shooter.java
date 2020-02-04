@@ -27,6 +27,7 @@ public class Shooter extends SubsystemBase {
     private static final int    TIMEOUT = 10; // ms
     private static final double ENCODER_TICKS_PER_REV = 2048;
     private static final double MAX_RPM = MAX_VELOCITY / ENCODER_TICKS_PER_REV;
+    private double speed;
 
     /**
      * Constructs new Shooter object and configures devices.
@@ -41,6 +42,7 @@ public class Shooter extends SubsystemBase {
         setCoast();
         controllerInit();
         configMotors();
+        SmartDashboard.putNumber("Set shooter speed", 0.0);
     }
 
     /**
@@ -66,6 +68,7 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("ShooterSlave velocity", shooterSlave.getSelectedSensorVelocity() * 600 / ENCODER_TICKS_PER_REV);
         SmartDashboard.putNumber("ShooterMotor temp", shooterMotor.getTemperature());
         SmartDashboard.putNumber("ShooterSlave temp", shooterSlave.getTemperature());
+        speed = SmartDashboard.getNumber("Set shooter speed", 0.0);
     }
 
     /** 
@@ -97,6 +100,15 @@ public class Shooter extends SubsystemBase {
         velocity = (velocity * ENCODER_TICKS_PER_REV) / 600; // native is talon units per 100ms
         shooterMotor.set(ControlMode.Velocity, velocity);
         shooterSlave.set(ControlMode.Velocity, -velocity);
+    }
+
+    /**
+     * Sets shooter motors to a given velocity in rpm.
+     */
+    public void setVelocity() {
+        double sped = (speed * ENCODER_TICKS_PER_REV) / 600; // native is talon units per 100ms
+        shooterMotor.set(ControlMode.Velocity, sped);
+        shooterSlave.set(ControlMode.Velocity, -sped);
     }
 
     /**

@@ -7,8 +7,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.AutoCenterBay;
 import frc.robot.commands.drive.CenterBay;
 import frc.robot.commands.drive.ManualDrive;
+import frc.robot.commands.magazine.AutoBelt;
 import frc.robot.commands.magazine.TurnBelt;
 import frc.robot.commands.shooter.CancelShooter;
+import frc.robot.commands.shooter.RunShooter;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
@@ -34,7 +36,7 @@ public class RobotContainer {
 
     // command groups
     ParallelCommandGroup shoot = new ParallelCommandGroup(new SpinShooter(shooter, limelight), 
-        new TurnBelt(magazine));
+        new AutoBelt(magazine));
     ParallelCommandGroup cancelShoot = new ParallelCommandGroup(new TurnBelt(magazine, 0), 
         new CancelShooter(shooter));
     //ParallelRaceGroup timedShoot = new ParallelRaceGroup(new Wait(), shoot);
@@ -78,7 +80,7 @@ public class RobotContainer {
         pilot.getYButtonObj().whileHeld(shoot);
         pilot.getYButtonObj().whenReleased(cancelShoot);
         pilot.getRbButtonObj().whileHeld(new CenterBay(drivetrain, limelight, pilot.getY(Hand.kLeft)));
-        pilot.getLbButtonObj().whenPressed(autoShoot);
+        //pilot.getLbButtonObj().whenPressed(autoShoot);
         pilot.getStartButtonObj().whenPressed(new KillAll());
     }
 
