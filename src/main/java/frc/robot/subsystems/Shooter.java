@@ -22,6 +22,7 @@ public class Shooter extends SubsystemBase {
     private static final double kD = 0.0;
     private static final double kF = 1023 / 20000.0;
     private static final double ENCODER_TICKS_PER_REV = 2048;
+    private static final double RAMP_RATE = 0.2; // seconds
 
     /**
      * Constructs new Shooter object and configures devices.
@@ -39,9 +40,7 @@ public class Shooter extends SubsystemBase {
         // configuration
         setCoast();
         controllerInit();
-
-        // temporary testing
-        SmartDashboard.putNumber("Shooter rpm setpoint", 0.0);
+        setRampRate();
 
     }
 
@@ -109,6 +108,16 @@ public class Shooter extends SubsystemBase {
     }
 
     /**
+     * Configures shooter motor ramp rates.
+     */
+    public void setRampRate() {
+        leftShooter.configClosedloopRamp(RAMP_RATE);
+        leftShooter.configOpenloopRamp(RAMP_RATE);
+        rightShooter.configClosedloopRamp(RAMP_RATE);
+        rightShooter.configOpenloopRamp(RAMP_RATE);
+    }
+
+    /**
      * Gets left shooter motor velocity in rpm.
      */
     public double getLeftVelocity() {
@@ -120,13 +129,6 @@ public class Shooter extends SubsystemBase {
      */
     public double getRightVelocity() {
         return (rightShooter.getSelectedSensorVelocity() * 600) / ENCODER_TICKS_PER_REV;
-    }
-
-    /**
-     * Gets velocity setpoint from dashboard.
-     */
-    public double getDashSetpoint() {
-        return SmartDashboard.getNumber("Shooter rpm setpoint", 0.0);
     }
 
 }
