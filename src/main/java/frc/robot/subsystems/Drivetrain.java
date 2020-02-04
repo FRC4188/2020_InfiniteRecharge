@@ -17,10 +17,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Drivetrain extends SubsystemBase {
 
     // device initialization
-    private WPI_TalonSRX leftMotor = new WPI_TalonSRX(6);
-    private WPI_TalonSRX leftSlave = new WPI_TalonSRX(5);
-    private WPI_TalonSRX rightMotor = new WPI_TalonSRX(7);
-    private WPI_TalonSRX rightSlave = new WPI_TalonSRX(8);
+    private WPI_TalonSRX leftMotor = new WPI_TalonSRX(7);
+    private WPI_TalonSRX leftSlave = new WPI_TalonSRX(8);
+    private WPI_TalonSRX rightMotor = new WPI_TalonSRX(6);
+    private WPI_TalonSRX rightSlave = new WPI_TalonSRX(5);
     private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     private DifferentialDriveOdometry odometry;
 

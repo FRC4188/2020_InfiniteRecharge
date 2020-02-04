@@ -2,6 +2,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.drive.AutoCenterBay;
 import frc.robot.commands.drive.CenterBay;
 import frc.robot.commands.drive.ManualDrive;
 import frc.robot.commands.magazine.TurnBelt;
@@ -12,6 +15,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 import frc.robot.utils.CspController;
+import frc.robot.utils.KillAll;
 
 /**
  * Class containing setup for robot.
@@ -33,6 +37,9 @@ public class RobotContainer {
         new TurnBelt(magazine));
     ParallelCommandGroup cancelShoot = new ParallelCommandGroup(new TurnBelt(magazine, 0), 
         new CancelShooter(shooter));
+    //ParallelRaceGroup timedShoot = new ParallelRaceGroup(new Wait(), shoot);
+    SequentialCommandGroup autoShoot = new SequentialCommandGroup(new AutoCenterBay(drivetrain, 
+        limelight, 0.1), shoot);
 
     /**
      * Initializes robot subsystems, controllers, and commands.
@@ -71,6 +78,8 @@ public class RobotContainer {
         pilot.getYButtonObj().whileHeld(shoot);
         pilot.getYButtonObj().whenReleased(cancelShoot);
         pilot.getRbButtonObj().whileHeld(new CenterBay(drivetrain, limelight, pilot.getY(Hand.kLeft)));
+        pilot.getLbButtonObj().whenPressed(autoShoot);
+        pilot.getStartButtonObj().whenPressed(new KillAll());
     }
 
     public static Limelight getLimelight(){
