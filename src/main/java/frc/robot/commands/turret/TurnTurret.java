@@ -16,7 +16,7 @@ public class TurnTurret extends CommandBase{
         this.limelight = limelight;
         this.tolerance = tolerance;
         targetPosition = limelight.getHorizontalAngle();
-        if (targetPosition + turret.getPosition() < -170 || targetPosition + turret.getPosition() > 170) 
+        if (targetPosition < -170 || targetPosition > 170) 
             targetPosition -= 360 * Math.signum(position);
     }
     

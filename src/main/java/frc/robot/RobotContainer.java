@@ -81,7 +81,7 @@ public class RobotContainer {
         pilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));
         pilot.getDpadRightButtonObj().whileHeld(new ManualTurret(turret, 0.5));
         pilot.getDpadRightButtonObj().whenReleased(new ManualTurret(turret, 0));
-        pilot.getXButtonObj().whileHeld(new TurnTurret(turret, limelight, 0.5));
+        pilot.getXButtonObj().whenPressed(new TurnTurret(turret, limelight, 0.5));
         pilot.getLbButtonObj().whenPressed(new Spin360(turret, 1));
     }
 
