@@ -2,20 +2,24 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.AutoCenterBay;
 import frc.robot.commands.drive.CenterBay;
 import frc.robot.commands.drive.ManualDrive;
+import frc.robot.commands.groups.CancelShoot;
+import frc.robot.commands.groups.Shoot;
 import frc.robot.commands.magazine.AutoBelt;
 import frc.robot.commands.magazine.TurnBelt;
 import frc.robot.commands.shooter.CancelShooter;
-import frc.robot.commands.shooter.RunShooter;
 import frc.robot.commands.shooter.SpinShooter;
+import frc.robot.commands.turret.ManualTurret;
+import frc.robot.commands.turret.Spin360;
+import frc.robot.commands.turret.TurnTurret;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 import frc.robot.utils.CspController;
 import frc.robot.utils.KillAll;
 
@@ -29,19 +33,11 @@ public class RobotContainer {
     private final Magazine magazine = new Magazine();
     private static final Shooter shooter = new Shooter();
     private static final Limelight limelight = new Limelight();
+    private final Turret turret = new Turret();
 
     // controller initialization
     private final CspController pilot = new CspController(0);
     private final CspController copilot = new CspController(1);
-
-    // command groups
-    ParallelCommandGroup shoot = new ParallelCommandGroup(new SpinShooter(shooter, limelight), 
-        new AutoBelt(magazine));
-    ParallelCommandGroup cancelShoot = new ParallelCommandGroup(new TurnBelt(magazine, 0), 
-        new CancelShooter(shooter));
-    //ParallelRaceGroup timedShoot = new ParallelRaceGroup(new Wait(), shoot);
-    SequentialCommandGroup autoShoot = new SequentialCommandGroup(new AutoCenterBay(drivetrain, 
-        limelight, 0.1), shoot);
 
     /**
      * Initializes robot subsystems, controllers, and commands.
@@ -77,11 +73,16 @@ public class RobotContainer {
         pilot.getBButtonObj().whenReleased(new TurnBelt(magazine, 0));
         pilot.getAButtonObj().whileHeld(new SpinShooter(shooter, limelight));
         pilot.getAButtonObj().whenReleased(new CancelShooter(shooter));
-        pilot.getYButtonObj().whileHeld(shoot);
-        pilot.getYButtonObj().whenReleased(cancelShoot);
+        pilot.getYButtonObj().whileHeld(new Shoot(shooter, limelight, magazine));
+        pilot.getYButtonObj().whenReleased(new CancelShoot(shooter, limelight, magazine));
         pilot.getRbButtonObj().whileHeld(new CenterBay(drivetrain, limelight, pilot.getY(Hand.kLeft)));
-        //pilot.getLbButtonObj().whenPressed(autoShoot);
         pilot.getStartButtonObj().whenPressed(new KillAll());
+        pilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, -0.5));
+        pilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));
+        pilot.getDpadRightButtonObj().whileHeld(new ManualTurret(turret, 0.5));
+        pilot.getDpadRightButtonObj().whenReleased(new ManualTurret(turret, 0));
+        pilot.getXButtonObj().whileHeld(new TurnTurret(turret, limelight, 0.5));
+        pilot.getLbButtonObj().whenPressed(new Spin360(turret, 1));
     }
 
     public static Limelight getLimelight(){
