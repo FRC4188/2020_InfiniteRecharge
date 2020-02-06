@@ -49,7 +49,21 @@ public class FollowTrajectory extends RamseteCommand {
      */
     public FollowTrajectory(Drivetrain drivetrain, List<Pose2d> waypoints) {
         this(drivetrain, TrajectoryGenerator.generateTrajectory(
-                waypoints, drivetrain.getTrajectoryConfig())
+                waypoints, drivetrain.getTrajectoryConfig().setReversed(false))
+        );
+    }
+
+    /**
+     * Constructs a new FollowTrajectory command to drive a specified path given by
+     * a list of Pose2d waypoints.
+     *
+     * @param drivetrain - Drivetrain subsystem to require.
+     * @param waypoints - Poses to generate trajectory from.
+     * @param reversed - If true, robot is intended to follow backwards.
+     */
+    public FollowTrajectory(Drivetrain drivetrain, List<Pose2d> waypoints, boolean reversed) {
+        this(drivetrain, TrajectoryGenerator.generateTrajectory(
+                waypoints, drivetrain.getTrajectoryConfig().setReversed(reversed))
         );
     }
 

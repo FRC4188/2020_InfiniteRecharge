@@ -27,4 +27,14 @@ public class Waypoints {
             new Pose2d(3, 0, new Rotation2d())
     );
 
+    /**
+     * Starts right of center from bay, drives backward to trench.
+     * Coordinates are field centric.
+     */
+    public static final List<Pose2d> RIGHT_TO_TRENCH = List.of(
+            new Pose2d(3, -1.5, new Rotation2d()),
+            new Pose2d(5, -0.75, new Rotation2d()),
+            new Pose2d(8, -0.75, new Rotation2d())
+    );
+
 }
