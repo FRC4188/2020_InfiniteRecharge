@@ -31,7 +31,7 @@ public class RobotContainer {
      * Resets variables and sensors for each subsystem.
      */
     public void resetSubsystems() {
-        drivetrain.reset();
+        drivetrain.reset(Waypoints.RIGHT_TO_BACK_TRENCH.get(0));
     }
 
     /**
@@ -49,11 +49,9 @@ public class RobotContainer {
      * Binds commands to buttons on controllers.
      */
     private void configureButtonBindings() {
-        pilot.getAButtonObj().whenPressed(new FollowTrajectory(drivetrain, Waypoints.STRAIGHT));
-        pilot.getBButtonObj().whenPressed(new FollowTrajectory(drivetrain, Waypoints.S_CURVE));
-        pilot.getXButtonObj().whenPressed(new FollowTrajectory(drivetrain,
-                Waypoints.RIGHT_TO_TRENCH, true
-        ));
+        pilot.getAButtonObj().whenPressed(new FollowTrajectory(drivetrain, Waypoints.RIGHT_TO_BACK_TRENCH));
+        pilot.getBButtonObj().whenPressed(new FollowTrajectory(drivetrain, Waypoints.BACK_TO_FRONT_TRENCH, true));
+        pilot.getXButtonObj().whenPressed(new FollowTrajectory(drivetrain, Waypoints.FRONT_TRENCH_TO_BAR));
     }
 
 }

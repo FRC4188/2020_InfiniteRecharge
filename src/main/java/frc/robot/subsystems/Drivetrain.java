@@ -230,10 +230,10 @@ public class Drivetrain extends SubsystemBase {
     /**
      * Resets necessary sensors and odometry for drivetrain.
      */
-    public void reset() {
+    public void reset(Pose2d initialPose) {
         resetEncoders();
         resetGyro();
-        resetOdometry();
+        resetOdometry(initialPose);
     }
 
     /**
@@ -254,8 +254,8 @@ public class Drivetrain extends SubsystemBase {
     /**
      * Resets pose to zero.
      */
-    private void resetOdometry() {
-        odometry.resetPosition(new Pose2d(), Rotation2d.fromDegrees(getGyroAngle()));
+    private void resetOdometry(Pose2d initialPose) {
+        odometry.resetPosition(initialPose, Rotation2d.fromDegrees(getGyroAngle()));
     }
 
     /**

@@ -25,7 +25,7 @@ public class FollowTrajectory extends RamseteCommand {
      * @param trajectory - Trajectory to drive, transformed by current pose.
      */
     private FollowTrajectory(Drivetrain drivetrain, Trajectory trajectory) {
-        super(trajectory.transformBy(drivetrain.getPose().minus(trajectory.getInitialPose())),
+        super(trajectory,
                 drivetrain::getPose,
                 new RamseteController(),
                 drivetrain.getFeedforward(),
