@@ -34,7 +34,7 @@ public class Drivetrain extends SubsystemBase {
     private static final double kV = 2.12; // volt seconds / meter
     private static final double kA = 0.363; // volt seconds squared / meter
     private static final double kP = 3.5;
-    private static final double AUTO_MAX_VEL = 1; // meters / second
+    private static final double AUTO_MAX_VEL = 1.75; // meters / second
     private static final double AUTO_MAX_ACCEL = 3; // meters / second squared
     private static final double AUTO_MAX_VOLTAGE = 10; // volts
     private static final double ARCADE_MAX_VEL = 3; // meters / second
@@ -82,6 +82,7 @@ public class Drivetrain extends SubsystemBase {
         // reset devices
         resetEncoders();
         resetGyro();
+        gyro.calibrate();
 
         // configuration
         setBrake();
@@ -110,6 +111,7 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("Right Position", getRightPosition());
         SmartDashboard.putNumber("Right Velocity", getRightVelocity());
         SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
+        SmartDashboard.putString("Odometry", getPose().toString());
     }
 
     /**
