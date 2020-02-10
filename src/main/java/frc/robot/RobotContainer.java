@@ -9,6 +9,7 @@ import frc.robot.commands.drive.ManualDrive;
 import frc.robot.commands.groups.CancelShoot;
 import frc.robot.commands.groups.Shoot;
 import frc.robot.commands.magazine.AutoBelt;
+import frc.robot.commands.magazine.MagazineDefault;
 import frc.robot.commands.magazine.TurnBelt;
 import frc.robot.commands.shooter.CancelShooter;
 import frc.robot.commands.shooter.SpinShooter;
@@ -31,8 +32,8 @@ public class RobotContainer {
     // subsystem initialization
     private final Drivetrain drivetrain = new Drivetrain();
     private final Magazine magazine = new Magazine();
-    private static final Shooter shooter = new Shooter();
-    private static final Limelight limelight = new Limelight();
+    private final Shooter shooter = new Shooter();
+    private final Limelight limelight = new Limelight();
     private final Turret turret = new Turret();
 
     // controller initialization
@@ -63,6 +64,7 @@ public class RobotContainer {
                 () -> pilot.getX(Hand.kRight),
                 () -> pilot.getBumper(Hand.kLeft)
         ));
+        magazine.setDefaultCommand(new MagazineDefault(magazine, shooter));
     }
 
     /**
@@ -83,13 +85,5 @@ public class RobotContainer {
         pilot.getDpadRightButtonObj().whenReleased(new ManualTurret(turret, 0));
         pilot.getXButtonObj().whenPressed(new TurnTurret(turret, limelight, 0.5));
         pilot.getLbButtonObj().whenPressed(new Spin360(turret, 1));
-    }
-
-    public static Limelight getLimelight(){
-        return limelight;
-    }
-
-    public static Shooter getShooter(){
-        return shooter;
     }
 }
