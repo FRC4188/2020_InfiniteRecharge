@@ -25,16 +25,16 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        robotContainer.resetSubsystems();
     }
 
     @Override
     public void disabledPeriodic() {
+        autonomousCommand = robotContainer.getAutoCommand();
+        robotContainer.resetSubsystems();
     }
 
     @Override
     public void autonomousInit() {
-        autonomousCommand = null;
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
