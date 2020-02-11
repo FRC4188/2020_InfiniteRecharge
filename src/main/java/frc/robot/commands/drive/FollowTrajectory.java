@@ -2,14 +2,13 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.controller.RamseteController;
-import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.utils.Waypoints;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Follows a trajectory using a RAMSETE controller.
@@ -42,29 +41,16 @@ public class FollowTrajectory extends RamseteCommand {
 
     /**
      * Constructs a new FollowTrajectory command to drive a specified path given by
-     * a list of Pose2d waypoints.
+     * a Waypoints object.
      *
      * @param drivetrain - Drivetrain subsystem to require.
-     * @param waypoints - Poses to generate trajectory from.
+     * @param waypoints - Waypoints to generate trajectory from.
      */
-    public FollowTrajectory(Drivetrain drivetrain, List<Pose2d> waypoints) {
+    public FollowTrajectory(Drivetrain drivetrain, Waypoints waypoints) {
         this(drivetrain, TrajectoryGenerator.generateTrajectory(
-                waypoints, drivetrain.getTrajectoryConfig().setReversed(false))
-        );
-    }
-
-    /**
-     * Constructs a new FollowTrajectory command to drive a specified path given by
-     * a list of Pose2d waypoints.
-     *
-     * @param drivetrain - Drivetrain subsystem to require.
-     * @param waypoints - Poses to generate trajectory from.
-     * @param reversed - If true, robot is intended to follow backwards.
-     */
-    public FollowTrajectory(Drivetrain drivetrain, List<Pose2d> waypoints, boolean reversed) {
-        this(drivetrain, TrajectoryGenerator.generateTrajectory(
-                waypoints, drivetrain.getTrajectoryConfig().setReversed(reversed))
-        );
+                waypoints.getPoses(),
+                drivetrain.getTrajectoryConfig().setReversed(waypoints.isReversed())
+        ));
     }
 
     /**

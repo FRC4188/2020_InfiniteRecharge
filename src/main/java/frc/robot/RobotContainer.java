@@ -5,7 +5,7 @@ import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.ManualDrive;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utils.CspController;
-import frc.robot.utils.Waypoints;
+import frc.robot.utils.WaypointsList;
 
 /**
  * Class containing setup for robot.
@@ -31,7 +31,7 @@ public class RobotContainer {
      * Resets variables and sensors for each subsystem.
      */
     public void resetSubsystems() {
-        drivetrain.reset(Waypoints.LEFT_TO_ENEMY_TRENCH.get(0));
+        drivetrain.reset(WaypointsList.LEFT_TO_ENEMY_TRENCH.getPoses().get(0));
     }
 
     /**
@@ -49,9 +49,12 @@ public class RobotContainer {
      * Binds commands to buttons on controllers.
      */
     private void configureButtonBindings() {
-        pilot.getAButtonObj().whenPressed(new FollowTrajectory(drivetrain, Waypoints.LEFT_TO_ENEMY_TRENCH));
-        pilot.getYButtonObj().whenPressed(new FollowTrajectory(drivetrain, Waypoints.ENEMY_TRENCH_TO_SHOOT, true));
-
+        pilot.getAButtonObj().whenPressed(new FollowTrajectory(drivetrain,
+                WaypointsList.LEFT_TO_ENEMY_TRENCH)
+        );
+        pilot.getYButtonObj().whenPressed(new FollowTrajectory(drivetrain,
+                WaypointsList.ENEMY_TRENCH_TO_SHOOT)
+        );
     }
 
 }
