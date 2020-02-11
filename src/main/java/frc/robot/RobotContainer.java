@@ -9,6 +9,7 @@ import frc.robot.commands.drive.ManualDrive;
 import frc.robot.commands.groups.LeftEnemyTrenchAuto;
 import frc.robot.commands.groups.RightTrenchAuto;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Shooter;
 import frc.robot.utils.CspController;
 import frc.robot.utils.CspSequentialCommandGroup;
 
@@ -19,6 +20,7 @@ public class RobotContainer {
 
     // subsystem initialization
     private final Drivetrain drivetrain = new Drivetrain();
+    private final Shooter shooter = new Shooter();
 
     // controller initialization
     private final CspController pilot = new CspController(0);
