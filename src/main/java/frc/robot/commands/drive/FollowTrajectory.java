@@ -21,7 +21,7 @@ public class FollowTrajectory extends RamseteCommand {
      * Constructs a new FollowTrajectory command to drive a specified trajectory.
      *
      * @param drivetrain - Drivetrain subsystem to require.
-     * @param trajectory - Trajectory to drive, transformed by current pose.
+     * @param trajectory - Trajectory to drive.
      */
     private FollowTrajectory(Drivetrain drivetrain, Trajectory trajectory) {
         super(trajectory,

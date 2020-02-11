@@ -5,14 +5,12 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.ManualDrive;
 import frc.robot.commands.groups.LeftEnemyTrenchAuto;
 import frc.robot.commands.groups.RightTrenchAuto;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utils.CspController;
 import frc.robot.utils.CspSequentialCommandGroup;
-import frc.robot.utils.WaypointsList;
 
 /**
  * Class containing setup for robot.

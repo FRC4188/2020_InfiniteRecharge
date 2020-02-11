@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 /**
  * Class representing a SequentialCommandGroup with the added functionality of storing
- * information about intial pose.
+ * information about initial pose.
  */
 public class CspSequentialCommandGroup extends SequentialCommandGroup {
 
