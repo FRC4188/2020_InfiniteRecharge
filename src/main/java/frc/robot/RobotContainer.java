@@ -58,7 +58,7 @@ public class RobotContainer {
                 () -> pilot.getX(Hand.kRight),
                 () -> pilot.getBumper(Hand.kLeft)
         ));
-        shooter.setDefaultCommand(new SpinShooterFormula(shooter, limelight));
+        shooter.setDefaultCommand(new SpinShooter(shooter, 3500));
     }
 
     /**
@@ -66,22 +66,27 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
-        pilot.getBButtonObj().whileHeld(new RunMagazine(magazine, 0.9));
-        pilot.getBButtonObj().whenReleased(new RunMagazine(magazine, 0));
+        copilot.getAButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
+
+        copilot.getBButtonObj().whileHeld(new RunMagazine(magazine, 0.9));
+        copilot.getBButtonObj().whenReleased(new RunMagazine(magazine, 0));
+        copilot.getYButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
+        copilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
 
         pilot.getRbButtonObj().whileHeld(new DriveCenterPort(
                 drivetrain, limelight, () -> pilot.getY(Hand.kLeft)
         ));
 
         pilot.getStartButtonObj().whenPressed(new KillAll());
+        copilot.getStartButtonObj().whenPressed(new KillAll());
 
-        pilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, -0.5));
-        pilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));
-        pilot.getDpadRightButtonObj().whileHeld(new ManualTurret(turret, 0.5));
-        pilot.getDpadRightButtonObj().whenReleased(new ManualTurret(turret, 0));
+        copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, -0.5));
+        copilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));
+        copilot.getDpadRightButtonObj().whileHeld(new ManualTurret(turret, 0.5));
+        copilot.getDpadRightButtonObj().whenReleased(new ManualTurret(turret, 0));
 
-        pilot.getXButtonObj().whenPressed(new TurretCenterPort(turret, limelight));
+        copilot.getXButtonObj().toggleWhenPressed(new TurretCenterPort(turret, limelight));
 
     }
-
+    
 }

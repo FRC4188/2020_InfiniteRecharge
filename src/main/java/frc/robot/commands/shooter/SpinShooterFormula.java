@@ -19,7 +19,7 @@ public class SpinShooterFormula extends CommandBase {
      * @param limelight - Limelight subsystem to use.
      */
     public SpinShooterFormula(Shooter shooter, Limelight limelight) {
-        addRequirements(shooter, limelight);
+        addRequirements(shooter);
         this.shooter = shooter;
         this.limelight = limelight;
     }
@@ -35,7 +35,7 @@ public class SpinShooterFormula extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     @Override

@@ -48,6 +48,7 @@ public class TurretCenterPort extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        turret.set(0);
     }
 
 }
