@@ -1,18 +1,26 @@
 package frc.robot.commands.turret;
 
-import frc.robot.subsystems.Turret;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Turret;
 
-/** Manually controls turret using copilot triggers (left up, right down). */
+/**
+ * Manually sets turret to a given output.
+ */
 public class ManualTurret extends CommandBase {
 
-    Turret turret;
-    public double output;
+    private final Turret turret;
+    private final double percent;
 
-    public ManualTurret(Turret turret, double output) {
+    /**
+     * Constructs a new ManualTurret command to set turret to a given output.
+     *
+     * @param turret - Turret subsystem to use.
+     * @param percent - percent output to command turret motors [-1.0, 1.0].
+     */
+    public ManualTurret(Turret turret, double percent) {
         addRequirements(turret);
         this.turret = turret;
-        this.output = output;
+        this.percent = percent;
     }
 
     @Override
@@ -21,7 +29,7 @@ public class ManualTurret extends CommandBase {
 
     @Override
     public void execute() {
-        if (Math.abs(output) > 0) turret.set(output);
+        turret.set(percent);
     }
 
     @Override

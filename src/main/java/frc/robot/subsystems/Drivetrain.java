@@ -88,13 +88,13 @@ public class Drivetrain extends SubsystemBase {
      * Controls the drivetrain using an arcade model.
      */
     public void arcade(double xSpeed, double zRotation) {
-		double leftOutput = xSpeed + zRotation;
-		double rightOutput = xSpeed - zRotation;
-		if(Math.abs(leftOutput) > 1.0 || Math.abs(rightOutput) > 1.0) {
-			if(Math.abs(rightOutput) > Math.abs(leftOutput)) {
-				leftOutput = (leftOutput / rightOutput) * Math.signum(leftOutput);
-				rightOutput = 1.0 * Math.signum(rightOutput);
-			} else  {
+        double leftOutput = xSpeed + zRotation;
+        double rightOutput = xSpeed - zRotation;
+        if (Math.abs(leftOutput) > 1.0 || Math.abs(rightOutput) > 1.0) {
+            if (Math.abs(rightOutput) > Math.abs(leftOutput)) {
+                leftOutput = (leftOutput / rightOutput) * Math.signum(leftOutput);
+                rightOutput = 1.0 * Math.signum(rightOutput);
+            } else  {
                 rightOutput = (rightOutput / leftOutput) * Math.signum(rightOutput);
                 leftOutput = 1.0 * Math.signum(leftOutput);
             }

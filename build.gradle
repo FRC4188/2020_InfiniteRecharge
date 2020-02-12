@@ -1,14 +1,14 @@
 plugins {
     id "java"
     id "edu.wpi.first.GradleRIO" version "2020.1.2"
-    //id "checkstyle"
+    id "checkstyle"
 }
 
 // checkstyle configuration
-//checkstyle {
-//    configFile file('config/checkstyle/checkstyle.xml');
-//    toolVersion '8.28';
-//}
+checkstyle {
+    configFile file('config/checkstyle/checkstyle.xml');
+    toolVersion '8.28';
+}
 
 sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
