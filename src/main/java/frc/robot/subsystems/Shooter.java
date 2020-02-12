@@ -24,9 +24,6 @@ public class Shooter extends SubsystemBase {
     private static final double ENCODER_TICKS_PER_REV = 2048;
     private static final double RAMP_RATE = 1; // seconds
 
-    // state vars
-    private boolean toggled = false;
-
     /**
      * Constructs new Shooter object and configures devices.
      */
@@ -132,20 +129,6 @@ public class Shooter extends SubsystemBase {
      */
     public double getRightVelocity() {
         return (rightShooter.getSelectedSensorVelocity() * 600) / ENCODER_TICKS_PER_REV;
-    }
-
-    /**
-     * Toggles the shooter on and off
-     */
-    public void toggle(){
-        toggled=!toggled;
-    }
-
-    /**
-     * return the toggled value
-     */
-    public boolean getToggled(){
-        return toggled;
     }
 
 }

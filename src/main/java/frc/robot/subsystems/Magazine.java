@@ -16,7 +16,7 @@ public class Magazine extends SubsystemBase {
     private final CANEncoder magEncoder = new CANEncoder(magMotor);
 
     // constants
-    private static final double RAMP_RATE = 0.5;
+    private static final double RAMP_RATE = 0.5; // seconds
 
     /**
      * Constructs new magazine object and configures devices.
