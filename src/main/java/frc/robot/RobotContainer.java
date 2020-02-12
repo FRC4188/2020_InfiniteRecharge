@@ -80,8 +80,13 @@ public class RobotContainer {
      * Returns the currently selected command from the auto chooser and gets its initial pose.
      */
     public Command getAutoCommand() {
-        initialPose = autoChooser.getSelected().getInitialPose();
-        return autoChooser.getSelected();
+        Command autoCommand = autoChooser.getSelected();
+        if (autoCommand != null) {
+            initialPose = autoChooser.getSelected().getInitialPose();
+        } else {
+            initialPose = new Pose2d();
+        }
+        return autoCommand;
     }
 
 }

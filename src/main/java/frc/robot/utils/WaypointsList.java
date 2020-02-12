@@ -81,7 +81,7 @@ public class WaypointsList {
             List.of(
                 new Pose2d(5.85, -7.5, new Rotation2d()),
                 new Pose2d(4.85, -6, Rotation2d.fromDegrees(-90)),
-                new Pose2d(4.85, -3.5, Rotation2d.fromDegrees(-90))
+                new Pose2d(4.85, -4.5, Rotation2d.fromDegrees(-90))
             ), true
     );
 
