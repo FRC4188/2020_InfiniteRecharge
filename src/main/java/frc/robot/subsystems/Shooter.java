@@ -14,8 +14,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Shooter extends SubsystemBase {
 
     // device initialization
-    private WPI_TalonFX shooterMotor = new WPI_TalonFX(27);
-    private WPI_TalonFX shooterSlave = new WPI_TalonFX(26);
+    //private WPI_TalonFX shooterMotor = new WPI_TalonFX(27);
+    //private WPI_TalonFX shooterSlave = new WPI_TalonFX(26);
+    private WPI_TalonFX shooterMotor;
+    private WPI_TalonFX shooterSlave;
 
     // constants
     private static final double MAX_VELOCITY = 20000.0; // talon units per 100ms
