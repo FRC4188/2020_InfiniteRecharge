@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.commands.turret.ZeroTurret;
 
 /**
  * Class encapsulating turret function.
@@ -12,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Turret extends SubsystemBase {
 
     // device initialization
-    private final CANSparkMax turretMotor = new CANSparkMax(0, MotorType.kBrushless);
+    private final CANSparkMax turretMotor = new CANSparkMax(31, MotorType.kBrushless);
     private final CANEncoder turretEncoder = new CANEncoder(turretMotor);
 
     // constants

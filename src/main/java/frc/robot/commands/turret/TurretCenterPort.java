@@ -1,6 +1,7 @@
 package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
@@ -13,9 +14,10 @@ public class TurretCenterPort extends CommandBase {
     private final Turret turret;
     private final Limelight limelight;
 
-    private final double kP = 0.05;
-    private final double kD = 0.0;
-    private final PIDController pid = new PIDController(kP, 0, kD);
+    private final double kP = 0.025;
+    private final double kI = 0.0000001;
+    private final double kD = 0.001;
+    private final PIDController pid = new PIDController(kP,kI, kD);
 
     /**
      * Constructs new TurretCenterPort command to turn turret to keep vision target centered.

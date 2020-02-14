@@ -43,7 +43,7 @@ public class DriveCenterPort extends CommandBase {
     @Override
     public void execute() {
         double xSpeed = percentForward.getAsDouble();
-        double zRotation = pid.calculate(limelight.getHorizontalAngle(), 0);
+        double zRotation = pid.calculate(-limelight.getHorizontalAngle(), 0);
         drivetrain.arcade(xSpeed, zRotation);
     }
 

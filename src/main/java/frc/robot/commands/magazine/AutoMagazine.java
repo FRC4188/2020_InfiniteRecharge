@@ -1,5 +1,6 @@
 package frc.robot.commands.magazine;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
@@ -39,15 +40,18 @@ public class AutoMagazine extends CommandBase {
         double currentVel = shooter.getLeftVelocity();
         double targetVel = limelight.formulaRpm();
 
+        SmartDashboard.putNumber("Mag-read shooter rpm", currentVel);
+        SmartDashboard.putNumber("Mag-read formula rpm", targetVel);
+
         // feed shooter only if at correct rpm
-        if (Math.abs(currentVel - targetVel) > 100) magazine.set(0);
+        if (Math.abs(currentVel - targetVel) > 350) magazine.set(0);
         else magazine.set(0.9);
 
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     @Override

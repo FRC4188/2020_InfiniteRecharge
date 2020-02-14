@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Shooter extends SubsystemBase {
 
     // device initialization
-    private WPI_TalonFX leftShooter = new WPI_TalonFX(11);
-    private WPI_TalonFX rightShooter = new WPI_TalonFX(12);
+    private WPI_TalonFX leftShooter = new WPI_TalonFX(26);
+    private WPI_TalonFX rightShooter = new WPI_TalonFX(27);
 
     // constants
     private static final double kP = 0.07;
