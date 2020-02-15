@@ -17,6 +17,7 @@ public class Limelight extends SubsystemBase{
     private final double FEET_TO_METERS = 0.3048;
     private final double RAD_TO_DEGREES = 180 / Math.PI;
     private final double formulaRatio = 55.029;
+    private final double formulaConstant = 4500;
     private final double portHeight = 8.1875; // meters
     private final double tapeHeight = 2.5 / 2; // the height between the bottom and top of the tape in meters
     private final double shooterHeight = 43 / 12; // meters
@@ -24,6 +25,8 @@ public class Limelight extends SubsystemBase{
     private final double heightDiff = portHeight - shooterHeight; // difference in height in meters
     private final double camAng = 30; //degrees
     private final double multiplier = 0.88; // offset for distance reader
+    private final double LIMELIGHT_MOUNT = 20.0; //angle which limelight is mounted at
+    private final double LIMELIGHT_RATIO = 1.108;
     private double dist, angDist, minBound, maxBound;
 
     // LED mode enum
@@ -62,7 +65,6 @@ public class Limelight extends SubsystemBase{
     @Override
     public void periodic(){
         updateShuffleboard();
-        setDist();
     }
 
     public void updateShuffleboard(){
@@ -108,17 +110,23 @@ public class Limelight extends SubsystemBase{
         return limelightTable.getEntry("tx").getDouble(0.0);
     }
 
+    /**
+     * Returns total angle to aim the shooter at
+     */
+    public double getAimedAngle(){
+        return getHorizontalAngle();
+    }
+
     /** Returns distance in meters from object of height s (feet). 
      *  Uses s = r(theta). */
-    public double getDistance(double objectHeight) {
-        double boxHeight = limelightTable.getEntry("tvert").getDouble(0.0); // pixels
-        if(boxHeight == 0) return 0;
-        double output = objectHeight/(2*Math.tan(boxHeight*CAMERA_FOV_VER/(2*CAMERA_HEIGHT)));
-        return output / multiplier; // from front of bot
+    public double getDistance() {
+        double ly = getVerticalAngle();
+        double y = (LIMELIGHT_RATIO * ly) + LIMELIGHT_MOUNT;
+        return heightDiff / (Math.tan(Math.toRadians(y)));
     }
 
     public double formulaRPM(){
-        return (formulaRatio * angDist) + 4349.71;
+        return (formulaRatio * angDist) + formulaConstant;
     }
 
     /**
@@ -127,31 +135,5 @@ public class Limelight extends SubsystemBase{
     public void trackTarget() {
         setLightMode(LedMode.ON);
         setCameraMode(CameraMode.VISION);
-    }
-
-    /**
-     * Use LimeLight as camera
-     */
-    public void useAsCamera() {
-        setLightMode(LedMode.OFF);
-        setCameraMode(CameraMode.CAMERA);
-    }
-
-    public void setDist(){
-        dist = getDistance(tapeHeight);
-        angDist = dist * Math.tan((getVerticalAngle() + camAng) / RAD_TO_DEGREES);
-    }
-
-    public void setBounds(){
-        minBound = formulaRPM() - 100;
-        maxBound = formulaRPM() + 100;
-    }
-
-    public double getMinBound(){
-        return minBound;
-    }
-
-    public double getMaxBound(){
-        return maxBound;
     }
 }

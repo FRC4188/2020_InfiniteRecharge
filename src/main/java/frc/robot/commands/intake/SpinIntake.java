@@ -9,10 +9,9 @@ public class SpinIntake extends CommandBase {
     double percent;
     boolean humanPlayer;
 
-    public SpinIntake(double percent, Intake intake, boolean override) {
+    public SpinIntake(double percent, Intake intake) {
         this.percent = percent;
         this.intake = intake;
-        this.humanPlayer = override;
     }
 
     @Override

@@ -35,15 +35,6 @@ public class Magazine extends SubsystemBase{
     @Override
     public void periodic(){
         updateShuffleboard();
-        updateSpeed();
-    }
-
-    public void updateSpeed(){
-        //double vel = shooter.getVelocity();
-        double min = limelight.getMinBound();
-        double max = limelight.getMaxBound();
-        //if (vel <= min || vel >= max) speed = 0;
-        //else speed = 0.9;
     }
 
     public double getSpeed(){

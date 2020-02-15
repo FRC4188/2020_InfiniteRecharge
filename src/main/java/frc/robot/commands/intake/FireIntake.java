@@ -1,19 +1,15 @@
 package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
 public class FireIntake extends CommandBase {
     
     Intake intake;
-    Value value;
     boolean output;
 
-    public FireIntake(boolean output, Intake intake) {
+    public FireIntake(Intake intake) {
         this.intake = intake;
-        this.value = value;
-        this.output = output;
     }
 
     @Override
@@ -23,6 +19,7 @@ public class FireIntake extends CommandBase {
     @Override
     public void execute() {
         intake.setSolenoid(output);
+        output = !output;
     }
 
     @Override
