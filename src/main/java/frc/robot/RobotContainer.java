@@ -91,18 +91,18 @@ public class RobotContainer {
         pilot.getDpadRightButtonObj().whenReleased(new ManualTurret(turret, 0));
         pilot.getXButtonObj().whenPressed(new TurnTurret(turret, limelight, 0.5));
         pilot.getLbButtonObj().whenPressed(new Spin360(turret, 1));*/
-        copilot.getAButtonObj().whileHeld(new SpinIntake(1.0, intake));
-        copilot.getAButtonObj().whenReleased(new SpinIntake(0.0, intake));
-        copilot.getBButtonObj().whileHeld(new SpinIntake(-1.0, intake));
-        copilot.getBButtonObj().whenReleased(new SpinIntake(0.0, intake));
-        //copilot.getXButtonObj().whenPressed(new FireIntake(Value.kForward, intake));
+        copilot.getAButtonObj().whileHeld(new SpinIntake(1.0, intake, false));
+        copilot.getAButtonObj().whenReleased(new SpinIntake(0.0, intake, false));
+        copilot.getBButtonObj().whileHeld(new SpinIntake(-1.0, intake, false));
+        copilot.getBButtonObj().whenReleased(new SpinIntake(0.0, intake, false));
+        copilot.getLbButtonObj().whileHeld(new SpinIntake(1.0, intake, true));
+        copilot.getLbButtonObj().whenReleased(new SpinIntake(0.0, intake, true));
+        copilot.getXButtonObj().whenPressed(new FireIntake(true, intake));
         //copilot.getXButtonObj().whenReleased(new FireIntake(Value.kOff, intake));
-        //copilot.getYButtonObj().whenPressed(new FireIntake(Value.kReverse, intake));
+        copilot.getYButtonObj().whenPressed(new FireIntake(false, intake));
         //copilot.getYButtonObj().whenReleased(new FireIntake(Value.kOff, intake));
-        copilot.getXButtonObj().whileHeld(new SpinIndexer(0.5, intake));
-        copilot.getXButtonObj().whenReleased(new SpinIndexer(0.0, intake));
-        copilot.getYButtonObj().whileHeld(new SpinIndexer(0.5, intake));
-        copilot.getYButtonObj().whenReleased(new SpinIndexer(0.5, intake));
+        copilot.getDpadDownButtonObj().whenPressed(new ManualBallCount(-1, intake));
+        copilot.getDpadUpButtonObj().whenPressed(new ManualBallCount(1, intake));
     }
 
     public static Limelight getLimelight(){

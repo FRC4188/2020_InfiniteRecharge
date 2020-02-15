@@ -7,11 +7,12 @@ public class SpinIntake extends CommandBase {
     
     private final Intake intake;
     double percent;
-    boolean override;
+    boolean humanPlayer;
 
-    public SpinIntake(double percent, Intake intake) {
+    public SpinIntake(double percent, Intake intake, boolean override) {
         this.percent = percent;
         this.intake = intake;
+        this.humanPlayer = override;
     }
 
     @Override
@@ -28,10 +29,16 @@ public class SpinIntake extends CommandBase {
             intake.spinIntake(percent);
         }*/
         //intake.spinIndexer(percent);
-
-        intake.spinIndexer(0.5*percent);
-        intake.spinIntake(percent);
-        intake.spinPolyRollers(0.3*percent);
+        if(!humanPlayer) {
+            intake.spinIndexer(0.5*percent);
+            intake.spinIntake(percent);
+            intake.spinPolyRollers(0.3*percent);
+        }
+        else {
+            intake.spinIntake(-percent);
+            intake.spinIndexer(0.5*percent);
+            intake.spinPolyRollers(0.3*percent);
+        }
     }
 
     @Override

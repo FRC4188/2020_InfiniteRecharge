@@ -6,16 +6,17 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Robot;
 
 public class Intake extends SubsystemBase {
-    private CANSparkMax intakeMotor = new CANSparkMax(24, MotorType.kBrushless);
+    private CANSparkMax intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
     private CANSparkMax indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
-    private CANSparkMax polyRoller = new CANSparkMax(31, MotorType.kBrushless);
-    private DoubleSolenoid intakeSolenoid;
+    private CANSparkMax polyRoller = new CANSparkMax(13, MotorType.kBrushless);
+    private Solenoid intakeSolenoid = new Solenoid(0);
     //private DoubleSolenoid intakeSolenoid = new DoubleSolenoid(0,1);
     /*private DigitalInput intakeBB1 = new DigitalInput(0);
     private DigitalInput intakeBB2 = new DigitalInput(1);
@@ -74,8 +75,8 @@ public class Intake extends SubsystemBase {
       }
       else {}
 
-
-      System.out.println(ballCount); */
+      */
+     // System.out.println(ballCount); 
     }
 
     public void updateShuffleboard() {
@@ -88,9 +89,10 @@ public class Intake extends SubsystemBase {
     /**
      * Deploys intake solenoid.
      */
-    public void setSolenoid(Value value) {
-        intakeSolenoid.set(value);
-        intakeSolenoid.set(Value.kOff);
+    public void setSolenoid(boolean output) {
+       // intakeSolenoid.set(value);
+       // intakeSolenoid.set(Value.kOff);
+       intakeSolenoid.set(output);
     }
 
     /**
@@ -99,9 +101,12 @@ public class Intake extends SubsystemBase {
      * than 0.
      */
     public void spinIntake(double percent) {
-       // if(ballCount < 5) {
+       if(ballCount < 5) {
             intakeMotor.set(percent);
-       // }
+       }
+       else {
+          intakeMotor.set(0);
+       }
     }
 
     /**

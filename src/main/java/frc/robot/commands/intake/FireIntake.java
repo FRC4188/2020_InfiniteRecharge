@@ -8,10 +8,12 @@ public class FireIntake extends CommandBase {
     
     Intake intake;
     Value value;
+    boolean output;
 
-    public FireIntake(Value value, Intake intake) {
+    public FireIntake(boolean output, Intake intake) {
         this.intake = intake;
         this.value = value;
+        this.output = output;
     }
 
     @Override
@@ -20,7 +22,7 @@ public class FireIntake extends CommandBase {
 
     @Override
     public void execute() {
-        intake.setSolenoid(value);
+        intake.setSolenoid(output);
     }
 
     @Override
