@@ -29,7 +29,7 @@ public class SpinIndexer extends CommandBase {
         }*/
         //intake.spinIndexer(percent);
         System.out.println("Spin indexer");
-        intake.spinIndexer2(percent);
+        intake.spinIndexer(percent);
     }
 
     @Override

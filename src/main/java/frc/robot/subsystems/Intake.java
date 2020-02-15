@@ -2,18 +2,14 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DigitalInput;
-import frc.robot.Robot;
 
 public class Intake extends SubsystemBase {
 
@@ -102,8 +98,7 @@ public class Intake extends SubsystemBase {
       }
       else {}
 
-      
-     // System.out.println(ballCount); 
+      updateShuffleboard();
     }
 
     private void controllerInit() {
@@ -128,8 +123,8 @@ public class Intake extends SubsystemBase {
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Balls", ballCount);
         SmartDashboard.putNumber("I11 Temp", intakeMotor.getMotorTemperature());
-        //SmartDashboard.putNumber("I12 Temp", indexer1.getMotorTemperature());
-        //SmartDashboard.putNumber("I13 Temp", indexer2.getMotorTemperature());
+        SmartDashboard.putNumber("I12 Temp", indexerMotor.getMotorTemperature());
+        SmartDashboard.putNumber("I13 Temp", polyRoller.getMotorTemperature());
     }
 
     /**
@@ -163,11 +158,6 @@ public class Intake extends SubsystemBase {
     public void spinIndexer(double percent) {
       System.out.println("Spin index");
         indexerMotor.set(percent);
-    }
-
-    public void spinIndexer2(double percent) {
-      System.out.println("spin index 2");
-      indexerMotor.set(percent);
     }
 
     /**
@@ -221,18 +211,25 @@ public class Intake extends SubsystemBase {
       return indexerMotorEncoder.getPosition();
     }
 
+    /**
+     * getter for the intakeMotor's encoder.
+     * @return
+     */
     public double getIntakeMotorEncoder() {
       return intakeMotorEncoder.getPosition();
     }
 
+    /**
+     * getter for the pollyRoller's encoder.
+     */
     public double getPollyRollerEncoder() {
       return polyRollerEncoder.getPosition();
     }
 
     /**
      * supposed to turn the intake a set distance measured in feet.
-     * @param position
-     * @param tolerance
+     * @param position how far you want the motors to turn
+     * @param tolerance the tolerance of the PID loop
      */
     public void turnToPosition(double position, double tolerance) {
       position /= ENCODER_TO_FEET;
