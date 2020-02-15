@@ -3,7 +3,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -13,26 +16,50 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Robot;
 
 public class Intake extends SubsystemBase {
+
+    //device initialization
     private CANSparkMax intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
     private CANSparkMax indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
     private CANSparkMax polyRoller = new CANSparkMax(13, MotorType.kBrushless);
+    private CANEncoder intakeMotorEncoder = intakeMotor.getEncoder();
+    private CANEncoder indexerMotorEncoder = indexerMotor.getEncoder();
+    private CANEncoder polyRollerEncoder = polyRoller.getEncoder();
     private Solenoid intakeSolenoid = new Solenoid(0);
-    //private DoubleSolenoid intakeSolenoid = new DoubleSolenoid(0,1);
-    /*private DigitalInput intakeBB1 = new DigitalInput(0);
+    private CANPIDController pidC = intakeMotor.getPIDController();
+    private DigitalInput intakeBB1 = new DigitalInput(0);
     private DigitalInput intakeBB2 = new DigitalInput(1);
     private DigitalInput magazineBB = new DigitalInput(2);
     private boolean lsRelease = true;
     private boolean lsRelease2 = true;
-    private boolean bbRelease = false;*/
+    private boolean bbRelease = false;
 
+    
+    // variables
     public static int ballCount = 0;
     private boolean intakeInverted = false;
     private boolean indexerInverted = false;
+
+    // constants
+    private final double GEAR_RATIO = 300; //needs to be assigned
+    private final double ENCODER_TO_DEGREES = 360 / (42 * GEAR_RATIO);
+    private final double ENCODER_TO_FEET = 2.0 / 36.047279;
+    private final double RAMP_RATE = 0.2; // seconds
+    private final double MAX_VELOCITY = 3000; // rpm
+    private final double MAX_OUT = 0.5; // percent out
+    private final double kP = 5e-5;
+    private final double kI = 1e-6;
+    private final double kI_ZONE = 0;
+    private final double kD = 0;
+    private final double kF = 0;
+    private final double MAX_ACCELERATION = 2500;
+    private final int    SLOT_ID = 0;
 
     /**
      * Constructs new Intake object.
      */
     public Intake() {
+      controllerInit();
+      resetEncoders();
     }
 
     /** Runs every loop. */
@@ -43,7 +70,7 @@ public class Intake extends SubsystemBase {
        * Adds to ballCount if the limit switch is clicked.
        */
 
-      /*if(intakeBB1.get() != lsRelease) {
+      if(intakeBB1.get() != lsRelease) {
         if(intakeBB1.get() == true) {
           lsRelease = true;
         }
@@ -75,8 +102,27 @@ public class Intake extends SubsystemBase {
       }
       else {}
 
-      */
+      
      // System.out.println(ballCount); 
+    }
+
+    private void controllerInit() {
+        pidC.setP(kP);
+        pidC.setI(kI);
+        pidC.setIZone(kI_ZONE);
+        pidC.setD(kD);
+        pidC.setFF(kF);
+        pidC.setOutputRange(-MAX_OUT, MAX_OUT);
+        pidC.setSmartMotionMaxVelocity(MAX_VELOCITY, SLOT_ID);
+        pidC.setSmartMotionMaxAccel(MAX_ACCELERATION, SLOT_ID);
+    }
+
+    public void resetEncoders() {
+      //double init = INITIAL_ANGLE / ENCODER_TO_FEET;
+      intakeMotorEncoder.setPosition(0);
+      indexerMotorEncoder.setPosition(0);
+      polyRollerEncoder.setPosition(0);
+
     }
 
     public void updateShuffleboard() {
@@ -165,5 +211,33 @@ public class Intake extends SubsystemBase {
 
     public int getBallCount() {
       return ballCount;
+    }
+
+    /**
+     * getter for the indexerMotor's encoder.
+     * @return
+     */
+    public double getIndexerMotorEncoder() {
+      return indexerMotorEncoder.getPosition();
+    }
+
+    public double getIntakeMotorEncoder() {
+      return intakeMotorEncoder.getPosition();
+    }
+
+    public double getPollyRollerEncoder() {
+      return polyRollerEncoder.getPosition();
+    }
+
+    /**
+     * supposed to turn the intake a set distance measured in feet.
+     * @param position
+     * @param tolerance
+     */
+    public void turnToPosition(double position, double tolerance) {
+      position /= ENCODER_TO_FEET;
+      tolerance /= ENCODER_TO_FEET;
+      pidC.setSmartMotionAllowedClosedLoopError(tolerance, SLOT_ID);
+      pidC.setReference(position, ControlType.kSmartMotion);
     }
 }
