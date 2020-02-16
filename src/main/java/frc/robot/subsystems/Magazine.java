@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Magazine extends SubsystemBase {
 
     // device initialization
-    private final CANSparkMax magMotor = new CANSparkMax(4, MotorType.kBrushless);
+    private final CANSparkMax magMotor = new CANSparkMax(24, MotorType.kBrushless);
     private final CANEncoder magEncoder = new CANEncoder(magMotor);
 
     // constants
@@ -37,7 +37,7 @@ public class Magazine extends SubsystemBase {
      * Writes values to Shuffleboard.
      */
     public void updateShuffleboard() {
-        SmartDashboard.putNumber("Magazine temp", magMotor.getMotorTemperature());
+        SmartDashboard.putNumber("M24 temp", magMotor.getMotorTemperature());
         SmartDashboard.putNumber("Magazine velocity", magEncoder.getVelocity());
     }
 

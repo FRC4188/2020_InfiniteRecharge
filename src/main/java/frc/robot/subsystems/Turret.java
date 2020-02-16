@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Turret extends SubsystemBase {
 
     // device initialization
-    private final CANSparkMax turretMotor = new CANSparkMax(31, MotorType.kBrushless);
+    private final CANSparkMax turretMotor = new CANSparkMax(23, MotorType.kBrushless);
     private final CANEncoder turretEncoder = new CANEncoder(turretMotor);
 
     // constants
@@ -41,7 +41,7 @@ public class Turret extends SubsystemBase {
      */
     private void updateShuffleboard() {
         SmartDashboard.putNumber("Turret pos (deg)", getPosition());
-        SmartDashboard.putNumber("Turret temp", turretMotor.getMotorTemperature());
+        SmartDashboard.putNumber("T23 temp", turretMotor.getMotorTemperature());
     }
 
     /**

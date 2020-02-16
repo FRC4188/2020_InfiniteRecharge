@@ -99,6 +99,8 @@ public class Climber extends SubsystemBase {
       SmartDashboard.putNumber("Climber Speed Value", getClimberSpeed());
       SmartDashboard.putNumber("Left Velocity",getClimberLeftVel());
       SmartDashboard.putNumber("Right Velocity", getClimberRightVel());
+      SmartDashboard.putNumber("C31 Temp", climberLeftMotor.getTemperature());
+      SmartDashboard.putNumber("C32 Temp", climberRightMotor.getTemperature());
       /**
       SmartDashboard.putBoolean("Limit Switch Right", getRightMagSwitch());
       SmartDashboard.putBoolean("Limit Switch Left", getLeftMagSwitch());
