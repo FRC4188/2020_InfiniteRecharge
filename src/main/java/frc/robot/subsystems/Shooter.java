@@ -23,6 +23,7 @@ public class Shooter extends SubsystemBase {
     private static final double kF = 1023 / 20000.0;
     private static final double ENCODER_TICKS_PER_REV = 2048;
     private static final double RAMP_RATE = 1; // seconds
+    private static final double MAX_VELOCITY = 6500; // RPM
 
     /**
      * Constructs new Shooter object and configures devices.
@@ -42,6 +43,7 @@ public class Shooter extends SubsystemBase {
         controllerInit();
         setRampRate();
 
+        SmartDashboard.putNumber("Shooter speed adjust", 0.0);
     }
 
     /**
@@ -78,17 +80,19 @@ public class Shooter extends SubsystemBase {
      * Sets shooter motors to a given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        leftShooter.set(percent);
-        rightShooter.set(percent);
+        double adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0) / MAX_VELOCITY;
+        leftShooter.set(percent + adjust);
+        rightShooter.set(percent + adjust);
     }
 
     /**
      * Sets shooter motors to a given velocity in rpm.
      */
     public void setVelocity(double velocity) {
+        double adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0);
         velocity = (velocity * ENCODER_TICKS_PER_REV) / 600; // native is talon units per 100ms
-        leftShooter.set(ControlMode.Velocity, velocity);
-        rightShooter.set(ControlMode.Velocity, velocity);
+        leftShooter.set(ControlMode.Velocity, velocity + adjust);
+        rightShooter.set(ControlMode.Velocity, velocity + adjust);
     }
 
     /**

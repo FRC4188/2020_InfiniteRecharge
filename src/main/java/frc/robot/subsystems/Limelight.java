@@ -24,6 +24,7 @@ public class Limelight extends SubsystemBase {
 
     // state vars
     private NetworkTable limelightTable = null;
+    private Pipeline pipeline = Pipeline.OFF;
 
     /**
      * Enum to control LED mode.
@@ -50,6 +51,21 @@ public class Limelight extends SubsystemBase {
 
         private final int value;
         CameraMode(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return this.value;
+        }
+    }
+
+    // pipeline enum 
+    public enum Pipeline {
+        CLOSE(0), ZOOM(1), OFF(2);
+
+        private final int value;
+
+        Pipeline(int value) {
             this.value = value;
         }
 
@@ -95,6 +111,15 @@ public class Limelight extends SubsystemBase {
      */
     public void setCameraMode(CameraMode mode) {
         limelightTable.getEntry("camMode").setNumber(mode.getValue());
+    }
+
+    /**
+     * Sets the pipeline of the camera.
+     * @param pl - the camera mode to set the camera to
+     */
+    public void setPipeline(Pipeline pl) {
+        limelightTable.getEntry("pipeline").setNumber(pl.getValue());
+        pipeline = pl;
     }
 
     /**
@@ -146,6 +171,13 @@ public class Limelight extends SubsystemBase {
     public void useAsCamera() {
         setLightMode(LedMode.OFF);
         setCameraMode(CameraMode.CAMERA);
+    }
+
+    /**
+     * Returns the pipeline the camera is running.
+     */
+    public Pipeline getPipeline() {
+        return pipeline;
     }
 
 }
