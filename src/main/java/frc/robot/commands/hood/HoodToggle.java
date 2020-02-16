@@ -32,4 +32,5 @@ public class HoodToggle extends CommandBase {
   public boolean isFinished() {
     return true;
   }
+  
 }
