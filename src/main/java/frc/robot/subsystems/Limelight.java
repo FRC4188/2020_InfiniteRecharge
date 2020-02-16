@@ -1,32 +1,34 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Limelight extends SubsystemBase{
-    // limelight network table
-    public NetworkTable limelightTable = null;
+/**
+ * Class encapsulating limelight function.
+ */
+public class Limelight extends SubsystemBase {
 
     // constants
-    public final double CAMERA_HEIGHT = 240; // pixels
-    public final double CAMERA_WIDTH = 320; // pixels
-    public final double CAMERA_FOV_HOR = Math.toRadians(59.6); // rads
-    public final double CAMERA_FOV_VER = Math.toRadians(49.7); // rads
-    private final double FEET_TO_METERS = 0.3048;
-    private final double RAD_TO_DEGREES = 180 / Math.PI;
-    private final double formulaRatio = 55.029;
-    private final double portHeight = 8.1875; // meters
-    private final double tapeHeight = 2.5 / 2; // the height between the bottom and top of the tape in meters
-    private final double shooterHeight = 43 / 12; // meters
-    private final double portDist = 29.25 / 12; // the horizontal distance between the inner and outer ports in meters
-    private final double heightDiff = portHeight - shooterHeight; // difference in height in meters
-    private final double camAng = 30; //degrees
-    private final double multiplier = 0.88; // offset for distance reader
-    private double dist, angDist, minBound, maxBound;
+    private static final double CAMERA_HEIGHT = 240; // pixels
+    private static final double CAMERA_WIDTH = 320; // pixels
+    private static final double CAMERA_FOV_HOR = Math.toRadians(59.6); // rads
+    private static final double CAMERA_FOV_VER = Math.toRadians(49.7); // rads
+    private static final double FORMULA_RATIO = 86.0;
+    private static final double PORT_HEIGHT = 8.1875; // meters
+    private static final double TAPE_HEIGHT = 2.5 / 2.0; // between bottom and top, feet
+    private static final double SHOOTER_HEIGHT = 3.0 + (5.5 / 12.0); // feet
+    private static final double HEIGHT_DIFF = PORT_HEIGHT - SHOOTER_HEIGHT; // feet
+    private static final double CAMERA_ANGLE = 26; // degrees
 
-    // LED mode enum
+    // state vars
+    private NetworkTable limelightTable = null;
+    private Pipeline pipeline = Pipeline.CLOSE;
+
+    /**
+     * Enum to control LED mode.
+     */
     public enum LedMode {
         DEFAULT(0), OFF(1), BLINK(2), ON(3);
 
@@ -34,12 +36,16 @@ public class Limelight extends SubsystemBase{
         LedMode(int value) {
             this.value = value;
         }
+
         public int getValue() {
             return this.value;
         }
+
     }
 
-    // camera mode enum
+    /**
+     * Enum to control camera mode.
+     */
     public enum CameraMode {
         VISION(0), CAMERA(1);
 
@@ -47,6 +53,22 @@ public class Limelight extends SubsystemBase{
         CameraMode(int value) {
             this.value = value;
         }
+
+        public int getValue() {
+            return this.value;
+        }
+    }
+
+    // pipeline enum 
+    public enum Pipeline {
+        CLOSE(0), ZOOM(1), OFF(2);
+
+        private final int value;
+
+        Pipeline(int value) {
+            this.value = value;
+        }
+
         public int getValue() {
             return this.value;
         }
@@ -59,21 +81,25 @@ public class Limelight extends SubsystemBase{
         limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
     }
 
+    /**
+     * Runs every loop.
+     */
     @Override
-    public void periodic(){
+    public void periodic() {
         updateShuffleboard();
-        setDist();
     }
 
-    public void updateShuffleboard(){
-        SmartDashboard.putNumber("Formula RPM", formulaRPM());
-        SmartDashboard.putNumber("Direct line distance", dist);
-        SmartDashboard.putNumber("Horizontal distance", angDist);
+    /**
+     * Writes values to Shuffleboard.
+     */
+    public void updateShuffleboard() {
+        SmartDashboard.putNumber("Formula RPM", formulaRpm());
+        SmartDashboard.putNumber("Direct line distance", getDistance());
     }
 
     /**
      * Sets the LED mode of the camera.
-     * @param mode the LED mode to set the camera to
+     * @param mode - the LED mode to set the camera to
      */
     public void setLightMode(LedMode mode) {
         limelightTable.getEntry("ledMode").setNumber(mode.getValue());
@@ -81,14 +107,23 @@ public class Limelight extends SubsystemBase{
 
     /**
      * Sets the camera mode of the camera.
-     * @param mode the camera mode to set the camera to
+     * @param mode - the camera mode to set the camera to
      */
     public void setCameraMode(CameraMode mode) {
         limelightTable.getEntry("camMode").setNumber(mode.getValue());
     }
 
     /**
-     * Returns if the camera sees a target.
+     * Sets the pipeline of the camera.
+     * @param pl - the camera mode to set the camera to
+     */
+    public void setPipeline(Pipeline pl) {
+        limelightTable.getEntry("pipeline").setNumber(pl.getValue());
+        pipeline = pl;
+    }
+
+    /**
+     * Returns true if the camera sees a target.
      */
     public boolean hasTarget() {
         return limelightTable.getEntry("tv").getBoolean(false);
@@ -108,50 +143,49 @@ public class Limelight extends SubsystemBase{
         return limelightTable.getEntry("tx").getDouble(0.0);
     }
 
-    /** Returns distance in meters from object of height s (feet). 
-     *  Uses s = r(theta). */
-    public double getDistance(double objectHeight) {
-        double boxHeight = limelightTable.getEntry("tvert").getDouble(0.0); // pixels
-        if(boxHeight == 0) return 0;
-        double output = objectHeight/(2*Math.tan(boxHeight*CAMERA_FOV_VER/(2*CAMERA_HEIGHT)));
-        return output / multiplier; // from front of bot
-    }
-
-    public double formulaRPM(){
-        return (formulaRatio * angDist) + 4349.71;
+    /**
+     * Returns horizontal distance in feet from the target.
+     */
+    public double getDistance() {
+        return HEIGHT_DIFF / (Math.tan(Math.toRadians(getVerticalAngle() + CAMERA_ANGLE)));
     }
 
     /**
-     * Start tracking the vision targets
+     * Returns rpm to spin shooter to based on vision target formula.
+     */
+    public double formulaRpm() {
+        return (FORMULA_RATIO * getDistance()) + 3900;
+    }
+
+    public void zoomTarget() {
+        setLightMode(LedMode.ON);
+        setCameraMode(CameraMode.VISION);
+        setPipeline(Pipeline.ZOOM);
+    }
+
+    /**
+     * Start tracking the vision targets.
      */
     public void trackTarget() {
         setLightMode(LedMode.ON);
         setCameraMode(CameraMode.VISION);
+        setPipeline(Pipeline.CLOSE);
     }
 
     /**
-     * Use LimeLight as camera
+     * Use LimeLight as camera.
      */
     public void useAsCamera() {
         setLightMode(LedMode.OFF);
         setCameraMode(CameraMode.CAMERA);
+        setPipeline(Pipeline.CLOSE);
     }
 
-    public void setDist(){
-        dist = getDistance(tapeHeight);
-        angDist = dist * Math.tan((getVerticalAngle() + camAng) / RAD_TO_DEGREES);
+    /**
+     * Returns the pipeline the camera is running.
+     */
+    public Pipeline getPipeline() {
+        return pipeline;
     }
 
-    public void setBounds(){
-        minBound = formulaRPM() - 100;
-        maxBound = formulaRPM() + 100;
-    }
-
-    public double getMinBound(){
-        return minBound;
-    }
-
-    public double getMaxBound(){
-        return maxBound;
-    }
 }

@@ -1,17 +1,18 @@
-package frc.robot.commands.Climber;
+package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 public class ManualClimb extends CommandBase {
-  Climber climber = new Climber();
+  Climber climber;
   double percent;
   /**
    * Creates a new RaiseClimber.
    */
-  public ManualClimb(double percent) {
+  public ManualClimb(double percent, Climber climber) {
     addRequirements(climber);
     this.percent = percent;
+    this.climber = climber;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -38,4 +39,3 @@ public class ManualClimb extends CommandBase {
   public boolean isFinished() {
     return false;
   }
-}

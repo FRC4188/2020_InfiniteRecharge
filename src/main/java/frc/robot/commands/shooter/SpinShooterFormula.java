@@ -1,26 +1,27 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 
 /**
- * Spins shooter to a given velocity.
+ * Spins shooter to a velocity calculated by Limelight.
  */
-public class SpinShooter extends CommandBase {
+public class SpinShooterFormula extends CommandBase {
 
     private final Shooter shooter;
-    private final double rpm;
+    private final Limelight limelight;
 
     /**
-     * Constructs a new SpinShooter command to spin shooter to given velocity.
+     * Constructs a new SpinShooter command to spin shooter to a velocity calculated by Limelight.
      *
      * @param shooter - Shooter subsystem to use.
-     * @param rpm - Velocity to spin shooter to in rpm.
+     * @param limelight - Limelight subsystem to use.
      */
-    public SpinShooter(Shooter shooter, double rpm) {
+    public SpinShooterFormula(Shooter shooter, Limelight limelight) {
         addRequirements(shooter);
         this.shooter = shooter;
-        this.rpm = rpm;
+        this.limelight = limelight;
     }
 
     @Override
@@ -29,7 +30,7 @@ public class SpinShooter extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.setVelocity(rpm);
+        shooter.setVelocity(limelight.formulaRpm());
     }
 
     @Override
