@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
 public class SpinIntake extends CommandBase {
-    
+
     private final Intake intake;
     double percent;
     boolean humanPlayer;
@@ -29,9 +29,9 @@ public class SpinIntake extends CommandBase {
         }*/
         //intake.spinIndexer(percent);
         //if(!humanPlayer) {
-            intake.spinIndexer(0.5*percent);
-            intake.spinIntake(percent);
-            intake.spinPolyRollers(0.3*percent);
+        intake.spinIndexer(0.5*percent);
+        intake.spinIntake(percent);
+        intake.spinPolyRollers(0.3*percent);
         //}
         //else {
         //    intake.spinIntake(-percent);

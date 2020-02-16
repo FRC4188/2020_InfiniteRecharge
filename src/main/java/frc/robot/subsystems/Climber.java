@@ -1,20 +1,10 @@
 package frc.robot.subsystems;
 
-import java.sql.Time;
-import java.util.concurrent.TimeoutException;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
-import com.ctre.phoenix.motorcontrol.TalonFXSensorCollection;
-import com.revrobotics.CANDigitalInput;
-import com.revrobotics.CANSparkMax;
-
-
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,16 +12,16 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Climber extends SubsystemBase {
 
     //constants
-    private static final double GEAR_RATIO = (58/11)*(20/60);// needs to be verified.
+    private static final double GEAR_RATIO = (58/11)*(20/60); // needs to be verified.
     private static final double ENCODER_TICS_PER_REV = 2048.0;
     private static final double ENCODER_TO_REV = 1.0 / (GEAR_RATIO *ENCODER_TICS_PER_REV);
     private static final double MAX_VELOCITY = 20000.0;
-    private static final double kP = 0.4;//porportion (will be * error (= at - want))
-    private static final double kD = 0.0; //constant * derivtive: change in  error over time will be negative * kD
-    private static final double kI = 0.0; //integral sums up error (see )
-    private static final double kF = 1023 / MAX_VELOCITY;//accel
-    private static final double RAMP_RATE = .2;//seconds
-    private static final int TIMEOUT = 10;//ms
+    private static final double kP = 0.4; // porportion (will be * error (= at - want))
+    private static final double kD = 0.0; // constant * derivtive: change in  error over time will be negative * kD
+    private static final double kI = 0.0; // integral sums up error (see )
+    private static final double kF = 1023 / MAX_VELOCITY; // accel
+    private static final double RAMP_RATE = .2; // seconds
+    private static final int TIMEOUT = 10; // ms
     private static final int CRUISE_ACCEL = 15000;
     private static final int CRUISE_VEL = 15000;
     
@@ -90,7 +80,7 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * Writes values to the Shuffleboard
+     * Writes values to the Shuffleboard.
      */
     public void updateShuffleboard(){
       SmartDashboard.putNumber("Left climber height", getLeftPosition());
@@ -113,35 +103,35 @@ public class Climber extends SubsystemBase {
     }
     
     /**
-     * Set the climber speed
+     * Set the climber speed.
      */
     public void setClimberSpeed(){
       climberSpeed = SmartDashboard.getNumber("Set climber speed", 0.0);
     }
     
     /**
-     * returns the climber set speed
+     * returns the climber set speed.
      */
     public double getClimberSpeed(){
       return climberSpeed;
     }
 
     /**
-     * returns the left climber velocity
+     * returns the left climber velocity.
      */
     public double getClimberLeftVel(){
       return climberLeftMotor.getSelectedSensorVelocity() * ENCODER_TO_REV * 600;//sensor units for rpm
     }
 
     /**
-     * returns the right climber velocity
+     * returns the right climber velocity.
      */
     public double getClimberRightVel(){
       return climberRightMotor.getSelectedSensorVelocity() * ENCODER_TO_REV * 600;//sensor units for rpm
     }
 
     /**
-     * Config Pid loop stuff. Have Locke explain
+     * Config Pid loop stuff. Have Locke explain.
      */
     public void controllerInit(){
       climberLeftMotor.config_kI(0, kI, TIMEOUT);
@@ -155,7 +145,7 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * Sets both of the motors to run at a percentage of the max speed (-1.0, 1.0)
+     * Sets both of the motors to run at a percentage of the max speed (-1.0, 1.0).
      */
     public void setSpeedPercentage(double percentage){
       climberLeftMotor.set(percentage);
@@ -163,14 +153,14 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * Sets the left motor to run at a percentage of the max speed (-1.0, 1.0)
+     * Sets the left motor to run at a percentage of the max speed (-1.0, 1.0).
      */
     public void setLeftPercentage(double percentage){
       climberLeftMotor.set(percentage);
     }
 
     /**
-     * Sets the right motor to run at a percentage of the max speed (-1.0, 1.0)
+     * Sets the right motor to run at a percentage of the max speed (-1.0, 1.0).
      */
     public void setRightPercentage(double percentage){
       climberLeftMotor.set(percentage);
@@ -186,14 +176,14 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * Fires the break pistons to stop the climber
+     * Fires the break pistons to stop the climber.
      */
     public void engagePneuBreak() {
       ClimberSolenoid.set(true);
     }
 
     /**
-     * returns true if the pneu brakes are engaged
+     * returns true if the pneu brakes are engaged.
      */
     public boolean getBrakeState() {
       return ClimberSolenoid.get();
@@ -208,7 +198,7 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * sets the drivetrain to coast mode
+     * sets the drivetrain to coast mode.
      */
     public void setCoast() {
       climberLeftMotor.setNeutralMode(NeutralMode.Coast);
@@ -216,14 +206,14 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * returns true if the right magnetic switch senses the other part
+     * returns true if the right magnetic switch senses the other part.
      */
     //public boolean getRightMagSwitch(){
       //return LIMITSWITCH1_DIGITAL_INPUT.get();
     //}
 
     /**
-     * returns true if the left magnetic switch senses the other part
+     * returns true if the left magnetic switch senses the other part.
      */
     //public boolean getLeftMagSwitch(){
       //return LIMITSWITCH2_DIGITAL_INPUT.get();
@@ -231,28 +221,28 @@ public class Climber extends SubsystemBase {
 
     //old switch stuff
     /**
-     * returns true if the upper right switch is active
+     * returns true if the upper right switch is active.
      */
     //public boolean getUpperRightLimitSwitch(){
      // return LIMITSWITCH1_DIGITAL_INPUT.get();
     //}
 
     /**
-     * returns true if the lower right switch is active
+     * returns true if the lower right switch is active.
      */
     //public boolean getLowerRightLimitSwitch(){
      // return LIMITSWITCH2_DIGITAL_INPUT.get();
     //}
 
     /**
-     * returns true if the upper left switch is active
+     * returns true if the upper left switch is active.
      */
     //public boolean getUpperLeftLimitSwitch(){
       //return LIMITSWITCH3_DIGITAL_INPUT.get();
     //}
 
     /**
-     * returns true if the lower left switch is active
+     * returns true if the lower left switch is active.
      */
     //public boolean getLowerLeftLimitSwitch(){
       //return LIMITSWITCH4_DIGITAL_INPUT.get();
@@ -281,7 +271,7 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * Sets the motors to run in opposite direction than before
+     * Sets the motors to run in opposite direction than before.
      */
     public void setInverted(){
       climberRightMotor.setInverted(InvertType.InvertMotorOutput);
@@ -289,7 +279,7 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * returns if the right side of the climber is up (based on Limit Switches)
+     * returns if the right side of the climber is up (based on Limit Switches).
      */
     public boolean isRightClimberUp(){
        //if(getUpperRightLimitSwitch() && ! getLowerRightLimitSwitch()) return true;
@@ -297,7 +287,7 @@ public class Climber extends SubsystemBase {
     }
     
     /**
-     * returns if the right side of the climber is up (based on Limit Switches)
+     * returns if the right side of the climber is up (based on Limit Switches).
      */
     public boolean isLeftClimberUp(){
       //if(getUpperLeftLimitSwitch() && ! getLowerLeftLimitSwitch()) return true;
@@ -305,7 +295,7 @@ public class Climber extends SubsystemBase {
    }
    
     /**
-     * returns if the right side of the climber is down (based on mag Limit Switches)
+     * returns if the right side of the climber is down (based on mag Limit Switches).
      */
     public boolean isRightClimberDown(){
       //if (getRightMagSwitch()) return true;
@@ -313,7 +303,7 @@ public class Climber extends SubsystemBase {
    }
 
     /**
-     * returns if the left side of the climber is down (based on mag Limit Switches)
+     * returns if the left side of the climber is down (based on mag Limit Switches).
      */
     public boolean isLeftClimberDown(){
       //if (getLeftMagSwitch()) return true;

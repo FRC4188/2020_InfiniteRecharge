@@ -10,7 +10,8 @@ import frc.robot.subsystems.Shooter;
 public class AutoShoot extends ParallelCommandGroup {
 
     public AutoShoot(Magazine magazine, Limelight limelight, Shooter shooter) {
-        addCommands(new AutoMagazine(magazine, limelight, shooter), new SpinShooterFormula(shooter, limelight));
+        addCommands(new AutoMagazine(magazine, limelight, shooter), 
+                new SpinShooterFormula(shooter, limelight));
     }
 
 }

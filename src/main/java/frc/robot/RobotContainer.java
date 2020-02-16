@@ -25,9 +25,6 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Hood;
-
 import frc.robot.utils.CspController;
 import frc.robot.utils.KillAll;
 
@@ -62,7 +59,6 @@ public class RobotContainer {
      * Resets variables and sensors for each subsystem.
      */
     public void resetSubsystems() {
-        
     }
 
     /**

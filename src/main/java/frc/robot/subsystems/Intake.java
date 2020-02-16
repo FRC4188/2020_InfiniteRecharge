@@ -1,15 +1,14 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Intake extends SubsystemBase {
 
@@ -29,7 +28,7 @@ public class Intake extends SubsystemBase {
     private boolean lsRelease2 = true;
     private boolean bbRelease = false;
 
-    
+
     // variables
     public static int ballCount = 0;
     private boolean intakeInverted = false;
@@ -53,51 +52,45 @@ public class Intake extends SubsystemBase {
      * Constructs new Intake object.
      */
     public Intake() {
-      controllerInit();
-      resetEncoders();
+        controllerInit();
+        resetEncoders();
     }
 
     /** Runs every loop. */
     @Override
     public void periodic() {
-
-      /**
-       * Adds to ballCount if the limit switch is clicked.
-       */
-
-      if(intakeBB1.get() != lsRelease) {
-        if(intakeBB1.get() == true) {
-          lsRelease = true;
+        //Adds to ballCount if the limit switch is clicked.
+        if(intakeBB1.get() != lsRelease) {
+            if(intakeBB1.get() == true) {
+                lsRelease = true;
+            }
+            else {
+                ballCount++;
+                System.out.println(ballCount);
+                lsRelease = false;
+            }
         }
-        else {
-          ballCount++;
-          System.out.println(ballCount);
-          lsRelease = false;
+        else if(intakeBB2.get() != lsRelease2) {
+            if(intakeBB2.get() == true) {
+                lsRelease2 = true;
+            }
+            else {
+                ballCount++;
+                System.out.println(ballCount);
+                lsRelease2 = false;
+            }
         }
-      }
-      else if(intakeBB2.get() != lsRelease2) {
-        if(intakeBB2.get() == true) {
-          lsRelease2 = true;
+        else if(magazineBB.get() != bbRelease) {
+            if(magazineBB.get() == false) {
+                bbRelease = false;
+            }
+            else {
+                ballCount++;
+                System.out.println(ballCount);
+                bbRelease = true;
+            }
         }
-        else {
-          ballCount++;
-          System.out.println(ballCount);
-          lsRelease2 = false;
-        }
-      }
-      else if(magazineBB.get() != bbRelease) {
-          if(magazineBB.get() == false) {
-              bbRelease = false;
-          }
-          else {
-              ballCount++;
-              System.out.println(ballCount);
-              bbRelease = true;
-          }
-      }
-      else {}
-
-      updateShuffleboard();
+        updateShuffleboard();
     }
 
     private void controllerInit() {
@@ -117,14 +110,19 @@ public class Intake extends SubsystemBase {
         polyRoller.setOpenLoopRampRate(RAMP_RATE);
     }
 
+    /**
+     * sets the encoder values to zero.
+     */
     public void resetEncoders() {
-      //double init = INITIAL_ANGLE / ENCODER_TO_FEET;
-      intakeMotorEncoder.setPosition(0);
-      indexerMotorEncoder.setPosition(0);
-      polyRollerEncoder.setPosition(0);
-
+        //double init = INITIAL_ANGLE / ENCODER_TO_FEET;
+        intakeMotorEncoder.setPosition(0);
+        indexerMotorEncoder.setPosition(0);
+        polyRollerEncoder.setPosition(0);
     }
 
+    /**
+     * puts values to ShuffleBoard.
+     */
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Balls", ballCount);
         SmartDashboard.putNumber("I11 Temp", intakeMotor.getMotorTemperature());
@@ -143,25 +141,25 @@ public class Intake extends SubsystemBase {
 
     /**
      * Spins the intake motor based on a given percent.
-     * The motor only spins if the number of balls is less 
+     * The motor only spins if the number of balls is less.
      * than 0.
      */
     public void spinIntake(double percent) {
-       if(ballCount < 5) {
+        if(ballCount < 5) {
             intakeMotor.set(percent);
-       }
-       else {
-          intakeMotor.set(0);
-       }
+        }
+        else {
+            intakeMotor.set(0);
+        }
     }
 
     /**
      * Spins the indexer motors together.
-     * They only spin if the number of balls is less than
+     * They only spin if the number of balls is less than.
      * or equal to 0.
      */
     public void spinIndexer(double percent) {
-      System.out.println("Spin index");
+        System.out.println("Spin index");
         indexerMotor.set(percent);
     }
 
@@ -193,7 +191,7 @@ public class Intake extends SubsystemBase {
      * Manually changes the ball count.
      */
     public void changeBallCount(int value) {
-      ballCount += value;
+        ballCount += value;
     }
 
     /*public boolean indexerInterval() {
@@ -204,30 +202,28 @@ public class Intake extends SubsystemBase {
     }*/
 
     public int getBallCount() {
-      return ballCount;
+        return ballCount;
     }
 
     /**
      * getter for the indexerMotor's encoder.
-     * @return
      */
     public double getIndexerMotorEncoder() {
-      return indexerMotorEncoder.getPosition();
+        return indexerMotorEncoder.getPosition();
     }
 
     /**
      * getter for the intakeMotor's encoder.
-     * @return
      */
     public double getIntakeMotorEncoder() {
-      return intakeMotorEncoder.getPosition();
+        return intakeMotorEncoder.getPosition();
     }
 
     /**
      * getter for the pollyRoller's encoder.
      */
     public double getPollyRollerEncoder() {
-      return polyRollerEncoder.getPosition();
+        return polyRollerEncoder.getPosition();
     }
 
     /**
@@ -236,9 +232,9 @@ public class Intake extends SubsystemBase {
      * @param tolerance the tolerance of the PID loop
      */
     public void turnToPosition(double position, double tolerance) {
-      position /= ENCODER_TO_FEET;
-      tolerance /= ENCODER_TO_FEET;
-      pidC.setSmartMotionAllowedClosedLoopError(tolerance, SLOT_ID);
-      pidC.setReference(position, ControlType.kSmartMotion);
+        position /= ENCODER_TO_FEET;
+        tolerance /= ENCODER_TO_FEET;
+        pidC.setSmartMotionAllowedClosedLoopError(tolerance, SLOT_ID);
+        pidC.setReference(position, ControlType.kSmartMotion);
     }
 }
