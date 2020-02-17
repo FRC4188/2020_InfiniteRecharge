@@ -41,8 +41,8 @@ public class Climber extends SubsystemBase {
     //Pneu
 
     //Pneumatic
-    private Solenoid ClimberSolenoid = new Solenoid(0);//needs to change
-    boolean isBreakEngaged;
+    //private Solenoid climberSolenoid = new Solenoid(2);//needs to change
+    boolean isBrakeEngaged;
 
     //motor init
     private WPI_TalonFX climberLeftMotor = new WPI_TalonFX(31);
@@ -85,7 +85,7 @@ public class Climber extends SubsystemBase {
     public void updateShuffleboard(){
       SmartDashboard.putNumber("Left climber height", getLeftPosition());
       SmartDashboard.putNumber("Right climber height", getRightPosition());
-      SmartDashboard.putBoolean("Pneumatic Brakes engaged", getBrakeState());
+      //SmartDashboard.putBoolean("Pneumatic Brakes engaged", getBrakeState());
       SmartDashboard.putNumber("Climber Speed Value", getClimberSpeed());
       SmartDashboard.putNumber("Left Velocity",getClimberLeftVel());
       SmartDashboard.putNumber("Right Velocity", getClimberRightVel());
@@ -179,15 +179,15 @@ public class Climber extends SubsystemBase {
      * Fires the break pistons to stop the climber.
      */
     public void engagePneuBreak() {
-      ClimberSolenoid.set(true);
+      //climberSolenoid.set(true);
     }
 
     /**
      * returns true if the pneu brakes are engaged.
-     */
+     
     public boolean getBrakeState() {
-      return ClimberSolenoid.get();
-    }
+      return climberSolenoid.get();
+    }*/
 
     /**
        * Sets Climber motors to brake mode.
@@ -309,5 +309,21 @@ public class Climber extends SubsystemBase {
       //if (getLeftMagSwitch()) return true;
       return false;
    }
+
+   /** Returns temperature of motor based off Falcon ID. */
+   public double getMotorTemperature(int index){
+      WPI_TalonFX[] falcons = new WPI_TalonFX[]{
+          climberRightMotor,
+          climberLeftMotor,
+      };
+      index -= 1;
+      double temp = -1.0;
+      try {
+          temp = falcons[index].getTemperature();
+      } catch(ArrayIndexOutOfBoundsException e) {
+          System.err.println("Error: index " + index + " not in array of climb falcons.");
+      }
+      return temp;
+}
 
 }

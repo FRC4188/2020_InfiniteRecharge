@@ -4,8 +4,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hood;
 
 public class HoodToggle extends CommandBase {
+    
     Hood hood;
     boolean Pos;
+
     public HoodToggle(Hood hood) {
         addRequirements(hood);
         this.hood = hood;

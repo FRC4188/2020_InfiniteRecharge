@@ -3,13 +3,13 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
-public class SpinIndexer extends CommandBase {
+public class RunIntake extends CommandBase {
     
     Intake intake;
     double percent;
     boolean override;
 
-    public SpinIndexer(Intake intake, double percent) {
+    public RunIntake(Intake intake, double percent) {
         this.percent = percent;
         this.intake = intake;
     }
@@ -20,15 +20,7 @@ public class SpinIndexer extends CommandBase {
 
     @Override
     public void execute() {
-        /*if(intake.indexerInterval()) {
-            intake.spinIndexer(0.3*percent);
-            intake.spinIntake(percent);
-        }
-        else {
-            intake.spinIntake(percent);
-        }*/
-        //intake.spinIndexer(percent);
-        intake.spinIndexer(percent);
+        intake.spinIntake(percent);
     }
 
     @Override

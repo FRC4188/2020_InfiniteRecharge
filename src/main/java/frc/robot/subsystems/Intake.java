@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,11 +20,12 @@ public class Intake extends SubsystemBase {
     private CANEncoder intakeMotorEncoder = intakeMotor.getEncoder();
     private CANEncoder indexerMotorEncoder = indexerMotor.getEncoder();
     private CANEncoder polyRollerEncoder = polyRoller.getEncoder();
-    private Solenoid intakeSolenoid = new Solenoid(0);
+    //private Solenoid intakeSolenoid = new Solenoid(0);
     private CANPIDController pidC = intakeMotor.getPIDController();
+    /** 
     private DigitalInput intakeBB1 = new DigitalInput(0);
     private DigitalInput intakeBB2 = new DigitalInput(1);
-    private DigitalInput magazineBB = new DigitalInput(2);
+    private DigitalInput magazineBB = new DigitalInput(2);*/
     private boolean lsRelease = true;
     private boolean lsRelease2 = true;
     private boolean bbRelease = false;
@@ -60,6 +62,7 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         //Adds to ballCount if the limit switch is clicked.
+        /** 
         if(intakeBB1.get() != lsRelease) {
             if(intakeBB1.get() == true) {
                 lsRelease = true;
@@ -89,7 +92,7 @@ public class Intake extends SubsystemBase {
                 System.out.println(ballCount);
                 bbRelease = true;
             }
-        }
+        }*/
         updateShuffleboard();
     }
 
@@ -134,10 +137,13 @@ public class Intake extends SubsystemBase {
      * Deploys intake solenoid.
      */
     public void setSolenoid(boolean output) {
-       // intakeSolenoid.set(value);
-       // intakeSolenoid.set(Value.kOff);
-       intakeSolenoid.set(output);
+       //intakeSolenoid.set(output);
     }
+
+    /** 
+    public boolean getSolenoid() {
+        return intakeSolenoid.get();
+    }*/
 
     /**
      * Spins the intake motor based on a given percent.
@@ -237,4 +243,22 @@ public class Intake extends SubsystemBase {
         pidC.setSmartMotionAllowedClosedLoopError(tolerance, SLOT_ID);
         pidC.setReference(position, ControlType.kSmartMotion);
     }
+
+    /** Returns temperature of motor based off Falcon ID. */
+    public double getMotorTemperature(int index){
+        CANSparkMax[] sparks = new CANSparkMax[]{
+            intakeMotor,
+            indexerMotor,
+            polyRoller,
+        };
+        index -= 1;
+        double temp = -1.0;
+        try {
+            temp = sparks[index].getMotorTemperature();
+        } catch(ArrayIndexOutOfBoundsException e) {
+            System.err.println("Error: index " + index + " not in array of intake sparks.");
+        }
+        return temp;
+    }
+
 }

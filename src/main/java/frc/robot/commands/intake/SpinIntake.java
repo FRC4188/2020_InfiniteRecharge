@@ -29,9 +29,9 @@ public class SpinIntake extends CommandBase {
         }*/
         //intake.spinIndexer(percent);
         //if(!humanPlayer) {
-        intake.spinIndexer(0.5*percent);
+        intake.spinIndexer(0.7*percent);
         intake.spinIntake(percent);
-        intake.spinPolyRollers(0.3*percent);
+        //intake.spinPolyRollers(0.3*percent);
         //}
         //else {
         //    intake.spinIntake(-percent);
@@ -46,6 +46,6 @@ public class SpinIntake extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

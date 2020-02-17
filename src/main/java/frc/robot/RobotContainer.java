@@ -6,6 +6,9 @@ import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.ManualDrive;
 import frc.robot.commands.groups.AutoShoot;
 import frc.robot.commands.hood.HoodToggle;
+import frc.robot.commands.intake.FireIntake;
+import frc.robot.commands.intake.RunIntake;
+import frc.robot.commands.intake.SpinIndexer;
 import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.magazine.RunMagazine;
@@ -67,7 +70,7 @@ public class RobotContainer {
     private void setDefaultCommands() {
         drivetrain.setDefaultCommand(new ManualDrive(drivetrain,
                 () -> pilot.getY(Hand.kLeft),
-                () -> pilot.getX(Hand.kRight),
+                () -> -pilot.getX(Hand.kRight),
                 () -> pilot.getBumper(Hand.kLeft)
         ));
         shooter.setDefaultCommand(new SpinShooter(shooter, 0));
@@ -78,29 +81,10 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
-        copilot.getAButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
-
-        copilot.getBButtonObj().whileHeld(new RunMagazine(magazine, 0.9));
-        copilot.getBButtonObj().whenReleased(new RunMagazine(magazine, 0));
-        copilot.getYButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
-        copilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
-
-        copilot.getLbButtonObj().toggleWhenPressed(new AutoMagazine(magazine, limelight, shooter));
-
         pilot.getRbButtonObj().whileHeld(new DriveCenterPort(
                 drivetrain, limelight, () -> pilot.getY(Hand.kLeft)
         ));
-
-        pilot.getStartButtonObj().whenPressed(new KillAll());
-        copilot.getStartButtonObj().whenPressed(new KillAll());
-
-        copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, 0.5));
-        copilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));
-        copilot.getDpadRightButtonObj().whileHeld(new ManualTurret(turret, -0.5));
-        copilot.getDpadRightButtonObj().whenReleased(new ManualTurret(turret, 0));
-
-        copilot.getXButtonObj().toggleWhenPressed(new AutoAim(turret, limelight));
-
+        
         pilot.getLbButtonObj().toggleWhenPressed(new AutoShoot(magazine, limelight, shooter));
 
         pilot.getAButtonObj().whenPressed(new CameraOff(limelight));
@@ -111,14 +95,39 @@ public class RobotContainer {
 
         pilot.getDpadDownButtonObj().whenPressed(new HoodToggle(hood));
 
+        pilot.getXButtonObj().whileHeld(new SpinIntake(intake, 0.85));
+        pilot.getXButtonObj().whenReleased(new SpinIntake(intake, 0));
+        //pilot.getDpadLeftButtonObj().whileHeld(new RunIntake(intake, 0.5));
+        //pilot.getDpadLeftButtonObj().whenReleased(new RunIntake(intake, 0));
+        //pilot.getDpadRightButtonObj().whileHeld(new SpinIndexer(intake, 0.5));
+        //pilot.getDpadRightButtonObj().whenReleased(new SpinIndexer(intake, 0));
+        pilot.getDpadLeftButtonObj().whenPressed(new FireIntake(intake));
+
+        pilot.getDpadRightButtonObj().whileHeld(new SpinShooter(shooter, shooter.getRpm()));
+        
+        pilot.getStartButtonObj().whenPressed(new KillAll());
+        copilot.getStartButtonObj().whenPressed(new KillAll());
+        
+        copilot.getAButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
+
+        copilot.getBButtonObj().whileHeld(new RunMagazine(magazine, 0.9));
+        copilot.getBButtonObj().whenReleased(new RunMagazine(magazine, 0));
+        copilot.getYButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
+        copilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
+
+        copilot.getLbButtonObj().toggleWhenPressed(new AutoMagazine(magazine, limelight, shooter));
+
+        copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, 0.5));
+        copilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));
+        copilot.getDpadRightButtonObj().whileHeld(new ManualTurret(turret, -0.5));
+        copilot.getDpadRightButtonObj().whenReleased(new ManualTurret(turret, 0));
+
+        copilot.getXButtonObj().toggleWhenPressed(new AutoAim(turret, limelight));
+
         copilot.getDpadUpButtonObj().whileHeld(new ManualClimb(.9, climber));
         copilot.getDpadUpButtonObj().whenReleased(new ManualClimb(0, climber));
         copilot.getDpadDownButtonObj().whileHeld(new ManualClimb(-.6, climber));
         copilot.getDpadDownButtonObj().whenReleased(new ManualClimb(0, climber));
-
-        pilot.getXButtonObj().whileHeld(new SpinIntake(intake, 0.5));
-        pilot.getXButtonObj().whenReleased(new SpinIntake(intake, 0));
-
     }
 
 }

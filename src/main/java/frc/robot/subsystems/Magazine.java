@@ -56,4 +56,19 @@ public class Magazine extends SubsystemBase {
         magMotor.setOpenLoopRampRate(RAMP_RATE);
     }
 
+    /** Returns temperature of motor based off Falcon ID. */
+    public double getMotorTemperature(int index){
+        CANSparkMax[] sparks = new CANSparkMax[]{
+            magMotor,
+        };
+        index -= 1;
+        double temp = -1.0;
+        try {
+            temp = sparks[index].getMotorTemperature();
+        } catch(ArrayIndexOutOfBoundsException e) {
+            System.err.println("Error: index " + index + " not in array of intake sparks.");
+        }
+        return temp;
+    }
+
 }

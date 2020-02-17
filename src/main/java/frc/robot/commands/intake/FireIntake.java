@@ -10,6 +10,7 @@ public class FireIntake extends CommandBase {
 
     public FireIntake(Intake intake) {
         this.intake = intake;
+        //output = intake.getSolenoid();
     }
 
     @Override
@@ -18,8 +19,8 @@ public class FireIntake extends CommandBase {
 
     @Override
     public void execute() {
-        intake.setSolenoid(output);
-        output = !output;
+        //intake.setSolenoid(false);
+        intake.setSolenoid(!output);
     }
 
     @Override
