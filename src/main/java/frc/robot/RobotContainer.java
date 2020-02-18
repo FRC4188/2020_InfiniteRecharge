@@ -7,6 +7,7 @@ import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.ManualDrive;
 import frc.robot.commands.groups.AutoShoot;
 import frc.robot.commands.hood.HoodToggle;
+import frc.robot.commands.intake.FireIntake;
 import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.shooter.SpinShooter;
@@ -26,7 +27,6 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
-
 import frc.robot.utils.CspController;
 import frc.robot.utils.KillAll;
 
@@ -41,8 +41,8 @@ public class RobotContainer {
     private final Shooter shooter = new Shooter();
     private final Limelight limelight = new Limelight();
     private final Turret turret = new Turret();
-    private final Climber climber = new Climber();
-    private final Intake intake = new Intake();
+    public final static Climber climber = new Climber();
+    public final static Intake intake = new Intake();
     private final Hood hood = new Hood();
 
     // controller initialization
@@ -61,7 +61,6 @@ public class RobotContainer {
      * Resets variables and sensors for each subsystem.
      */
     public void resetSubsystems() {
-        
     }
 
     /**
@@ -70,7 +69,7 @@ public class RobotContainer {
     private void setDefaultCommands() {
         drivetrain.setDefaultCommand(new ManualDrive(drivetrain,
                 () -> pilot.getY(Hand.kLeft),
-                () -> pilot.getX(Hand.kRight),
+                () -> -pilot.getX(Hand.kRight),
                 () -> pilot.getBumper(Hand.kLeft)
         ));
         shooter.setDefaultCommand(new SpinShooter(shooter, 0));
@@ -83,6 +82,37 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
 
+        pilot.getRbButtonObj().whileHeld(new DriveCenterPort(
+                drivetrain, limelight, () -> pilot.getY(Hand.kLeft)
+        ));
+        
+        pilot.getLbButtonObj().toggleWhenPressed(new AutoShoot(magazine, limelight, shooter));
+
+        pilot.getDpadRightButtonObj().whenPressed(new CameraOff(limelight));
+        pilot.getDpadLeftButtonObj().whenPressed(new CameraTrack(limelight));
+        //pilot.getYButtonObj().whenPressed(new CameraZoom(limelight));
+
+        pilot.getYButtonObj().whileHeld(new RunMagazine(magazine, 0.9));
+        pilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
+        pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
+        pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
+
+        pilot.getDpadUpButtonObj().whenPressed(new ZeroTurret(turret));
+
+        pilot.getDpadDownButtonObj().whenPressed(new HoodToggle(hood));
+
+        pilot.getBButtonObj().whileHeld(new SpinIntake(intake, 1.0));
+        pilot.getBButtonObj().whenReleased(new SpinIntake(intake, 0));
+        pilot.getAButtonObj().whileHeld(new SpinIntake(intake, -.85));
+        pilot.getAButtonObj().whenReleased(new SpinIntake(intake, 0));
+
+        copilot.getRbButtonObj().whenPressed(new FireIntake(intake));
+
+        pilot.getDpadRightButtonObj().whileHeld(new SpinShooter(shooter, shooter.getRpm()));
+        
+        pilot.getStartButtonObj().whenPressed(new KillAll());
+        copilot.getStartButtonObj().whenPressed(new KillAll());
+        
         copilot.getAButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
 
         copilot.getBButtonObj().whileHeld(new RunMagazine(magazine, 0.9));

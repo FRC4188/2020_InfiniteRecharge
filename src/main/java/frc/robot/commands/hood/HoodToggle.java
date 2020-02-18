@@ -4,33 +4,34 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hood;
 
 public class HoodToggle extends CommandBase {
-  Hood hood;
-  boolean Pos;
-  public HoodToggle(Hood hood) {
-      addRequirements(hood);
-      this.hood = hood;
-  }
+    
+    Hood hood;
+    boolean Pos;
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-}
+    public HoodToggle(Hood hood) {
+        addRequirements(hood);
+        this.hood = hood;
+    }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    hood.setHood();
-}
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-  }
+    // Called every time the scheduler runs while the command is scheduled.
+    @Override
+    public void execute() {
+        hood.setHood();
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return true;
-  }
-  
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+    }
+
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }

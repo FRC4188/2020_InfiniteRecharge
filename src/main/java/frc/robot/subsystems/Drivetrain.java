@@ -112,6 +112,10 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("Right Velocity", getRightVelocity());
         SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
         SmartDashboard.putString("Odometry", getPose().toString());
+        SmartDashboard.putNumber("D1 Temp", leftMotor.getTemperature());
+        SmartDashboard.putNumber("D2 Temp", leftSlave.getTemperature());
+        SmartDashboard.putNumber("D3 Temp", rightMotor.getTemperature());
+        SmartDashboard.putNumber("D4 Temp", rightSlave.getTemperature());
     }
 
     /**
@@ -369,7 +373,8 @@ public class Drivetrain extends SubsystemBase {
      * Returns gyro angle in degrees.
      */
     public double getGyroAngle() {
-        return Math.IEEEremainder(gyro.getAngle(), 360) * (gyroInverted ? -1.0 : 1.0);
+        //return Math.IEEEremainder(gyro.getAngle(), 360) * (gyroInverted ? -1.0 : 1.0);
+        return 0.0;
     }
 
     /**
@@ -377,6 +382,24 @@ public class Drivetrain extends SubsystemBase {
      */
     public double getGyroRate() {
         return gyro.getRate();
+    }
+
+    /** Returns temperature of motor based off Falcon ID. */
+    public double getMotorTemperature(int index){
+        WPI_TalonFX[] falcons = new WPI_TalonFX[]{
+            leftMotor,
+            leftSlave,
+            rightMotor,
+            rightSlave,
+        };
+        index -= 1;
+        double temp = -1.0;
+        try {
+            temp = falcons[index].getTemperature();
+        } catch(ArrayIndexOutOfBoundsException e) {
+            System.err.println("Error: index " + index + " not in array of drive falcons.");
+        }
+        return temp;
     }
 
 }

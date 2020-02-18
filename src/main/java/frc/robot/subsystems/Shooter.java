@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Shooter extends SubsystemBase {
 
     // device initialization
-    private WPI_TalonFX leftShooter = new WPI_TalonFX(26);
-    private WPI_TalonFX rightShooter = new WPI_TalonFX(27);
+    private WPI_TalonFX leftShooter = new WPI_TalonFX(21);
+    private WPI_TalonFX rightShooter = new WPI_TalonFX(22);
 
     // constants
     private static final double kP = 0.07;
@@ -54,12 +54,16 @@ public class Shooter extends SubsystemBase {
         updateShuffleboard();
     }
 
+    private double rpm;
     /**
      * Writes values to Shuffleboard.
      */
     private void updateShuffleboard() {
         SmartDashboard.putNumber("Left shooter rpm", getLeftVelocity());
         SmartDashboard.putNumber("Right shooter rpm", getRightVelocity());
+        SmartDashboard.putNumber("S26 Temp", leftShooter.getTemperature());
+        SmartDashboard.putNumber("S27 Temp", rightShooter.getTemperature());
+        adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0);
     }
 
     /**
@@ -80,19 +84,20 @@ public class Shooter extends SubsystemBase {
      * Sets shooter motors to a given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        double adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0) / MAX_VELOCITY;
+        //double adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0) / MAX_VELOCITY;
         leftShooter.set(percent + adjust);
         rightShooter.set(percent + adjust);
     }
+
+    double adjust = 0.0;
 
     /**
      * Sets shooter motors to a given velocity in rpm.
      */
     public void setVelocity(double velocity) {
-        double adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0);
-        velocity = (velocity * ENCODER_TICKS_PER_REV) / 600; // native is talon units per 100ms
-        leftShooter.set(ControlMode.Velocity, velocity + adjust);
-        rightShooter.set(ControlMode.Velocity, velocity + adjust);
+        velocity = (adjust * ENCODER_TICKS_PER_REV) / 600; // native is talon units per 100ms
+        leftShooter.set(ControlMode.Velocity, velocity);
+        rightShooter.set(ControlMode.Velocity, velocity);
     }
 
     /**
@@ -133,6 +138,26 @@ public class Shooter extends SubsystemBase {
      */
     public double getRightVelocity() {
         return (rightShooter.getSelectedSensorVelocity() * 600) / ENCODER_TICKS_PER_REV;
+    }
+
+    /** Returns temperature of motor based off Falcon ID. */
+    public double getMotorTemperature(int index){
+        WPI_TalonFX[] falcons = new WPI_TalonFX[]{
+            leftShooter,
+            rightShooter,
+        };
+        index -= 1;
+        double temp = -1.0;
+        try {
+            temp = falcons[index].getTemperature();
+        } catch(ArrayIndexOutOfBoundsException e) {
+            System.err.println("Error: index " + index + " not in array of drive falcons.");
+        }
+        return temp;
+    }
+
+    public double getRpm() {
+        return rpm;
     }
 
 }
