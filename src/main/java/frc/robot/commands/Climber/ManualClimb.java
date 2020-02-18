@@ -39,3 +39,5 @@ public class ManualClimb extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
+}

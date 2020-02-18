@@ -36,7 +36,7 @@ public class Intake extends SubsystemBase {
     private boolean indexerInverted = false;
 
     // constants
-    private final double GEAR_RATIO = 300; //needs to be assigned
+    //private final double GEAR_RATIO = 300; //needs to be assigned
     private final double ENCODER_TO_FEET = 2.0 / 36.047279;
     private final double RAMP_RATE = 0.5; // seconds
     private final double MAX_VELOCITY = 3000; // rpm
