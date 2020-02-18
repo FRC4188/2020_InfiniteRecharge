@@ -21,7 +21,11 @@ public class ManualClimb extends CommandBase {
 
     @Override
     public void execute() {
-        climber.setSpeedPercentage(percent);
+        if((climber.getLeftPosition() < 100000) && (climber.getLeftPosition() >= 0)) {
+            climber.setSpeedPercentage(percent);
+        } else {
+            climber.setSpeedPercentage(0);
+        }
     }
 
     @Override

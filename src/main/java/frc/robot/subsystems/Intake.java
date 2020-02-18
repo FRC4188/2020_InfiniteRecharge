@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -20,8 +21,10 @@ public class Intake extends SubsystemBase {
     private CANEncoder intakeMotorEncoder = intakeMotor.getEncoder();
     private CANEncoder indexerMotorEncoder = indexerMotor.getEncoder();
     private CANEncoder polyRollerEncoder = polyRoller.getEncoder();
-    //private Solenoid intakeSolenoid = new Solenoid(0);
+    //private Compressor pcm = new Compressor();
+    private Solenoid intakeSolenoid = new Solenoid(0);
     private CANPIDController pidC = intakeMotor.getPIDController();
+    private CANEncoder[] motors = {intakeMotorEncoder, indexerMotorEncoder, polyRollerEncoder};
     /** 
     private DigitalInput intakeBB1 = new DigitalInput(0);
     private DigitalInput intakeBB2 = new DigitalInput(1);
@@ -29,6 +32,7 @@ public class Intake extends SubsystemBase {
     private boolean lsRelease = true;
     private boolean lsRelease2 = true;
     private boolean bbRelease = false;
+    private boolean isIntakeDown = false;
 
 
     // variables
@@ -94,6 +98,7 @@ public class Intake extends SubsystemBase {
             }
         }*/
         updateShuffleboard();
+        
     }
 
     private void controllerInit() {
@@ -131,19 +136,29 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("I11 Temp", intakeMotor.getMotorTemperature());
         SmartDashboard.putNumber("I12 Temp", indexerMotor.getMotorTemperature());
         SmartDashboard.putNumber("I13 Temp", polyRoller.getMotorTemperature());
+        SmartDashboard.putNumber("Intake Position", getEncoderPosition(0));
+        SmartDashboard.putNumber("Indexer Position", getEncoderPosition(1));
+        SmartDashboard.putNumber("PolyRoller Position", getEncoderPosition(2));
+       
     }
 
     /**
      * Deploys intake solenoid.
      */
-    public void setSolenoid(boolean output) {
-       //intakeSolenoid.set(output);
+    public void activateIntake(boolean output) {
+       intakeSolenoid.set(output);
+       isIntakeDown = output;
+       //intakeSolenoid.free();
     }
 
-    /** 
-    public boolean getSolenoid() {
-        return intakeSolenoid.get();
-    }*/
+    public double getEncoderPosition(int index) {
+        return motors[index].getPosition();
+    }
+
+    /** */
+    public boolean isIntakeActive() {
+        return isIntakeDown;
+    }
 
     /**
      * Spins the intake motor based on a given percent.

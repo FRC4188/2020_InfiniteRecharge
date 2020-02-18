@@ -1,5 +1,6 @@
 package frc.robot.commands.intake;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
@@ -10,7 +11,8 @@ public class FireIntake extends CommandBase {
 
     public FireIntake(Intake intake) {
         this.intake = intake;
-        //output = intake.getSolenoid();
+        output = !intake.isIntakeActive();
+        System.out.println("Calling the FireIntake command");
     }
 
     @Override
@@ -20,7 +22,8 @@ public class FireIntake extends CommandBase {
     @Override
     public void execute() {
         //intake.setSolenoid(false);
-        intake.setSolenoid(!output);
+        intake.activateIntake(output);
+        SmartDashboard.putBoolean("Solenoid Output", output);
     }
 
     @Override

@@ -17,7 +17,7 @@ public class Hood extends SubsystemBase {
     }
 
     public void setHood() {
-        hoodSolenoid.set(hoodPos);
+        //hoodSolenoid.set(hoodPos);
         hoodPos = !hoodPos;
     }
 }

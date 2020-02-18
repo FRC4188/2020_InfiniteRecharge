@@ -373,7 +373,8 @@ public class Drivetrain extends SubsystemBase {
      * Returns gyro angle in degrees.
      */
     public double getGyroAngle() {
-        return Math.IEEEremainder(gyro.getAngle(), 360) * (gyroInverted ? -1.0 : 1.0);
+        //return Math.IEEEremainder(gyro.getAngle(), 360) * (gyroInverted ? -1.0 : 1.0);
+        return 0.0;
     }
 
     /**

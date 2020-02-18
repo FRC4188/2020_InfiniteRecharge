@@ -1,5 +1,6 @@
 package frc.robot.utils;
 
+import frc.robot.RobotContainer;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -13,9 +14,9 @@ public class TempManager {
 
     final int MAX_TEMP = 55; //Cel
 
-    Climber climber = new Climber();
+    Climber climber = RobotContainer.climber;
     Drivetrain drivetrain = new Drivetrain();
-    Intake intake = new Intake();
+    Intake intake = RobotContainer.intake;
     Magazine magazine = new Magazine();
     Shooter shooter = new Shooter();
     Turret turret = new Turret();
@@ -33,6 +34,7 @@ public class TempManager {
         for(int i = 1; i <= 4; i++){
             if(drivetrain.getMotorTemperature(i) > MAX_TEMP){
                 double tempInC = drivetrain.getMotorTemperature(i);
+                // add here to do pneumatic cooling
                 sb.append("D" + i + ": " + tempInC + ", ");
             }
         }
@@ -51,6 +53,7 @@ public class TempManager {
         for(int i = 26; i <= 27; i++){
             if(shooter.getMotorTemperature(i) > MAX_TEMP){
                 double tempInC = shooter.getMotorTemperature(i);
+                //add here to do pneumatic cooling
                 sb.append("S" + i + ": " + tempInC + ", ");
             }
         }

@@ -42,8 +42,8 @@ public class RobotContainer {
     private final Shooter shooter = new Shooter();
     private final Limelight limelight = new Limelight();
     private final Turret turret = new Turret();
-    private final Climber climber = new Climber();
-    private final Intake intake = new Intake();
+    public final static Climber climber = new Climber();
+    public final static Intake intake = new Intake();
     private final Hood hood = new Hood();
 
     // controller initialization
@@ -87,21 +87,29 @@ public class RobotContainer {
         
         pilot.getLbButtonObj().toggleWhenPressed(new AutoShoot(magazine, limelight, shooter));
 
-        pilot.getAButtonObj().whenPressed(new CameraOff(limelight));
-        pilot.getBButtonObj().whenPressed(new CameraTrack(limelight));
-        pilot.getYButtonObj().whenPressed(new CameraZoom(limelight));
+        pilot.getDpadRightButtonObj().whenPressed(new CameraOff(limelight));
+        pilot.getDpadLeftButtonObj().whenPressed(new CameraTrack(limelight));
+        //pilot.getYButtonObj().whenPressed(new CameraZoom(limelight));
+
+        pilot.getYButtonObj().whileHeld(new RunMagazine(magazine, 0.9));
+        pilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
+        pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
+        pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
 
         pilot.getDpadUpButtonObj().whenPressed(new ZeroTurret(turret));
 
         pilot.getDpadDownButtonObj().whenPressed(new HoodToggle(hood));
 
-        pilot.getXButtonObj().whileHeld(new SpinIntake(intake, 0.85));
-        pilot.getXButtonObj().whenReleased(new SpinIntake(intake, 0));
+        pilot.getBButtonObj().whileHeld(new SpinIntake(intake, 1.0));
+        pilot.getBButtonObj().whenReleased(new SpinIntake(intake, 0));
+        pilot.getAButtonObj().whileHeld(new SpinIntake(intake, -.85));
+        pilot.getAButtonObj().whenReleased(new SpinIntake(intake, 0));
         //pilot.getDpadLeftButtonObj().whileHeld(new RunIntake(intake, 0.5));
         //pilot.getDpadLeftButtonObj().whenReleased(new RunIntake(intake, 0));
         //pilot.getDpadRightButtonObj().whileHeld(new SpinIndexer(intake, 0.5));
         //pilot.getDpadRightButtonObj().whenReleased(new SpinIndexer(intake, 0));
-        pilot.getDpadLeftButtonObj().whenPressed(new FireIntake(intake));
+        //copilot.getRbButtonObj().whileHeld(new FireIntake(intake));
+        copilot.getRbButtonObj().whenPressed(new FireIntake(intake));
 
         pilot.getDpadRightButtonObj().whileHeld(new SpinShooter(shooter, shooter.getRpm()));
         
@@ -115,7 +123,7 @@ public class RobotContainer {
         copilot.getYButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
         copilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
 
-        copilot.getLbButtonObj().toggleWhenPressed(new AutoMagazine(magazine, limelight, shooter));
+        //copilot.getLbButtonObj().toggleWhenPressed(new AutoMagazine(magazine, limelight, shooter));
 
         copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, 0.5));
         copilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));
@@ -124,7 +132,7 @@ public class RobotContainer {
 
         copilot.getXButtonObj().toggleWhenPressed(new AutoAim(turret, limelight));
 
-        copilot.getDpadUpButtonObj().whileHeld(new ManualClimb(.9, climber));
+        copilot.getDpadUpButtonObj().whileHeld(new ManualClimb(.8, climber));
         copilot.getDpadUpButtonObj().whenReleased(new ManualClimb(0, climber));
         copilot.getDpadDownButtonObj().whileHeld(new ManualClimb(-.6, climber));
         copilot.getDpadDownButtonObj().whenReleased(new ManualClimb(0, climber));
