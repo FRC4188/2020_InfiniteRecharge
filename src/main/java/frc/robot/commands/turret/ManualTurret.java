@@ -29,7 +29,7 @@ public class ManualTurret extends CommandBase {
 
     @Override
     public void execute() {
-        turret.set(percent/3);
+        turret.set(percent);
     }
 
     @Override

@@ -59,7 +59,7 @@ public class Limelight extends SubsystemBase {
         }
     }
 
-    // pipeline enum 
+    // pipeline enum
     public enum Pipeline {
         CLOSE(0), ZOOM(1), OFF(2);
 
