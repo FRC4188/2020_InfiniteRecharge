@@ -21,7 +21,7 @@ public class Turret extends SubsystemBase {
     // constants
     private static final double GEAR_RATIO = 300; // angular velocity will be divided by this amount
     private static final double ENCODER_TO_DEGREES = 360.0 / GEAR_RATIO; // degrees
-    private static final double RAMP_RATE = 0.2; // seconds
+    private static final double RAMP_RATE = 0.25; // seconds
     private final double MAX_VELOCITY = 11000; // rpm
     private final double kP = 5e-5;
     private final double kI = 1e-5;
@@ -30,8 +30,8 @@ public class Turret extends SubsystemBase {
     private final double kI_ZONE = 0;
     private final int SLOT_ID = 0;
     private final double  MAX_OUT = 1.0; // percent out
-    private final double MIN_ANG = 0;
-    private final double MAX_ANG = 360;
+    private final double MIN_ANG = -2;
+    private final double MAX_ANG = 362;
 
     /**
      * Constructs new Turret object and configures devices.

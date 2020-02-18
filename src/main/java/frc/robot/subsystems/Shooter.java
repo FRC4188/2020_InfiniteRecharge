@@ -54,7 +54,6 @@ public class Shooter extends SubsystemBase {
         updateShuffleboard();
     }
 
-    private double rpm;
     /**
      * Writes values to Shuffleboard.
      */
@@ -63,7 +62,6 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Right shooter rpm", getRightVelocity());
         SmartDashboard.putNumber("S26 Temp", leftShooter.getTemperature());
         SmartDashboard.putNumber("S27 Temp", rightShooter.getTemperature());
-        adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0);
     }
 
     /**
@@ -84,18 +82,17 @@ public class Shooter extends SubsystemBase {
      * Sets shooter motors to a given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        //double adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0) / MAX_VELOCITY;
+        double adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0) / MAX_VELOCITY;
         leftShooter.set(percent + adjust);
         rightShooter.set(percent + adjust);
     }
-
-    double adjust = 0.0;
 
     /**
      * Sets shooter motors to a given velocity in rpm.
      */
     public void setVelocity(double velocity) {
-        velocity = (adjust * ENCODER_TICKS_PER_REV) / 600; // native is talon units per 100ms
+        double adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0);
+        velocity += adjust * ENCODER_TICKS_PER_REV / 600;
         leftShooter.set(ControlMode.Velocity, velocity);
         rightShooter.set(ControlMode.Velocity, velocity);
     }
@@ -154,10 +151,6 @@ public class Shooter extends SubsystemBase {
             System.err.println("Error: index " + index + " not in array of drive falcons.");
         }
         return temp;
-    }
-
-    public double getRpm() {
-        return rpm;
     }
 
 }

@@ -15,7 +15,7 @@ public class Spin360 extends CommandBase{
     
     @Override
     public void initialize() {
-        targetPosition = turret.getPosition() - 360 * Math.signum(turret.getPosition() - 180);
+        targetPosition = turret.getPosition() - 355 * Math.signum(turret.getPosition() - 180);
     }
 
     @Override

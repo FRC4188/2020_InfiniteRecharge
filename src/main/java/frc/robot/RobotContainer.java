@@ -85,12 +85,10 @@ public class RobotContainer {
         pilot.getRbButtonObj().whileHeld(new DriveCenterPort(
                 drivetrain, limelight, () -> pilot.getY(Hand.kLeft)
         ));
-        
-        pilot.getLbButtonObj().toggleWhenPressed(new AutoShoot(magazine, limelight, shooter));
 
         pilot.getDpadRightButtonObj().whenPressed(new CameraOff(limelight));
         pilot.getDpadLeftButtonObj().whenPressed(new CameraTrack(limelight));
-        //pilot.getYButtonObj().whenPressed(new CameraZoom(limelight));
+        pilot.getLbButtonObj().whenPressed(new CameraZoom(limelight));
 
         pilot.getYButtonObj().whileHeld(new RunMagazine(magazine, 0.9));
         pilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
@@ -105,20 +103,13 @@ public class RobotContainer {
         pilot.getBButtonObj().whenReleased(new SpinIntake(intake, 0));
         pilot.getAButtonObj().whileHeld(new SpinIntake(intake, -.85));
         pilot.getAButtonObj().whenReleased(new SpinIntake(intake, 0));
-
-        copilot.getRbButtonObj().whenPressed(new FireIntake(intake));
-
-        pilot.getDpadRightButtonObj().whileHeld(new SpinShooter(shooter, shooter.getRpm()));
         
         pilot.getStartButtonObj().whenPressed(new KillAll());
         copilot.getStartButtonObj().whenPressed(new KillAll());
-        
-        copilot.getAButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
 
-        copilot.getBButtonObj().whileHeld(new RunMagazine(magazine, 0.9));
-        copilot.getBButtonObj().whenReleased(new RunMagazine(magazine, 0));
-        copilot.getYButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
-        copilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
+        copilot.getRbButtonObj().whenPressed(new FireIntake(intake));
+
+        copilot.getAButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
 
         copilot.getLbButtonObj().toggleWhenPressed(new AutoShoot(magazine, limelight, shooter));
 
@@ -131,26 +122,6 @@ public class RobotContainer {
         copilot.getDpadUpButtonObj().whenReleased(new ManualClimb(0, climber));
         copilot.getDpadDownButtonObj().whileHeld(new ManualClimb(-.6, climber));
         copilot.getDpadDownButtonObj().whenReleased(new ManualClimb(0, climber));
-
-        copilot.getStartButtonObj().whenPressed(new KillAll());
-        pilot.getStartButtonObj().whenPressed(new KillAll());
-
-        pilot.getRbButtonObj().whileHeld(new DriveCenterPort(
-                drivetrain, limelight, () -> pilot.getY(Hand.kLeft)
-        ));
-
-        pilot.getLbButtonObj().toggleWhenPressed(new AutoShoot(magazine, limelight, shooter));
-
-        pilot.getAButtonObj().whenPressed(new CameraOff(limelight));
-        pilot.getBButtonObj().whenPressed(new CameraTrack(limelight));
-        pilot.getYButtonObj().whenPressed(new CameraZoom(limelight));
-
-        pilot.getDpadUpButtonObj().whenPressed(new ZeroTurret(turret));
-
-        pilot.getDpadDownButtonObj().whenPressed(new HoodToggle(hood));
-
-        pilot.getXButtonObj().whileHeld(new SpinIntake(intake, 0.5));
-        pilot.getXButtonObj().whenReleased(new SpinIntake(intake, 0));
 
     }
 
