@@ -73,7 +73,7 @@ public class RobotContainer {
                 () -> pilot.getBumper(Hand.kLeft)
         ));
         shooter.setDefaultCommand(new SpinShooter(shooter, 0));
-        turret.setDefaultCommand(new ConditionalCommand(new Spin360(turret, 0.5), 
+        turret.setDefaultCommand(new ConditionalCommand(new Spin360(turret, limelight, 0.5), 
                 new AutoAim(turret, limelight), turret::getSpin));
     }
 

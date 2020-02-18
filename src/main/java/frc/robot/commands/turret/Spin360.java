@@ -1,21 +1,25 @@
 package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
 
 public class Spin360 extends CommandBase{
     private Turret turret;
+    private Limelight limelight;
     private double position, tolerance, counter, targetPosition;
     
-    public Spin360(Turret turret, double tolerance) {
+    public Spin360(Turret turret, Limelight limelight, double tolerance) {
         addRequirements(turret);
         this.turret = turret;
+        this.limelight = limelight;
         this.tolerance = tolerance;
     }
     
     @Override
     public void initialize() {
-        targetPosition = turret.getPosition() - 355 * Math.signum(turret.getPosition() - 180);
+        targetPosition = turret.getPosition() + limelight.getHorizontalAngle() - 360 * 
+                Math.signum(turret.getPosition() - 180);
     }
 
     @Override
