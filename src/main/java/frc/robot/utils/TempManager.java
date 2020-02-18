@@ -14,9 +14,9 @@ public class TempManager {
 
     final int MAX_TEMP = 55; //Cel
 
-    Climber climber = RobotContainer.climber;
+    Climber climber = new Climber();
     Drivetrain drivetrain = new Drivetrain();
-    Intake intake = RobotContainer.intake;
+    Intake intake = new Intake();
     Magazine magazine = new Magazine();
     Shooter shooter = new Shooter();
     Turret turret = new Turret();

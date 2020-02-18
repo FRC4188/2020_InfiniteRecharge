@@ -276,4 +276,8 @@ public class Intake extends SubsystemBase {
         return temp;
     }
 
+    public void toggleSolenoid() {
+        intakeSolenoid.set(!intakeSolenoid.get());
+    }
+
 }

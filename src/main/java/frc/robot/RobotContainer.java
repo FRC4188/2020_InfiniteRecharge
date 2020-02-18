@@ -109,7 +109,7 @@ public class RobotContainer {
         //pilot.getDpadRightButtonObj().whileHeld(new SpinIndexer(intake, 0.5));
         //pilot.getDpadRightButtonObj().whenReleased(new SpinIndexer(intake, 0));
         //copilot.getRbButtonObj().whileHeld(new FireIntake(intake));
-        copilot.getRbButtonObj().whenPressed(new FireIntake(intake));
+        copilot.getRbButtonObj().whenPressed(intake::toggleSolenoid);
 
         pilot.getDpadRightButtonObj().whileHeld(new SpinShooter(shooter, shooter.getRpm()));
         
