@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Shooter extends SubsystemBase {
 
     // device initialization
-    private WPI_TalonFX leftShooter = new WPI_TalonFX(11);
-    private WPI_TalonFX rightShooter = new WPI_TalonFX(12);
+    private WPI_TalonFX leftShooter = new WPI_TalonFX(21);
+    private WPI_TalonFX rightShooter = new WPI_TalonFX(22);
 
     // constants
     private static final double kP = 0.07;
@@ -22,7 +22,7 @@ public class Shooter extends SubsystemBase {
     private static final double kD = 0.0;
     private static final double kF = 1023 / 20000.0;
     private static final double ENCODER_TICKS_PER_REV = 2048;
-    private static final double RAMP_RATE = 0.2; // seconds
+    private static final double RAMP_RATE = 0.5; // seconds
 
     /**
      * Constructs new Shooter object and configures devices.
