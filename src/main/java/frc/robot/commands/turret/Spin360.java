@@ -7,7 +7,10 @@ import frc.robot.subsystems.Turret;
 public class Spin360 extends CommandBase{
     private Turret turret;
     private Limelight limelight;
-    private double position, tolerance, counter, targetPosition;
+    private double position, tolerance, counter, targetPosition, lastError;
+    private final double kP = 0.001;
+    private final double kD = 0.05;
+    private final double DELTA_T = 0.02;
     
     public Spin360(Turret turret, Limelight limelight, double tolerance) {
         addRequirements(turret);
@@ -18,15 +21,17 @@ public class Spin360 extends CommandBase{
     
     @Override
     public void initialize() {
-        targetPosition = turret.getPosition() + limelight.getHorizontalAngle() - 360 * 
-                Math.signum(turret.getPosition() - 180);
+        /*targetPosition = turret.getPosition() + limelight.getHorizontalAngle() - 360 * 
+                Math.signum(turret.getPosition() - 180);*/
+        targetPosition = 90;
     }
 
     @Override
     public void execute() {
         position = turret.getPosition();
-        turret.turretToAngle(targetPosition, tolerance);
         double error = targetPosition - position;
+        turret.set(kP * error + kD * lastError * DELTA_T);
+        lastError = error;
         if (Math.abs(error) < tolerance) counter++;
         else counter = 0;
     }
@@ -38,6 +43,7 @@ public class Spin360 extends CommandBase{
 
     @Override
     public void end(boolean interrupted) {
+        turret.set(0);
     }
 
 }

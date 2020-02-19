@@ -91,10 +91,9 @@ public class Shooter extends SubsystemBase {
      * Sets shooter motors to a given velocity in rpm.
      */
     public void setVelocity(double velocity) {
-        double adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0);
-        velocity += adjust * ENCODER_TICKS_PER_REV / 600;
-        leftShooter.set(ControlMode.Velocity, velocity);
-        rightShooter.set(ControlMode.Velocity, velocity);
+        double adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0) * ENCODER_TICKS_PER_REV / 600;
+        leftShooter.set(ControlMode.Velocity, velocity + adjust);
+        rightShooter.set(ControlMode.Velocity, velocity + adjust);
     }
 
     /**

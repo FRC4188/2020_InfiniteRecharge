@@ -6,7 +6,7 @@ import frc.robot.commands.climber.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.ManualDrive;
 import frc.robot.commands.groups.AutoShoot;
-import frc.robot.commands.hood.HoodToggle;
+import frc.robot.commands.hood.FireHood;
 import frc.robot.commands.intake.FireIntake;
 import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.magazine.RunMagazine;
@@ -73,8 +73,8 @@ public class RobotContainer {
                 () -> pilot.getBumper(Hand.kLeft)
         ));
         shooter.setDefaultCommand(new SpinShooter(shooter, 0));
-        turret.setDefaultCommand(new ConditionalCommand(new Spin360(turret, limelight, 0.5), 
-                new AutoAim(turret, limelight), turret::getSpin));
+        /*turret.setDefaultCommand(new ConditionalCommand(new Spin360(turret, limelight, 0.5), 
+                new AutoAim(turret, limelight), turret::getSpin));*/
     }
 
     /**
@@ -97,7 +97,8 @@ public class RobotContainer {
 
         pilot.getDpadUpButtonObj().whenPressed(new ZeroTurret(turret));
 
-        pilot.getDpadDownButtonObj().whenPressed(new HoodToggle(hood));
+        pilot.getDpadDownButtonObj().whileHeld(new FireHood(hood, true));
+        pilot.getDpadDownButtonObj().whenPressed(new FireHood(hood, false));
 
         pilot.getBButtonObj().whileHeld(new SpinIntake(intake, 1.0));
         pilot.getBButtonObj().whenReleased(new SpinIntake(intake, 0));
@@ -107,7 +108,8 @@ public class RobotContainer {
         pilot.getStartButtonObj().whenPressed(new KillAll());
         copilot.getStartButtonObj().whenPressed(new KillAll());
 
-        copilot.getRbButtonObj().whenPressed(new FireIntake(intake));
+        copilot.getRbButtonObj().whileHeld(new FireIntake(intake, true));
+        copilot.getRbButtonObj().whenReleased(new FireIntake(intake, false));
 
         copilot.getAButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
 

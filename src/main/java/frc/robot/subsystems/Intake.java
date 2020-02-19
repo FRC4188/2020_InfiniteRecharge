@@ -147,8 +147,6 @@ public class Intake extends SubsystemBase {
      */
     public void activateIntake(boolean output) {
        intakeSolenoid.set(output);
-       isIntakeDown = output;
-       //intakeSolenoid.free();
     }
 
     public double getEncoderPosition(int index) {
