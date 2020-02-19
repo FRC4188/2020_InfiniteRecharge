@@ -1,5 +1,6 @@
 package frc.robot.commands.turret;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
@@ -16,6 +17,7 @@ public class AutoAim extends CommandBase {
         this.turret = turret;
         this.limelight = limelight;
         limelight.trackTarget();
+        SmartDashboard.putNumber("Turret trim", 0.0);
     }
 
     // Called when the command is initially scheduled.
@@ -26,7 +28,7 @@ public class AutoAim extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        turret.set(-limelight.getHorizontalAngle()/47);
+        turret.set(-(limelight.getHorizontalAngle() + SmartDashboard.getNumber("Turret trim", 0.0))/47);
     }
 
     // Called once the command ends or is interrupted.

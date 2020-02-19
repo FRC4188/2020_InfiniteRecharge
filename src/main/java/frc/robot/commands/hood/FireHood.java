@@ -3,14 +3,15 @@ package frc.robot.commands.hood;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hood;
 
-public class HoodToggle extends CommandBase {
+public class FireHood extends CommandBase {
     
     Hood hood;
-    boolean Pos;
+    boolean output;
 
-    public HoodToggle(Hood hood) {
+    public FireHood(Hood hood, boolean output) {
         addRequirements(hood);
         this.hood = hood;
+        this.output = output;
     }
 
     // Called when the command is initially scheduled.
@@ -21,7 +22,7 @@ public class HoodToggle extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        hood.setHood();
+        hood.setHood(output);
     }
 
     // Called once the command ends or is interrupted.

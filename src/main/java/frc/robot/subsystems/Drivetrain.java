@@ -112,10 +112,6 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("Right Velocity", getRightVelocity());
         SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
         SmartDashboard.putString("Odometry", getPose().toString());
-        SmartDashboard.putNumber("D1 Temp", leftMotor.getTemperature());
-        SmartDashboard.putNumber("D2 Temp", leftSlave.getTemperature());
-        SmartDashboard.putNumber("D3 Temp", rightMotor.getTemperature());
-        SmartDashboard.putNumber("D4 Temp", rightSlave.getTemperature());
     }
 
     /**
@@ -392,7 +388,6 @@ public class Drivetrain extends SubsystemBase {
             rightMotor,
             rightSlave,
         };
-        index -= 1;
         double temp = -1.0;
         try {
             temp = falcons[index].getTemperature();

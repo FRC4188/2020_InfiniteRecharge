@@ -41,7 +41,6 @@ public class Turret extends SubsystemBase {
      */
     private void updateShuffleboard() {
         SmartDashboard.putNumber("Turret pos (deg)", getPosition());
-        SmartDashboard.putNumber("T23 temp", turretMotor.getMotorTemperature());
     }
 
     /**
@@ -74,18 +73,8 @@ public class Turret extends SubsystemBase {
     }
 
     /** Returns temperature of motor based off Falcon ID. */
-    public double getMotorTemperature(int index){
-        CANSparkMax[] sparks = new CANSparkMax[]{
-            turretMotor,
-        };
-        index -= 1;
-        double temp = -1.0;
-        try {
-            temp = sparks[index].getMotorTemperature();
-        } catch(ArrayIndexOutOfBoundsException e) {
-            System.err.println("Error: index " + index + " not in array of intake sparks.");
-        }
-        return temp;
+    public double getMotorTemperature(){
+        return turretMotor.getMotorTemperature();
     }
 
 }

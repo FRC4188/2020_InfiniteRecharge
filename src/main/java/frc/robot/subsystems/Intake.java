@@ -41,7 +41,7 @@ public class Intake extends SubsystemBase {
     private boolean indexerInverted = false;
 
     // constants
-    private final double GEAR_RATIO = 300; //needs to be assigned
+    //private final double GEAR_RATIO = 300; //needs to be assigned
     private final double ENCODER_TO_FEET = 2.0 / 36.047279;
     private final double RAMP_RATE = 0.5; // seconds
     private final double MAX_VELOCITY = 3000; // rpm
@@ -133,9 +133,6 @@ public class Intake extends SubsystemBase {
      */
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Balls", ballCount);
-        SmartDashboard.putNumber("I11 Temp", intakeMotor.getMotorTemperature());
-        SmartDashboard.putNumber("I12 Temp", indexerMotor.getMotorTemperature());
-        SmartDashboard.putNumber("I13 Temp", polyRoller.getMotorTemperature());
         SmartDashboard.putNumber("Intake Position", getEncoderPosition(0));
         SmartDashboard.putNumber("Indexer Position", getEncoderPosition(1));
         SmartDashboard.putNumber("PolyRoller Position", getEncoderPosition(2));
@@ -147,8 +144,6 @@ public class Intake extends SubsystemBase {
      */
     public void activateIntake(boolean output) {
        intakeSolenoid.set(output);
-       isIntakeDown = output;
-       //intakeSolenoid.free();
     }
 
     public double getEncoderPosition(int index) {
@@ -180,7 +175,6 @@ public class Intake extends SubsystemBase {
      * or equal to 0.
      */
     public void spinIndexer(double percent) {
-        System.out.println("Spin index");
         indexerMotor.set(percent);
     }
 
@@ -269,15 +263,10 @@ public class Intake extends SubsystemBase {
         index -= 1;
         double temp = -1.0;
         try {
-            temp = sparks[index].getMotorTemperature();
+            temp = sparks[index - 10].getMotorTemperature();
         } catch(ArrayIndexOutOfBoundsException e) {
             System.err.println("Error: index " + index + " not in array of intake sparks.");
         }
         return temp;
     }
-
-    public void toggleSolenoid() {
-        intakeSolenoid.set(!intakeSolenoid.get());
-    }
-
 }

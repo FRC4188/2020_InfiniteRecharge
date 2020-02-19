@@ -7,8 +7,6 @@ public class Hood extends SubsystemBase {
     
     private Solenoid hoodSolenoid = new Solenoid(1);
 
-    boolean hoodPos = false;
-
     public Hood() {
     }
 
@@ -16,8 +14,7 @@ public class Hood extends SubsystemBase {
     public void periodic() {
     }
 
-    public void setHood() {
-        //hoodSolenoid.set(hoodPos);
-        hoodPos = !hoodPos;
+    public void setHood(boolean hoodPos) {
+        hoodSolenoid.set(hoodPos);
     }
 }

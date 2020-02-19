@@ -50,8 +50,8 @@ public class Climber extends SubsystemBase {
   boolean isBrakeEngaged;
 
   // motor init
-  private WPI_TalonFX climberLeftMotor = new WPI_TalonFX(31);
-  private WPI_TalonFX climberRightMotor = new WPI_TalonFX(32);
+  private WPI_TalonFX climberLeftMotor = new WPI_TalonFX(32);
+  private WPI_TalonFX climberRightMotor = new WPI_TalonFX(31);
 
   private double climberSpeed;
   private double velocity;
@@ -94,8 +94,6 @@ public class Climber extends SubsystemBase {
     SmartDashboard.putNumber("Climber Speed Value", getClimberSpeed());
     SmartDashboard.putNumber("Left Velocity", getClimberLeftVel());
     SmartDashboard.putNumber("Right Velocity", getClimberRightVel());
-    SmartDashboard.putNumber("C31 Temp", climberLeftMotor.getTemperature());
-    SmartDashboard.putNumber("C32 Temp", climberRightMotor.getTemperature());
     /**
      * SmartDashboard.putBoolean("Limit Switch Right", getRightMagSwitch());
      * SmartDashboard.putBoolean("Limit Switch Left", getLeftMagSwitch());
@@ -326,8 +324,8 @@ public class Climber extends SubsystemBase {
     index -= 1;
     double temp = -1.0;
     try {
-      temp = falcons[index].getTemperature();
-    } catch (ArrayIndexOutOfBoundsException e) {
+      temp = falcons[index - 30].getTemperature();
+    }catch (ArrayIndexOutOfBoundsException e) {
       System.err.println("Error: index " + index + " not in array of climb falcons.");
     }
     return temp;

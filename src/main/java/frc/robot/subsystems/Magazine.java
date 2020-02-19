@@ -37,7 +37,6 @@ public class Magazine extends SubsystemBase {
      * Writes values to Shuffleboard.
      */
     public void updateShuffleboard() {
-        SmartDashboard.putNumber("M24 temp", magMotor.getMotorTemperature());
         SmartDashboard.putNumber("Magazine velocity", magEncoder.getVelocity());
     }
 
@@ -57,18 +56,8 @@ public class Magazine extends SubsystemBase {
     }
 
     /** Returns temperature of motor based off Falcon ID. */
-    public double getMotorTemperature(int index){
-        CANSparkMax[] sparks = new CANSparkMax[]{
-            magMotor,
-        };
-        index -= 1;
-        double temp = -1.0;
-        try {
-            temp = sparks[index].getMotorTemperature();
-        } catch(ArrayIndexOutOfBoundsException e) {
-            System.err.println("Error: index " + index + " not in array of intake sparks.");
-        }
-        return temp;
+    public double getMotorTemperature(){
+        return magMotor.getMotorTemperature();
     }
 
 }

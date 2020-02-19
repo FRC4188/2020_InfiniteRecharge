@@ -29,7 +29,11 @@ public class ManualTurret extends CommandBase {
 
     @Override
     public void execute() {
-        turret.set(percent);
+        if((turret.getPosition() >= 360 && percent > 0) || (turret.getPosition() <= 5 && percent < 0)) {
+            turret.set(0);
+        } else {
+            turret.set(percent);
+        }
     }
 
     @Override

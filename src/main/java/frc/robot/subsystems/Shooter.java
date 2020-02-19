@@ -61,8 +61,6 @@ public class Shooter extends SubsystemBase {
     private void updateShuffleboard() {
         SmartDashboard.putNumber("Left shooter rpm", getLeftVelocity());
         SmartDashboard.putNumber("Right shooter rpm", getRightVelocity());
-        SmartDashboard.putNumber("S26 Temp", leftShooter.getTemperature());
-        SmartDashboard.putNumber("S27 Temp", rightShooter.getTemperature());
         adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0);
     }
 
@@ -149,9 +147,9 @@ public class Shooter extends SubsystemBase {
         index -= 1;
         double temp = -1.0;
         try {
-            temp = falcons[index].getTemperature();
+            temp = falcons[index - 25].getTemperature();
         } catch(ArrayIndexOutOfBoundsException e) {
-            System.err.println("Error: index " + index + " not in array of drive falcons.");
+            System.err.println("Error: index " + index + " not in array of shooter falcons.");
         }
         return temp;
     }
