@@ -17,7 +17,6 @@ public class Robot extends TimedRobot {
     private RobotContainer robotContainer;
     private final PowerDistributionPanel pdp = new PowerDistributionPanel();
     private Compressor pcm = new Compressor();
-    //private TempManager tempManager;
 
     @Override
     public void robotInit() {

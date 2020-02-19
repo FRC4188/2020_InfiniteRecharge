@@ -54,14 +54,13 @@ public class Shooter extends SubsystemBase {
         updateShuffleboard();
     }
 
-    private double rpm;
     /**
      * Writes values to Shuffleboard.
      */
     private void updateShuffleboard() {
         SmartDashboard.putNumber("Left shooter rpm", getLeftVelocity());
         SmartDashboard.putNumber("Right shooter rpm", getRightVelocity());
-        adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0);
+        //adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0);
     }
 
     /**
@@ -82,20 +81,18 @@ public class Shooter extends SubsystemBase {
      * Sets shooter motors to a given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        //double adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0) / MAX_VELOCITY;
+        double adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0) / MAX_VELOCITY;
         leftShooter.set(percent + adjust);
         rightShooter.set(percent + adjust);
     }
-
-    double adjust = 0.0;
 
     /**
      * Sets shooter motors to a given velocity in rpm.
      */
     public void setVelocity(double velocity) {
-        velocity = (adjust * ENCODER_TICKS_PER_REV) / 600; // native is talon units per 100ms
-        leftShooter.set(ControlMode.Velocity, velocity);
-        rightShooter.set(ControlMode.Velocity, velocity);
+        double adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0) * ENCODER_TICKS_PER_REV / 600;
+        leftShooter.set(ControlMode.Velocity, velocity + adjust);
+        rightShooter.set(ControlMode.Velocity, velocity + adjust);
     }
 
     /**
@@ -152,10 +149,6 @@ public class Shooter extends SubsystemBase {
             System.err.println("Error: index " + index + " not in array of shooter falcons.");
         }
         return temp;
-    }
-
-    public double getRpm() {
-        return rpm;
     }
 
 }

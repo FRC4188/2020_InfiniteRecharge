@@ -53,6 +53,8 @@ public class Climber extends SubsystemBase {
   private WPI_TalonFX climberLeftMotor = new WPI_TalonFX(32);
   private WPI_TalonFX climberRightMotor = new WPI_TalonFX(31);
 
+  private final double MAX_POSITION = 100000;
+  private final double MIN_POSITION = 0;
   private double climberSpeed;
   private double velocity;
 
@@ -316,6 +318,14 @@ public class Climber extends SubsystemBase {
   public boolean isLeftClimberDown() {
     // if (getLeftMagSwitch()) return true;
     return false;
+  }
+
+  public double getMaxPosition() {
+    return MAX_POSITION;
+  }
+
+  public double getMinPosition() {
+    return MIN_POSITION;
   }
 
   /** Returns temperature of motor based off Falcon ID. */

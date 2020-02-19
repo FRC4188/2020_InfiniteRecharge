@@ -6,40 +6,45 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
 
 public class AutoAim extends CommandBase {
-    Turret turret;
-    Limelight limelight;
 
-    /**
-     * Creates a new AutoAim.
-     */
-    public AutoAim(Turret turret, Limelight limelight) {
-        addRequirements(turret);
-        this.turret = turret;
-        this.limelight = limelight;
-        limelight.trackTarget();
-        SmartDashboard.putNumber("Turret trim", 0.0);
-    }
+  Turret turret;
+  Limelight limelight;
+  private final double kP = 1.0 / 47;
 
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() {
-    }
+  /**
+   * Creates a new AutoAim.
+   */
+  public AutoAim(Turret turret, Limelight limelight) {
+    addRequirements(turret);
+    this.turret = turret;
+    this.limelight = limelight;
+    limelight.trackTarget();
+  }
 
-    // Called every time the scheduler runs while the command is scheduled.
-    @Override
-    public void execute() {
-        turret.set(-(limelight.getHorizontalAngle() + SmartDashboard.getNumber("Turret trim", 0.0))/47);
-    }
+  // Called when the command is initially scheduled.
+  @Override
+  public void initialize() {
+    SmartDashboard.putNumber("Turret kP adjust", 0.0);
+  }
 
-    // Called once the command ends or is interrupted.
-    @Override
-    public void end(boolean interrupted) {
-        turret.set(0);
+  // Called every time the scheduler runs while the command is scheduled.
+  @Override
+  public void execute() {
+    if (limelight.hasTarget()) {
+      turret.set(-limelight.getHorizontalAngle() * (kP + 
+          SmartDashboard.getNumber("Turret kP adjust", 0.0) / 10.0));
     }
+  }
 
-    // Returns true when the command should end.
-    @Override
-    public boolean isFinished() {
-        return false;
-    }
+  // Called once the command ends or is interrupted.
+  @Override
+  public void end(boolean interrupted) {
+    turret.set(0);
+  }
+
+  // Returns true when the command should end.
+  @Override
+  public boolean isFinished() {
+    return false;
+  }
 }
