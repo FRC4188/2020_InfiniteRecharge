@@ -8,8 +8,8 @@ public class Spin360 extends CommandBase{
     private Turret turret;
     private Limelight limelight;
     private double position, tolerance, counter, targetPosition, lastError;
-    private final double kP = 0.001;
-    private final double kD = 0.05;
+    private final double kP = 0.000005;
+    private final double kD = 0.75;
     private final double DELTA_T = 0.02;
     
     public Spin360(Turret turret, Limelight limelight, double tolerance) {
@@ -23,7 +23,12 @@ public class Spin360 extends CommandBase{
     public void initialize() {
         /*targetPosition = turret.getPosition() + limelight.getHorizontalAngle() - 360 * 
                 Math.signum(turret.getPosition() - 180);*/
-        targetPosition = 90;
+        position = turret.getPosition();
+        if (position > 355)
+            targetPosition = 0;
+        else if (position < 5)
+            targetPosition = 360;
+        else targetPosition = position;
     }
 
     @Override

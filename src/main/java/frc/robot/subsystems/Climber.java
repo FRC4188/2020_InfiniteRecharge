@@ -53,8 +53,8 @@ public class Climber extends SubsystemBase {
   private WPI_TalonFX climberLeftMotor = new WPI_TalonFX(32);
   private WPI_TalonFX climberRightMotor = new WPI_TalonFX(31);
 
-  private final double MAX_POSITION = 100000;
-  private final double MIN_POSITION = 0;
+  private final double MAX_POSITION = -40000;
+  private final double MIN_POSITION = -160000;
   private double climberSpeed;
   private double velocity;
 

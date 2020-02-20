@@ -30,10 +30,8 @@ public class AutoAim extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (limelight.hasTarget()) {
-      turret.set(-limelight.getHorizontalAngle() * (kP + 
-          SmartDashboard.getNumber("Turret kP adjust", 0.0) / 10.0));
-    }
+    turret.set(-limelight.getHorizontalAngle() * kP
+        + SmartDashboard.getNumber("Turret kP adjust", 0.0) / 10.0);
   }
 
   // Called once the command ends or is interrupted.

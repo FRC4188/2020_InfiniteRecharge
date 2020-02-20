@@ -9,7 +9,9 @@ import frc.robot.subsystems.Turret;
 public class ManualTurret extends CommandBase {
 
     private final Turret turret;
-    private final double percent;
+    private double percent;
+    private final double MAX_ANG = 385;
+    private final double MIN_ANG = -25;
 
     /**
      * Constructs a new ManualTurret command to set turret to a given output.
@@ -29,7 +31,7 @@ public class ManualTurret extends CommandBase {
 
     @Override
     public void execute() {
-        if((turret.getPosition() >= 360 && percent > 0) || (turret.getPosition() <= 5 && percent < 0)) {
+        if((turret.getPosition() >= MAX_ANG && percent > 0) || (turret.getPosition() <= MIN_ANG && percent < 0)) {
             turret.set(0);
         } else {
             turret.set(percent);

@@ -20,7 +20,7 @@ public class Shooter extends SubsystemBase {
     private static final double kP = 0.07;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
-    private static final double kF = 1023 / 20000.0;
+    private static final double kF = 1023 / 19970.0;
     private static final double ENCODER_TICKS_PER_REV = 2048;
     private static final double RAMP_RATE = 1; // seconds
     private static final double MAX_VELOCITY = 6500; // RPM
@@ -44,6 +44,7 @@ public class Shooter extends SubsystemBase {
         setRampRate();
 
         SmartDashboard.putNumber("Shooter speed adjust", 0.0);
+
     }
 
     /**
@@ -60,7 +61,6 @@ public class Shooter extends SubsystemBase {
     private void updateShuffleboard() {
         SmartDashboard.putNumber("Left shooter rpm", getLeftVelocity());
         SmartDashboard.putNumber("Right shooter rpm", getRightVelocity());
-        //adjust = SmartDashboard.getNumber("Shooter speed adjust", 0.0);
     }
 
     /**

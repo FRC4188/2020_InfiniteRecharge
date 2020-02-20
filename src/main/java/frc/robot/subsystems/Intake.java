@@ -155,6 +155,11 @@ public class Intake extends SubsystemBase {
         return isIntakeDown;
     }
 
+    /** */
+    public boolean getSolenoid() {
+        return intakeSolenoid.get();
+    }
+
     /**
      * Spins the intake motor based on a given percent.
      * The motor only spins if the number of balls is less.

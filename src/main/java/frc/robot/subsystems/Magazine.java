@@ -38,6 +38,7 @@ public class Magazine extends SubsystemBase {
      */
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Magazine velocity", magEncoder.getVelocity());
+        SmartDashboard.putNumber("Magazine Encoder Position", magEncoder.getPosition());
     }
 
     /**

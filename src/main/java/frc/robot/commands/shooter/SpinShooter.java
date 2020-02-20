@@ -29,7 +29,7 @@ public class SpinShooter extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.setVelocity(rpm);
+        shooter.set(rpm);
     }
 
     @Override
