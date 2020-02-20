@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import frc.robot.commands.climber.FireBrake;
 import frc.robot.commands.climber.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.ManualDrive;
@@ -125,8 +126,7 @@ public class RobotContainer {
 
         pilot.getDpadUpButtonObj().whenPressed(new ZeroTurret(turret));
 
-        pilot.getDpadDownButtonObj().whileHeld(new FireHood(hood, true));
-        pilot.getDpadDownButtonObj().whenPressed(new FireHood(hood, false));
+        pilot.getDpadDownButtonObj().toggleWhenPressed(new FireHood(hood));
 
         pilot.getBButtonObj().whileHeld(new SpinIntake(intake, 1.0));
         pilot.getBButtonObj().whenReleased(new SpinIntake(intake, 0));
@@ -136,8 +136,7 @@ public class RobotContainer {
         pilot.getStartButtonObj().whenPressed(new KillAll());
         copilot.getStartButtonObj().whenPressed(new KillAll());
 
-        copilot.getRbButtonObj().whileHeld(new FireIntake(intake, true));
-        copilot.getRbButtonObj().whenReleased(new FireIntake(intake, false));
+        copilot.getRbButtonObj().toggleWhenPressed(new FireIntake(intake));
 
         //copilot.getAButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
         copilot.getAButtonObj().toggleWhenPressed(new AutoAim(turret, limelight));
@@ -158,6 +157,9 @@ public class RobotContainer {
 
         copilot.getXButtonObj().whenPressed(new ManualBallCount(-1, intake));
         copilot.getYButtonObj().whenPressed(new ManualBallCount(1, intake));
+
+        copilot.getBackButtonObj().toggleWhenPressed(new FireBrake(climber));
+        
     }
 
 }

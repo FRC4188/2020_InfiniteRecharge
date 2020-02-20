@@ -1,15 +1,15 @@
-package frc.robot.commands.hood;
+package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Climber;
 
-public class FireHood extends CommandBase {
+public class FireBrake extends CommandBase {
     
-    Hood hood;
+    Climber climber;
 
-    public FireHood(Hood hood) {
-        addRequirements(hood);
-        this.hood = hood;
+    public FireBrake(Climber climber) {
+        addRequirements(climber);
+        this.climber = climber;
     }
 
     // Called when the command is initially scheduled.
@@ -20,13 +20,13 @@ public class FireHood extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        hood.setHood(true);
+        climber.engagePneuBrake(true);
     }
 
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        hood.setHood(false);
+        climber.engagePneuBrake(false);
     }
 
     // Returns true when the command should end.
@@ -34,4 +34,5 @@ public class FireHood extends CommandBase {
     public boolean isFinished() {
         return false;
     }
+
 }

@@ -19,6 +19,8 @@ public class Turret extends SubsystemBase {
     private static final double GEAR_RATIO = 300; // angular velocity will be divided by this amount
     private static final double ENCODER_TO_DEGREES = 360.0 / GEAR_RATIO; // degrees
     private static final double RAMP_RATE = 0.25; // seconds
+    private final double MAX_ANG = 365;
+    private final double MIN_ANG = -5;
 
     /**
      * Constructs new Turret object and configures devices.
@@ -48,6 +50,7 @@ public class Turret extends SubsystemBase {
      */
     private void updateShuffleboard() {
         SmartDashboard.putNumber("Turret pos (deg)", getPosition());
+        SmartDashboard.putNumber("Turret raw velocity", turretEncoder.getVelocity());
     }
 
     /**
@@ -82,6 +85,15 @@ public class Turret extends SubsystemBase {
     /** Returns temperature of motor based off Falcon ID. */
     public double getMotorTemperature(){
         return turretMotor.getMotorTemperature();
+    }
+
+    public double getMaxPosition() 
+    {
+        return MAX_ANG;
+    }
+
+    public double getMinPosition() {
+        return MIN_ANG;
     }
 
 }

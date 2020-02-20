@@ -17,13 +17,13 @@ public class Shooter extends SubsystemBase {
     private WPI_TalonFX rightShooter = new WPI_TalonFX(22);
 
     // constants
-    private static final double kP = 0.07;
+    private static final double kP = 0.1;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
     private static final double kF = 1023 / 19970.0;
     private static final double ENCODER_TICKS_PER_REV = 2048;
-    private static final double RAMP_RATE = 1; // seconds
-    private static final double MAX_VELOCITY = 6500; // RPM
+    private static final double RAMP_RATE = 0.2; // seconds
+    private static final double MAX_VELOCITY = 5859; // RPM
 
     /**
      * Constructs new Shooter object and configures devices.
@@ -44,7 +44,6 @@ public class Shooter extends SubsystemBase {
         setRampRate();
 
         SmartDashboard.putNumber("Shooter speed adjust", 0.0);
-
     }
 
     /**

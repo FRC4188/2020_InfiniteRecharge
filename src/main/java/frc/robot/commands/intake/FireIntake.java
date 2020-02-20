@@ -6,11 +6,9 @@ import frc.robot.subsystems.Intake;
 public class FireIntake extends CommandBase {
     
     Intake intake;
-    boolean output;
 
-    public FireIntake(Intake intake, boolean output) {
+    public FireIntake(Intake intake) {
         this.intake = intake;
-        this.output = output;
     }
 
     @Override
@@ -19,15 +17,16 @@ public class FireIntake extends CommandBase {
 
     @Override
     public void execute() {
-        intake.activateIntake(output);
+        intake.activateIntake(true);
     }
 
     @Override
     public void end(boolean interrupted) {
+        intake.activateIntake(false);
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 }

@@ -187,8 +187,8 @@ public class Climber extends SubsystemBase {
   /**
    * Fires the break pistons to stop the climber.
    */
-  public void engagePneuBreak() {
-    // climberSolenoid.set(true);
+  public void engagePneuBrake(boolean output) {
+    climberSolenoid.set(output);
   }
 
   /**
