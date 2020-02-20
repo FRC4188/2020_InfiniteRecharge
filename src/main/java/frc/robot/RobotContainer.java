@@ -15,7 +15,6 @@ import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.shooter.SpinShooterFormula;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.ManualTurret;
-import frc.robot.commands.turret.ZeroTurret;
 import frc.robot.commands.vision.LimelightAsCamera;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
@@ -63,6 +62,7 @@ public class RobotContainer {
      */
     public void resetSubsystems() {
         drivetrain.reset(initialPose);
+        turret.resetEncoders();
     }
 
     /**
@@ -107,8 +107,6 @@ public class RobotContainer {
         copilot.getXButtonObj().toggleWhenPressed(new AutoAim(turret, limelight));
 
         pilot.getAButtonObj().whenPressed(new LimelightAsCamera(limelight));
-
-        copilot.getDpadUpButtonObj().whenPressed(new ZeroTurret(turret));
 
     }
 

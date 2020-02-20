@@ -58,4 +58,5 @@ public class AutoMagazine extends CommandBase {
     public void end(boolean interrupted) {
         magazine.set(0);
     }
+
 }
