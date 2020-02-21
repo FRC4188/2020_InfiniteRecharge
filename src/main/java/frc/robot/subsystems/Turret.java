@@ -19,8 +19,8 @@ public class Turret extends SubsystemBase {
     private final CANPIDController pid = new CANPIDController(turretMotor);
 
     // constants
-    private static final double MAX_VELOCITY = 2000; // rpm
-    private static final double MAX_ACCELERATION = 3000; // rpm / sec
+    private static final double MAX_VELOCITY = 11000; // rpm
+    private static final double MAX_ACCELERATION = 22000; // rpm / sec
     private static final double kP = 5e-5;
     private static final double kI = 1e-6;
     private static final double kD = 0;
@@ -53,6 +53,7 @@ public class Turret extends SubsystemBase {
     private void updateShuffleboard() {
         SmartDashboard.putNumber("Turret pos (deg)", getPosition());
         SmartDashboard.putNumber("Turret temp", turretMotor.getMotorTemperature());
+        SmartDashboard.putNumber("Turret raw vel", turretEncoder.getVelocity());
     }
 
     /**

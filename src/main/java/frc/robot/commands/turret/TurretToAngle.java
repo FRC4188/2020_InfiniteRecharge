@@ -1,7 +1,6 @@
 package frc.robot.commands.turret;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
 
 /**
@@ -13,7 +12,7 @@ public class TurretToAngle extends CommandBase {
     private final double angle;
 
     private static final double POS_TOLERANCE = 3.0; // degrees
-    private static final double VEL_TOLERANCE = 10.0; // degrees per sec
+    private static final double VEL_TOLERANCE = 1.0; // degrees per sec
 
     /**
      * Constructs new TurretToAngle command to turn turret to a given angle in degrees.
@@ -39,7 +38,7 @@ public class TurretToAngle extends CommandBase {
     @Override
     public boolean isFinished() {
         return (Math.abs(turret.getPosition() - angle) < POS_TOLERANCE)
-                && (turret.getVelocity() < VEL_TOLERANCE);
+                && (Math.abs(turret.getVelocity()) < VEL_TOLERANCE);
     }
 
     @Override

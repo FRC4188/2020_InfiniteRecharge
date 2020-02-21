@@ -17,10 +17,10 @@ public class Shooter extends SubsystemBase {
     private WPI_TalonFX rightShooter = new WPI_TalonFX(22);
 
     // constants
-    private static final double kP = 0.07;
+    private static final double kP = 0.3;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
-    private static final double kF = 1023 / 20000.0;
+    private static final double kF = 1023 / 21300.0;
     private static final double ENCODER_TICKS_PER_REV = 2048;
     private static final double RAMP_RATE = 0.5; // seconds
 
@@ -111,9 +111,9 @@ public class Shooter extends SubsystemBase {
      * Configures shooter motor ramp rates.
      */
     public void setRampRate() {
-        leftShooter.configClosedloopRamp(RAMP_RATE);
+        leftShooter.configClosedloopRamp(0);
         leftShooter.configOpenloopRamp(RAMP_RATE);
-        rightShooter.configClosedloopRamp(RAMP_RATE);
+        rightShooter.configClosedloopRamp(0);
         rightShooter.configOpenloopRamp(RAMP_RATE);
     }
 
