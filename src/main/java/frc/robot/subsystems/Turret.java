@@ -29,6 +29,8 @@ public class Turret extends SubsystemBase {
     private static final double GEAR_RATIO = 300; // angular velocity will be divided by this amount
     private static final double ENCODER_TO_DEGREES = 360.0 / GEAR_RATIO; // degrees
     private static final double RAMP_RATE = 0.5; // seconds
+    private static final double MAX_ANG = 365;
+    private static final double MIN_ANG = -5;
 
     /**
      * Constructs new Turret object and configures devices.
@@ -112,6 +114,20 @@ public class Turret extends SubsystemBase {
      */
     public double getVelocity() {
         return turretEncoder.getVelocity() * ENCODER_TO_DEGREES / 60.0;
+    }
+
+    /**
+     * Returns max position of turret in degrees.
+     */
+    public double getMaxPosition() {
+        return MAX_ANG;
+    }
+
+    /**
+     * Returns min position of turret in degrees.
+     */
+    public double getMinPosition() {
+        return MIN_ANG;
     }
 
 }

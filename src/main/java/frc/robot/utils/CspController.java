@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
  */
 public class CspController extends XboxController {
 
-    private static final double DEADBAND = 0.08;
+    private static final double DEADBAND = 0.1;
 
     /**
      * Class containing button mappings for Logitech F310.

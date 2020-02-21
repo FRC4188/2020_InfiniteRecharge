@@ -24,7 +24,7 @@ public class Limelight extends SubsystemBase {
 
     // state vars
     private NetworkTable limelightTable = null;
-    private Pipeline pipeline = Pipeline.OFF;
+    private Pipeline pipeline = Pipeline.CLOSE;
 
     /**
      * Enum to control LED mode.
@@ -158,11 +158,21 @@ public class Limelight extends SubsystemBase {
     }
 
     /**
+     * Zooms in on target.
+     */
+    public void zoomTarget() {
+        setLightMode(LedMode.ON);
+        setCameraMode(CameraMode.VISION);
+        setPipeline(Pipeline.ZOOM);
+    }
+
+    /**
      * Start tracking the vision targets.
      */
     public void trackTarget() {
         setLightMode(LedMode.ON);
         setCameraMode(CameraMode.VISION);
+        setPipeline(Pipeline.CLOSE);
     }
 
     /**
@@ -171,6 +181,7 @@ public class Limelight extends SubsystemBase {
     public void useAsCamera() {
         setLightMode(LedMode.OFF);
         setCameraMode(CameraMode.CAMERA);
+        setPipeline(Pipeline.CLOSE);
     }
 
     /**

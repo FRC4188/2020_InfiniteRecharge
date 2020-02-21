@@ -38,8 +38,8 @@ public class Magazine extends SubsystemBase {
      * Writes values to Shuffleboard.
      */
     public void updateShuffleboard() {
-        SmartDashboard.putNumber("Magazine temp", magMotor.getMotorTemperature());
         SmartDashboard.putNumber("Magazine velocity", magEncoder.getVelocity());
+        SmartDashboard.putNumber("Magazine Encoder Position", magEncoder.getPosition());
     }
 
     /**
