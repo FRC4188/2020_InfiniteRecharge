@@ -4,17 +4,31 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Hood extends SubsystemBase {
-    
+
     private Solenoid hoodSolenoid = new Solenoid(1);
+    private boolean isRaised = false;
 
-    public Hood() {
+    /**
+     * Sets hood to raised position.
+     */
+    public void raise() {
+        hoodSolenoid.set(true);
+        isRaised = true;
     }
 
-    @Override
-    public void periodic() {
+    /**
+     * Sets hood to lowered position.
+     */
+    public void lower() {
+        hoodSolenoid.set(false);
+        isRaised = false;
     }
 
-    public void setHood(boolean hoodPos) {
-        hoodSolenoid.set(hoodPos);
+    /**
+     * Returns true if hood is in the raised position.
+     */
+    public boolean isRaised() {
+        return isRaised;
     }
+
 }

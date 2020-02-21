@@ -1,19 +1,22 @@
 package frc.robot.commands.intake;
 
-import frc.robot.subsystems.Intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Intake;
 
-public class ManualBallCount extends CommandBase {
+/**
+ * Lowers intake by firing solenoids.
+ */
+public class LowerIntake extends CommandBase {
 
     private final Intake intake;
-    private int value;
 
     /**
-     * Changes the value of the ball count.
+     * Constructs new LowwerIntake command to fire intake solenoids to lowered position.
+     *
+     * @param intake - Intake subsystem to use.
      */
-    public ManualBallCount(int value, Intake intake) {
+    public LowerIntake(Intake intake) {
         this.intake = intake;
-        this.value = value;
     }
 
     @Override
@@ -22,7 +25,7 @@ public class ManualBallCount extends CommandBase {
 
     @Override
     public void execute() {
-      intake.changeBallCount(value);
+        intake.lower();
     }
 
     @Override
@@ -31,8 +34,7 @@ public class ManualBallCount extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
-  
 }

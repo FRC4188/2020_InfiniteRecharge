@@ -59,7 +59,7 @@ public class Limelight extends SubsystemBase {
         }
     }
 
-    // pipeline enum 
+    // pipeline enum
     public enum Pipeline {
         CLOSE(0), ZOOM(1), OFF(2);
 
@@ -157,6 +157,9 @@ public class Limelight extends SubsystemBase {
         return (FORMULA_RATIO * getDistance()) + 3900;
     }
 
+    /**
+     * Zooms in on target.
+     */
     public void zoomTarget() {
         setLightMode(LedMode.ON);
         setCameraMode(CameraMode.VISION);

@@ -3,11 +3,19 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
-public class FireIntake extends CommandBase {
-    
-    Intake intake;
+/**
+ * Raises intake by firing solenoids.
+ */
+public class RaiseIntake extends CommandBase {
 
-    public FireIntake(Intake intake) {
+    private final Intake intake;
+
+    /**
+     * Constructs new RaiseIntake command to fire intake solenoids to raised position.
+     *
+     * @param intake - Intake subsystem to use.
+     */
+    public RaiseIntake(Intake intake) {
         this.intake = intake;
     }
 
@@ -17,16 +25,16 @@ public class FireIntake extends CommandBase {
 
     @Override
     public void execute() {
-        intake.activateIntake(true);
+        intake.raise();
     }
 
     @Override
     public void end(boolean interrupted) {
-        intake.activateIntake(false);
     }
 
     @Override
     public boolean isFinished() {
         return false;
     }
+
 }

@@ -3,15 +3,23 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
+/**
+ * Spins intake motors a given percentage.
+ */
 public class SpinIntake extends CommandBase {
 
     private final Intake intake;
-    double percent;
-    boolean humanPlayer;
+    private final double percent;
 
+    /**
+     * Constructs new SpinIntake command to spin intake motors a given percentage.
+     *
+     * @param intake - Intake subsystem to use.
+     * @param percent - percent output to command motors.
+     */
     public SpinIntake(Intake intake, double percent) {
-        this.intake = intake;
         this.percent = percent;
+        this.intake = intake;
     }
 
     @Override
@@ -20,23 +28,7 @@ public class SpinIntake extends CommandBase {
 
     @Override
     public void execute() {
-        humanPlayer = intake.getSolenoid();
-        /*if(intake.indexerInterval()) {
-            intake.spinIndexer(0.3*percent);
-            intake.spinIntake(percent);
-        }
-        else {
-            intake.spinIntake(percent);
-        }*/
-        intake.spinIndexer(percent);
-        if(!humanPlayer) {
-            intake.spinIntake(-percent);
-            //intake.spinPolyRollers(0.75*percent);
-        }
-        else {
-            intake.spinIndexer(0.5*percent);
-            //intake.spinPolyRollers(0.3*percent);
-        }
+        intake.spin(percent);
     }
 
     @Override
@@ -47,4 +39,5 @@ public class SpinIntake extends CommandBase {
     public boolean isFinished() {
         return false;
     }
+
 }

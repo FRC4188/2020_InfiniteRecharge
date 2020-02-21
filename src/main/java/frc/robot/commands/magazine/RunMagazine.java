@@ -13,6 +13,7 @@ public class RunMagazine extends CommandBase {
 
     /**
      * Constructs a new RunMagazine command to run magazine motor at a given percentage.
+     *
      * @param magazine - Magazine subsystem to use.
      * @param percent - Percent to run motors [-1.0, 1.0].
      */

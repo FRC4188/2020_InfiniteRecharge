@@ -7,42 +7,43 @@ import frc.robot.subsystems.Turret;
 
 public class AutoAim extends CommandBase {
 
-  Turret turret;
-  Limelight limelight;
-  private final double kP = 1.0 / 47;
+    Turret turret;
+    Limelight limelight;
+    private final double kP = 1.0 / 47;
 
-  /**
-   * Creates a new AutoAim.
-   */
-  public AutoAim(Turret turret, Limelight limelight) {
-    addRequirements(turret);
-    this.turret = turret;
-    this.limelight = limelight;
-    limelight.trackTarget();
-  }
+    /**
+     * Constructs a new AutoAim command to center turret on vision target.
+     *
+     * @param turret - Turret subsystem to use.
+     * @param limelight - Limelight subsystem to use.
+     */
+    public AutoAim(Turret turret, Limelight limelight) {
+        addRequirements(turret);
+        this.turret = turret;
+        this.limelight = limelight;
+        limelight.trackTarget();
+    }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    SmartDashboard.putNumber("Turret kP adjust", 0.0);
-  }
+    @Override
+    public void initialize() {
+        SmartDashboard.putNumber("Turret kP adjust", 0.0);
+    }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    turret.set(-limelight.getHorizontalAngle() * kP
-        + SmartDashboard.getNumber("Turret kP adjust", 0.0) / 10.0);
-  }
+    @Override
+    public void execute() {
+        turret.set(-limelight.getHorizontalAngle() * kP
+                + SmartDashboard.getNumber("Turret kP adjust", 0.0) / 10.0);
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    turret.set(0);
-  }
+    @Override
+    public void end(boolean interrupted) {
+        turret.set(0);
+    }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return (turret.getPosition() <= turret.getMinPosition() || turret.getPosition() >= turret.getMaxPosition());
-  }
+    @Override
+    public boolean isFinished() {
+        return (turret.getPosition() <= turret.getMinPosition()
+                || turret.getPosition() >= turret.getMaxPosition());
+    }
+
 }

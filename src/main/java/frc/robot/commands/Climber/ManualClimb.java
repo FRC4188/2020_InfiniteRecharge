@@ -3,16 +3,24 @@ package frc.robot.commands.climber;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
+/**
+ * Controls climber manually.
+ */
 public class ManualClimb extends CommandBase {
-    Climber climber;
-    double percent;
+
+    private final Climber climber;
+    private final double percent;
+
     /**
-     * Creates a new RaiseClimber.
+     * Constructs a new ManualClimb command to run climber motors at a given percentage.
+     *
+     * @param climber - Climber subsystem to use.
+     * @param percent - percent to drive motors, positive extends.
      */
-    public ManualClimb(double percent, Climber climber) {
+    public ManualClimb(Climber climber, double percent) {
         addRequirements(climber);
-        this.percent = percent;
         this.climber = climber;
+        this.percent = percent;
     }
 
     @Override
@@ -21,9 +29,9 @@ public class ManualClimb extends CommandBase {
 
     @Override
     public void execute() {
-        if((climber.getLeftPosition() >= climber.getMaxPosition() && percent > 0) || 
-            (climber.getLeftPosition() <= climber.getMinPosition() && percent < 0)) {
-                climber.setSpeedPercentage(0);
+        if ((climber.getLeftPosition() >= climber.getMaxPosition() && percent > 0)
+                || (climber.getLeftPosition() <= climber.getMinPosition() && percent < 0)) {
+            climber.setSpeedPercentage(0);
         } else {
             climber.setSpeedPercentage(percent);
         }
@@ -33,10 +41,9 @@ public class ManualClimb extends CommandBase {
     public void end(boolean interrupted) {
     }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    return true;
-  }
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 
 }

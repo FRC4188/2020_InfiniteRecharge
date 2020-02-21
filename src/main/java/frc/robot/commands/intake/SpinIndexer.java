@@ -3,12 +3,21 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
+/**
+ * Spins indexer motors a given percentage.
+ */
 public class SpinIndexer extends CommandBase {
-    
+
     Intake intake;
     double percent;
     boolean override;
 
+    /**
+     * Constructs new SpinIndexer command to spin indexer motors a given percentage.
+     *
+     * @param intake - Intake subsystem to use.
+     * @param percent - percent out to command motors.
+     */
     public SpinIndexer(Intake intake, double percent) {
         this.percent = percent;
         this.intake = intake;
@@ -20,14 +29,6 @@ public class SpinIndexer extends CommandBase {
 
     @Override
     public void execute() {
-        /*if(intake.indexerInterval()) {
-            intake.spinIndexer(0.3*percent);
-            intake.spinIntake(percent);
-        }
-        else {
-            intake.spinIntake(percent);
-        }*/
-        //intake.spinIndexer(percent);
         intake.spinIndexer(percent);
     }
 
@@ -39,4 +40,5 @@ public class SpinIndexer extends CommandBase {
     public boolean isFinished() {
         return false;
     }
+
 }

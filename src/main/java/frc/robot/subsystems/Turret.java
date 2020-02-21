@@ -19,8 +19,8 @@ public class Turret extends SubsystemBase {
     private static final double GEAR_RATIO = 300; // angular velocity will be divided by this amount
     private static final double ENCODER_TO_DEGREES = 360.0 / GEAR_RATIO; // degrees
     private static final double RAMP_RATE = 0.25; // seconds
-    private final double MAX_ANG = 365;
-    private final double MIN_ANG = -5;
+    private static final double MAX_ANG = 365;
+    private static final double MIN_ANG = -5;
 
     /**
      * Constructs new Turret object and configures devices.
@@ -39,8 +39,8 @@ public class Turret extends SubsystemBase {
         updateShuffleboard();
     }
 
-    /** 
-     * Configures gains for Spark closed loop controller. 
+    /**
+     * Configures gains for Spark closed loop controller.
      */
     private void controllerInit() {
     }
@@ -82,16 +82,16 @@ public class Turret extends SubsystemBase {
         return turretEncoder.getPosition() * ENCODER_TO_DEGREES;
     }
 
-    /** Returns temperature of motor based off Falcon ID. */
-    public double getMotorTemperature(){
-        return turretMotor.getMotorTemperature();
-    }
-
-    public double getMaxPosition() 
-    {
+    /**
+     * Returns max position of turret in degrees.
+     */
+    public double getMaxPosition() {
         return MAX_ANG;
     }
 
+    /**
+     * Returns min position of turret in degrees.
+     */
     public double getMinPosition() {
         return MIN_ANG;
     }
