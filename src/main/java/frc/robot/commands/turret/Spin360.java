@@ -14,7 +14,7 @@ public class Spin360 extends CommandBase {
     private double targetPosition;
     private double lastError;
 
-    private static final double kP = 0.000005;
+    private static final double kP = 0.0000055;
     private static final double kD = 0.75;
     private static final double DELTA_T = 0.02;
     private static final double TOLERANCE = 3.0; // degrees
@@ -33,8 +33,9 @@ public class Spin360 extends CommandBase {
 
     @Override
     public void initialize() {
-        targetPosition = turret.getPosition() + limelight.getHorizontalAngle() + SmartDashboard.getNumber("Turret Aim adjust", 0.0) 
+        targetPosition = turret.getPosition() - limelight.getHorizontalAngle() + SmartDashboard.getNumber("Turret Aim adjust", 0.0) 
                 - 360 * Math.signum(turret.getPosition() - 180);
+        if (targetPosition > turret.getMaxPosition() || targetPosition < turret.getMinPosition()) targetPosition = turret.getPosition();
     }
 
     @Override

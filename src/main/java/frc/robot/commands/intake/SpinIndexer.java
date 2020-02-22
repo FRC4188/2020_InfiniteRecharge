@@ -34,6 +34,7 @@ public class SpinIndexer extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        intake.spinIndexer(0);
     }
 
     @Override

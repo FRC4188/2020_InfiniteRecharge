@@ -15,12 +15,12 @@ public class Limelight extends SubsystemBase {
     private static final double CAMERA_WIDTH = 320; // pixels
     private static final double CAMERA_FOV_HOR = Math.toRadians(59.6); // rads
     private static final double CAMERA_FOV_VER = Math.toRadians(49.7); // rads
-    private static final double FORMULA_RATIO = 86.0;
-    private static final double PORT_HEIGHT = 8.1875; // meters
+    private static final double FORMULA_RATIO = 106.8;
+    private static final double PORT_HEIGHT = 8.1875; // feet
     private static final double TAPE_HEIGHT = 2.5 / 2.0; // between bottom and top, feet
-    private static final double SHOOTER_HEIGHT = 3.0 + (5.5 / 12.0); // feet
+    private static final double SHOOTER_HEIGHT = 3.0 + (1.0 / 12.0); // feet
     private static final double HEIGHT_DIFF = PORT_HEIGHT - SHOOTER_HEIGHT; // feet
-    private static final double CAMERA_ANGLE = 26; // degrees
+    private static final double CAMERA_ANGLE = 13; // degrees
 
     // state vars
     private NetworkTable limelightTable = null;
@@ -94,7 +94,7 @@ public class Limelight extends SubsystemBase {
      */
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Formula RPM", formulaRpm());
-        SmartDashboard.putNumber("Direct line distance", getDistance());
+        SmartDashboard.putNumber("Limelight distance reading", getDistance());
     }
 
     /**
@@ -154,7 +154,8 @@ public class Limelight extends SubsystemBase {
      * Returns rpm to spin shooter to based on vision target formula.
      */
     public double formulaRpm() {
-        return (FORMULA_RATIO * getDistance()) + 3900;
+        if (getDistance() >= 25) return 4400;
+        else return (FORMULA_RATIO * getDistance()) + 1766;
     }
 
     /**

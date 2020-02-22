@@ -33,6 +33,7 @@ public class SpinIntake extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        intake.spin(0);
     }
 
     @Override

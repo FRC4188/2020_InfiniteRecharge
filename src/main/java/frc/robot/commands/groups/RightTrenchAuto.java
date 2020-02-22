@@ -8,8 +8,9 @@ import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.intake.RaiseIntake;
 import frc.robot.commands.intake.SpinIndexer;
 import frc.robot.commands.intake.SpinIntake;
-import frc.robot.commands.magazine.AutoMagazine;
+import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.shooter.SpinShooter;
+import frc.robot.commands.shooter.SpinShooterFormula;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.TurretToAngle;
 import frc.robot.subsystems.Drivetrain;
@@ -32,26 +33,40 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
     public RightTrenchAuto(Drivetrain drivetrain, Magazine magazine, Shooter shooter,
             Limelight limelight, Turret turret, Intake intake) {
         addCommands(
-                new ParallelCommandGroup(
+                new ParallelRaceGroup(
                         new SpinShooter(shooter, 3000),
                         new TurretToAngle(turret, 180.0)
                 ),
                 new ParallelRaceGroup(
-                    new SpinShooter(shooter, 5000),
+                    new AutoAim(turret, limelight).withTimeout(0.5),
+                    new SpinShooter(shooter, 6000)
+                ),
+                new ParallelRaceGroup(
+                    new SpinShooter(shooter, 6000),
                     new AutoAim(turret, limelight),
-                    new AutoMagazine(magazine, limelight, shooter).withTimeout(4.0),
+                    new RunMagazine(magazine, 0.8).withTimeout(2.5),
                     new SpinIndexer(intake, 0.8)
                 ),
-                new FollowTrajectory(drivetrain, WaypointsList.RIGHT_TO_BACK_TRENCH),
+                new LowerIntake(intake).withTimeout(0.3),
                 new ParallelRaceGroup(
-                    new FollowTrajectory(drivetrain, WaypointsList.BACK_TO_FRONT_TRENCH),
-                    new LowerIntake(intake),
-                    new SpinIntake(intake, 0.8)
+                    new FollowTrajectory(drivetrain, WaypointsList.RIGHT_TO_BACK_TRENCH),
+                    new SpinIntake(intake, 1)
+                ),
+                new FollowTrajectory(drivetrain, WaypointsList.BACK_TO_FRONT_TRENCH),
+                new ParallelRaceGroup(
+                    new AutoAim(turret, limelight).withTimeout(0.5),
+                    new SpinShooterFormula(shooter, limelight)
                 ),
                 new ParallelRaceGroup(
+                    new RaiseIntake(intake),
+                    new SpinShooterFormula(shooter, limelight),
+                    new SpinIndexer(intake, 0.8),
+                    new RunMagazine(magazine, 0.8).withTimeout(2.5)
+                )
+                /*new ParallelRaceGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.FRONT_TRENCH_TO_BAR),
                     new RaiseIntake(intake)
-                )
+                )*/
         );
     }
 

@@ -11,8 +11,9 @@ import frc.robot.subsystems.Turret;
 /** Display temperatures of motors accessed by CAN ID. */
 public class TempManager {
 
-    final int MAX_TEMP = 55; //Cel
+    final int MAX_TEMP = 50; //Cel
     final int FALCON_TEMP = 50; //Cel
+    boolean cool;
 
     Climber climber;
     Drivetrain drivetrain;
@@ -42,7 +43,7 @@ public class TempManager {
 
         for (int i = 31; i < 32; i++) {
             if (climber.getMotorTemperature(i) > FALCON_TEMP) {
-                //fire pneumatic cooling
+                cool = true;
             }
             if (climber.getMotorTemperature(i) > MAX_TEMP) {
                 final double tempInC = climber.getMotorTemperature(i);
@@ -51,7 +52,7 @@ public class TempManager {
         }
         for (int i = 0; i < 4; i++) {
             if (drivetrain.getMotorTemperature(i) > FALCON_TEMP) {
-                //fire pneumatic cooling
+                cool = true;
             }
             if (drivetrain.getMotorTemperature(i) > MAX_TEMP) {
                 final double tempInC = drivetrain.getMotorTemperature(i);
@@ -71,7 +72,7 @@ public class TempManager {
             }
         for (int i = 26; i < 27; i++) {
             if (shooter.getMotorTemperature(i) > FALCON_TEMP) {
-                //fire pneumatic cooling
+                cool = true;
             }
             if (shooter.getMotorTemperature(i) > MAX_TEMP) {
                 final double tempInC = shooter.getMotorTemperature(i);
@@ -84,6 +85,8 @@ public class TempManager {
                 sb.append("T" + 23 + ": " + tempInC + ", ");
             }
         SmartDashboard.putString("Temp Warnings", sb.toString());
+        if (cool) drivetrain.setCooler(true);
+        else drivetrain.setCooler(false);
     }
 
 }

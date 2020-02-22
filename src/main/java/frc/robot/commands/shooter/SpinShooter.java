@@ -39,6 +39,7 @@ public class SpinShooter extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        shooter.set(0);
     }
 
 }

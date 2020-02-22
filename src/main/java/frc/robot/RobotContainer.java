@@ -22,6 +22,7 @@ import frc.robot.commands.shooter.SpinShooterFormula;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.ManualTurret;
 import frc.robot.commands.turret.Spin360;
+import frc.robot.commands.turret.TurretToAngle;
 import frc.robot.commands.turret.ZeroTurret;
 import frc.robot.commands.vision.CameraOff;
 import frc.robot.commands.vision.CameraTrack;
@@ -122,7 +123,7 @@ public class RobotContainer {
         pilot.getAButtonObj().whileHeld(new SpinIntake(intake, -.85));
         pilot.getAButtonObj().whenReleased(new SpinIntake(intake, 0));
 
-        pilot.getBackButtonObj().whenPressed(new Spin360(turret, limelight));
+        pilot.getBackButtonObj().whenPressed(new TurretToAngle(turret, 180));
 
         pilot.getStartButtonObj().whenPressed(new KillAll());
         copilot.getStartButtonObj().whenPressed(new KillAll());
@@ -137,7 +138,9 @@ public class RobotContainer {
 
         copilot.getXButtonObj().toggleWhenPressed(new AutoAim(turret, limelight));
 
-        copilot.getRbButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
+        //copilot.getRbButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
+
+        copilot.getLbButtonObj().whenPressed(new Spin360(turret, limelight));
 
         //copilot.getLbButtonObj().toggleWhenPressed(new AutoShoot(magazine, limelight, shooter));
 
@@ -150,6 +153,11 @@ public class RobotContainer {
         copilot.getDpadUpButtonObj().whenReleased(new ManualClimb(climber, 0));
         copilot.getDpadDownButtonObj().whileHeld(new ManualClimb(climber, 0.6));
         copilot.getDpadDownButtonObj().whenReleased(new ManualClimb(climber, 0));
+
+        //copilot.getRbButtonObj().whileHeld(new SpinIntake(intake, 1.0));
+        //copilot.getRbButtonObj().whenReleased(new SpinIntake(intake, 0.0));
+        //copilot.getLbButtonObj().whileHeld(new SpinIntake(intake, -.85));
+        //copilot.getLbButtonObj().whenReleased(new SpinIntake(intake, 0.0));
 
     }
 

@@ -36,14 +36,13 @@ public class AutoAim extends CommandBase {
 
     @Override
     public void execute() {
-        // simple P loop
         adjust = SmartDashboard.getNumber("Turret Aim adjust", 0.0);
         turret.set((-limelight.getHorizontalAngle() + adjust) / 47.0);
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return (turret.getPosition() >= turret.getMaxPosition() || turret.getPosition() <= turret.getMinPosition());
     }
 
     @Override

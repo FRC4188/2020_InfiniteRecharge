@@ -44,7 +44,7 @@ public class AutoMagazine extends CommandBase {
         SmartDashboard.putNumber("Mag-read formula rpm", targetVel);
 
         // feed shooter only if at correct rpm
-        if (Math.abs(currentVel - targetVel) > 350) magazine.set(0);
+        if (Math.abs(currentVel - targetVel) > 600) magazine.set(0);
         else magazine.set(0.9);
 
     }
