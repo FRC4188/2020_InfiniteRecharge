@@ -58,6 +58,7 @@ public class Intake extends SubsystemBase {
      */
     public void spin(double percent) {
         intakeMotor.set(percent);
+        indexerMotor.set(percent);
     }
 
     /**
@@ -78,15 +79,16 @@ public class Intake extends SubsystemBase {
      * Raises intake by firing solenoids.
      */
     public void raise() {
-        intakeSolenoid.set(true);
-        isRaised = true;
+        intakeSolenoid.set(false);
+        isRaised = false;
     }
 
     /**
      * Lowers intake by firing solenoid.
      */
     public void lower() {
-        intakeSolenoid.set(false);
+        intakeSolenoid.set(true);
+        isRaised = true;
     }
 
     /**
@@ -135,4 +137,20 @@ public class Intake extends SubsystemBase {
         return polyRollerEncoder.getPosition();
     }
 
+    /** Returns temperature of motor based off Falcon ID. */
+    public double getMotorTemperature(int index) {
+        CANSparkMax[] sparks = new CANSparkMax[] {
+            intakeMotor,
+            indexerMotor,
+            polyRoller,
+        };
+        index -= 1;
+        double temp = -1.0;
+        try {
+            temp = sparks[index - 10].getMotorTemperature();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.err.println("Error: index " + index + " not in array of intake sparks.");
+        }
+        return temp;
+    }
 }

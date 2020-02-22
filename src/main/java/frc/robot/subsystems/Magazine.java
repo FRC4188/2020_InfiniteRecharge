@@ -16,7 +16,7 @@ public class Magazine extends SubsystemBase {
     private final CANEncoder magEncoder = new CANEncoder(magMotor);
 
     // constants
-    private static final double RAMP_RATE = 0.5; // seconds
+    private static final double RAMP_RATE = 0.2; // seconds
 
     /**
      * Constructs new magazine object and configures devices.
@@ -40,6 +40,7 @@ public class Magazine extends SubsystemBase {
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Magazine velocity", magEncoder.getVelocity());
         SmartDashboard.putNumber("Magazine Encoder Position", magEncoder.getPosition());
+        SmartDashboard.putNumber("M24 temp", magMotor.getMotorTemperature());
     }
 
     /**
@@ -57,4 +58,8 @@ public class Magazine extends SubsystemBase {
         magMotor.setOpenLoopRampRate(RAMP_RATE);
     }
 
+    /** Returns temperature of motor based off Falcon ID. */
+    public double getMotorTemperature() {
+        return magMotor.getMotorTemperature();
+    }
 }

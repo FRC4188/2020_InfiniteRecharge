@@ -1,5 +1,6 @@
 package frc.robot.commands.turret;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
@@ -32,8 +33,8 @@ public class Spin360 extends CommandBase {
 
     @Override
     public void initialize() {
-        targetPosition = turret.getPosition() + limelight.getHorizontalAngle() - 360
-                * Math.signum(turret.getPosition() - 180);
+        targetPosition = turret.getPosition() + limelight.getHorizontalAngle() + SmartDashboard.getNumber("Turret Aim adjust", 0.0) 
+                - 360 * Math.signum(turret.getPosition() - 180);
     }
 
     @Override

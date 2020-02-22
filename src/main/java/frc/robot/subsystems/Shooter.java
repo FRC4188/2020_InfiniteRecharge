@@ -20,9 +20,10 @@ public class Shooter extends SubsystemBase {
     private static final double kP = 0.3;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
-    private static final double kF = 1023 / 21300.0;
+    private static final double MAX_VELOCITY = 21300.0;
+    private static final double kF = 1023 / MAX_VELOCITY;
     private static final double ENCODER_TICKS_PER_REV = 2048;
-    private static final double RAMP_RATE = 0.5; // seconds
+    private static final double RAMP_RATE = 0.25; // seconds
 
     /**
      * Constructs new Shooter object and configures devices.
@@ -41,6 +42,8 @@ public class Shooter extends SubsystemBase {
         setCoast();
         controllerInit();
         setRampRate();
+
+        SmartDashboard.putNumber("Set shooter rpm", 0.0);
 
     }
 
@@ -78,17 +81,19 @@ public class Shooter extends SubsystemBase {
      * Sets shooter motors to a given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        leftShooter.set(percent);
-        rightShooter.set(percent);
+        double adjust = SmartDashboard.getNumber("Set shooter rpm", 0.0) / MAX_VELOCITY;
+        leftShooter.set(percent + adjust);
+        rightShooter.set(percent + adjust);
     }
 
     /**
      * Sets shooter motors to a given velocity in rpm.
      */
     public void setVelocity(double velocity) {
-        velocity = (velocity * ENCODER_TICKS_PER_REV) / 600; // native is talon units per 100ms
-        leftShooter.set(ControlMode.Velocity, velocity);
-        rightShooter.set(ControlMode.Velocity, velocity);
+        double adjust = SmartDashboard.getNumber("Set shooter rpm", 0.0) * ENCODER_TICKS_PER_REV / 600;
+        velocity *= (ENCODER_TICKS_PER_REV) / 600;
+        leftShooter.set(ControlMode.Velocity, velocity + adjust);
+        rightShooter.set(ControlMode.Velocity, velocity + adjust);
     }
 
     /**
@@ -111,9 +116,9 @@ public class Shooter extends SubsystemBase {
      * Configures shooter motor ramp rates.
      */
     public void setRampRate() {
-        leftShooter.configClosedloopRamp(0);
+        leftShooter.configClosedloopRamp(RAMP_RATE);
         leftShooter.configOpenloopRamp(RAMP_RATE);
-        rightShooter.configClosedloopRamp(0);
+        rightShooter.configClosedloopRamp(RAMP_RATE);
         rightShooter.configOpenloopRamp(RAMP_RATE);
     }
 
@@ -131,4 +136,19 @@ public class Shooter extends SubsystemBase {
         return (rightShooter.getSelectedSensorVelocity() * 600) / ENCODER_TICKS_PER_REV;
     }
 
+    /** Returns temperature of motor based off Falcon ID. */
+    public double getMotorTemperature(int index) {
+        WPI_TalonFX[] falcons = new WPI_TalonFX[] {
+            leftShooter,
+            rightShooter,
+        };
+        index -= 1;
+        double temp = -1.0;
+        try {
+            temp = falcons[index - 25].getTemperature();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.err.println("Error: index " + index + " not in array of shooter falcons.");
+        }
+        return temp;
+    }
 }

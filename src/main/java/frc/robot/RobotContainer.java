@@ -18,6 +18,7 @@ import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.shooter.SpinShooter;
+import frc.robot.commands.shooter.SpinShooterFormula;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.ManualTurret;
 import frc.robot.commands.turret.Spin360;
@@ -36,6 +37,7 @@ import frc.robot.subsystems.Turret;
 import frc.robot.utils.CspController;
 import frc.robot.utils.CspSequentialCommandGroup;
 import frc.robot.utils.KillAll;
+import frc.robot.utils.TempManager;
 
 /**
  * Class containing setup for robot.
@@ -51,6 +53,7 @@ public class RobotContainer {
     private final Climber climber = new Climber();
     private final Intake intake = new Intake();
     private final Hood hood = new Hood();
+    private final TempManager tempManager = new TempManager(climber, drivetrain, intake, magazine, shooter, turret);
 
     // controller initialization
     private final CspController pilot = new CspController(0);
@@ -62,6 +65,10 @@ public class RobotContainer {
 
     // state variables
     private Pose2d initialPose = new Pose2d();
+
+    public TempManager getTempManager() {
+        return tempManager;
+    }
 
     /**
      * Initializes robot subsystems, controllers, commands, and chooser.
@@ -105,28 +112,34 @@ public class RobotContainer {
         pilot.getDpadLeftButtonObj().whenPressed(new CameraTrack(limelight));
         pilot.getLbButtonObj().whenPressed(new CameraZoom(limelight));
 
-        pilot.getYButtonObj().whileHeld(new RunMagazine(magazine, 0.9));
-        pilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
         pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
         pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
-
-        pilot.getDpadUpButtonObj().whenPressed(new ZeroTurret(turret));
-
-        pilot.getDpadDownButtonObj().whenPressed(new ToggleHood(hood));
+        pilot.getYButtonObj().whileHeld(new RunMagazine(magazine, 0.9));
+        pilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
 
         pilot.getBButtonObj().whileHeld(new SpinIntake(intake, 1.0));
         pilot.getBButtonObj().whenReleased(new SpinIntake(intake, 0));
         pilot.getAButtonObj().whileHeld(new SpinIntake(intake, -.85));
         pilot.getAButtonObj().whenReleased(new SpinIntake(intake, 0));
 
+        pilot.getBackButtonObj().whenPressed(new Spin360(turret, limelight));
+
         pilot.getStartButtonObj().whenPressed(new KillAll());
         copilot.getStartButtonObj().whenPressed(new KillAll());
 
-        copilot.getRbButtonObj().whenPressed(new ToggleIntake(intake));
+        copilot.getBackButtonObj().toggleWhenPressed(new FireBrake(climber));
 
-        copilot.getAButtonObj().toggleWhenPressed(new AutoAim(turret, limelight));
+        copilot.getYButtonObj().whenPressed(new ZeroTurret(turret));
 
-        copilot.getLbButtonObj().toggleWhenPressed(new AutoShoot(magazine, limelight, shooter));
+        copilot.getBButtonObj().toggleWhenPressed(new ToggleHood(hood));
+
+        copilot.getAButtonObj().toggleWhenPressed(new ToggleIntake(intake));
+
+        copilot.getXButtonObj().toggleWhenPressed(new AutoAim(turret, limelight));
+
+        copilot.getRbButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
+
+        //copilot.getLbButtonObj().toggleWhenPressed(new AutoShoot(magazine, limelight, shooter));
 
         copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, 0.3));
         copilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));
@@ -138,10 +151,6 @@ public class RobotContainer {
         copilot.getDpadDownButtonObj().whileHeld(new ManualClimb(climber, 0.6));
         copilot.getDpadDownButtonObj().whenReleased(new ManualClimb(climber, 0));
 
-        copilot.getBButtonObj().whenPressed(new Spin360(turret, limelight));
-
-        copilot.getBackButtonObj().toggleWhenPressed(new FireBrake(climber));
-
     }
 
     /**
@@ -150,7 +159,7 @@ public class RobotContainer {
     private void putChooser() {
         autoChooser.addOption("Do Nothing", null);
         autoChooser.addOption("Right Trench", new RightTrenchAuto(drivetrain, magazine, shooter,
-                limelight, turret
+                limelight, turret, intake
         ));
         autoChooser.addOption("Left Enemy Trench", new LeftEnemyTrenchAuto(drivetrain));
         SmartDashboard.putData("Auto Chooser", autoChooser);

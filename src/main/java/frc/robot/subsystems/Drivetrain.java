@@ -379,4 +379,20 @@ public class Drivetrain extends SubsystemBase {
         return gyro.getRate();
     }
 
+    /** Returns temperature of motor based off Falcon ID. */
+    public double getMotorTemperature(int index) {
+        WPI_TalonFX[] falcons = new WPI_TalonFX[]{
+            leftMotor,
+            leftSlave,
+            rightMotor,
+            rightSlave,
+        };
+        double temp = -1.0;
+        try {
+            temp = falcons[index].getTemperature();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.err.println("Error: index " + index + " not in array of drive falcons.");
+        }
+        return temp;
+    }
 }

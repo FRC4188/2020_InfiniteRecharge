@@ -27,15 +27,12 @@ public class ToggleHood extends CommandBase {
 
     @Override
     public void execute() {
-        if (hood.isRaised()) {
-            hood.lower();
-        } else {
-            hood.raise();
-        }
+        hood.raise();
     }
 
     @Override
     public void end(boolean interrupted) {
+        hood.lower();
     }
 
     @Override

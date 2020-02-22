@@ -39,6 +39,7 @@ public class Turret extends SubsystemBase {
         resetEncoders();
         setRampRate();
         controllerInit();
+        SmartDashboard.putNumber("Turret offset (deg)", 0.0);
     }
 
     /**
@@ -99,7 +100,7 @@ public class Turret extends SubsystemBase {
      * Resets turret encoder value to 0.
      */
     public void resetEncoders() {
-        turretEncoder.setPosition(0);
+        turretEncoder.setPosition(SmartDashboard.getNumber("Turret offset (deg)", 0.0) / ENCODER_TO_DEGREES);
     }
 
     /**
@@ -130,4 +131,8 @@ public class Turret extends SubsystemBase {
         return MIN_ANG;
     }
 
+    /** Returns temperature of motor based off Falcon ID. */
+    public double getMotorTemperature() {
+        return turretMotor.getMotorTemperature();
+    }
 }
