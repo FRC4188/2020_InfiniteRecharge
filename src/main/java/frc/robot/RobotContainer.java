@@ -150,7 +150,7 @@ public class RobotContainer {
     private void putChooser() {
         autoChooser.addOption("Do Nothing", null);
         autoChooser.addOption("Right Trench", new RightTrenchAuto(drivetrain, magazine, shooter,
-                limelight, turret
+                limelight, turret, intake
         ));
         autoChooser.addOption("Left Enemy Trench", new LeftEnemyTrenchAuto(drivetrain));
         SmartDashboard.putData("Auto Chooser", autoChooser);
