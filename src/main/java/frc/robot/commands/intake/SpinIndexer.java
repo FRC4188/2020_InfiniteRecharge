@@ -30,6 +30,7 @@ public class SpinIndexer extends CommandBase {
     @Override
     public void execute() {
         intake.spinIndexer(percent);
+        intake.spinPolyRollers(percent);
     }
 
     @Override

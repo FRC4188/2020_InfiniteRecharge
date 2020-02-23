@@ -15,7 +15,10 @@ public class Limelight extends SubsystemBase {
     private static final double CAMERA_WIDTH = 320; // pixels
     private static final double CAMERA_FOV_HOR = Math.toRadians(59.6); // rads
     private static final double CAMERA_FOV_VER = Math.toRadians(49.7); // rads
-    private static final double FORMULA_RATIO = 106.8;
+    private static final double CLOSE_FORMULA_RATIO = 1952;
+    private static final double MID_FORMULA_RATIO = -903;
+    private static final double FAR_FORMULA_RATIO = 67.3;
+    private static final double SUPER_FAR_FORMULA_RATIO = 80.9;
     private static final double PORT_HEIGHT = 8.1875; // feet
     private static final double TAPE_HEIGHT = 2.5 / 2.0; // between bottom and top, feet
     private static final double SHOOTER_HEIGHT = 3.0 + (1.0 / 12.0); // feet
@@ -154,8 +157,11 @@ public class Limelight extends SubsystemBase {
      * Returns rpm to spin shooter to based on vision target formula.
      */
     public double formulaRpm() {
-        if (getDistance() >= 25) return 4400;
-        else return (FORMULA_RATIO * getDistance()) + 1766;
+        if (getDistance() <= 11.7) return (CLOSE_FORMULA_RATIO * getDistance() - 18190);
+        else if (getDistance() > 11.7 && getDistance() <= 14.8) return (MID_FORMULA_RATIO * getDistance() + 17326);
+        else if (getDistance() > 14.8 && getDistance() <= 26) return (FAR_FORMULA_RATIO * getDistance()) + 2971;
+        else if (getDistance() > 26) return (SUPER_FAR_FORMULA_RATIO * getDistance() + 2290);
+        else return 0;
     }
 
     /**

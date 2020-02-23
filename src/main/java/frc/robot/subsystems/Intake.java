@@ -60,10 +60,12 @@ public class Intake extends SubsystemBase {
         if (intakeSolenoid.get()){
             intakeMotor.set(percent);
             indexerMotor.set(percent);
+            polyRoller.set(percent);
         }
         else{
             intakeMotor.set(-percent);
             indexerMotor.set(percent);
+            polyRoller.set(percent);
         }
     }
 

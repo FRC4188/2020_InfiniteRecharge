@@ -35,6 +35,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
+import frc.robot.utils.ButtonBox;
 import frc.robot.utils.CspController;
 import frc.robot.utils.CspSequentialCommandGroup;
 import frc.robot.utils.KillAll;
@@ -49,16 +50,17 @@ public class RobotContainer {
     private final Drivetrain drivetrain = new Drivetrain();
     private final Magazine magazine = new Magazine();
     private final Shooter shooter = new Shooter();
-    private final Limelight limelight = new Limelight();
     private final Turret turret = new Turret();
     private final Climber climber = new Climber();
     private final Intake intake = new Intake();
     private final Hood hood = new Hood();
+    private final Limelight limelight = new Limelight();
     private final TempManager tempManager = new TempManager(climber, drivetrain, intake, magazine, shooter, turret);
 
     // controller initialization
     private final CspController pilot = new CspController(0);
     private final CspController copilot = new CspController(1);
+    private final ButtonBox buttonBox = new ButtonBox(2);
 
     // auto chooser initialization
     private final SendableChooser<CspSequentialCommandGroup> autoChooser =
@@ -138,9 +140,7 @@ public class RobotContainer {
 
         copilot.getXButtonObj().toggleWhenPressed(new AutoAim(turret, limelight));
 
-        //copilot.getRbButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
-
-        copilot.getLbButtonObj().whenPressed(new Spin360(turret, limelight));
+        copilot.getRbButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
 
         //copilot.getLbButtonObj().toggleWhenPressed(new AutoShoot(magazine, limelight, shooter));
 
@@ -154,10 +154,16 @@ public class RobotContainer {
         copilot.getDpadDownButtonObj().whileHeld(new ManualClimb(climber, 0.6));
         copilot.getDpadDownButtonObj().whenReleased(new ManualClimb(climber, 0));
 
-        //copilot.getRbButtonObj().whileHeld(new SpinIntake(intake, 1.0));
-        //copilot.getRbButtonObj().whenReleased(new SpinIntake(intake, 0.0));
-        //copilot.getLbButtonObj().whileHeld(new SpinIntake(intake, -.85));
-        //copilot.getLbButtonObj().whenReleased(new SpinIntake(intake, 0.0));
+        /*copilot.getRbButtonObj().whileHeld(new SpinIntake(intake, 1.0));
+        copilot.getRbButtonObj().whenReleased(new SpinIntake(intake, 0.0));
+        copilot.getLbButtonObj().whileHeld(new SpinIntake(intake, -.85));
+        copilot.getLbButtonObj().whenReleased(new SpinIntake(intake, 0.0));*/
+
+        buttonBox.getButton1Obj().whenPressed(new Spin360(turret, limelight));
+        buttonBox.getButton4Obj().whenPressed(new TurretToAngle(turret, 180));
+        buttonBox.getButton5Obj().whenPressed(new TurretToAngle(turret, 0));
+        buttonBox.getButton6Obj().toggleWhenPressed(new SpinShooter(shooter, 6000));
+        buttonBox.getButton7Obj().toggleWhenPressed(new SpinShooter(shooter, 2250));
 
     }
 
