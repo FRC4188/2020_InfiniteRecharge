@@ -10,7 +10,6 @@ import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.intake.SpinPolyRoller;
 import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.shooter.SpinShooter;
-import frc.robot.commands.shooter.SpinShooterFormula;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.TurretAngle;
 import frc.robot.subsystems.Drivetrain;
@@ -38,15 +37,15 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                     new TurretAngle(turret, 195)
                 ),
                 new ParallelRaceGroup(
-                    new AutoAim(turret, limelight, -1.5).withTimeout(0.15), // 0.5
+                    new AutoAim(turret, limelight, -1.5).withTimeout(0.15),
                     new SpinShooter(shooter, 6000)
                 ),
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 6000),
                     new AutoAim(turret, limelight, -1.5),
-                    new RunMagazine(magazine, 0.8).withTimeout(1.5) // 2.5
+                    new RunMagazine(magazine, 0.8).withTimeout(1.5)
                 ),
-                new LowerIntake(intake).withTimeout(0.15), // 0.3
+                new LowerIntake(intake).withTimeout(0.15),
                 new ParallelRaceGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.RIGHT_TO_BACK_TRENCH),
                     new SpinIntake(intake, 1)
@@ -57,7 +56,7 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                     new RunMagazine(magazine, 0.5)
                 ),
                 new ParallelRaceGroup(
-                    new AutoAim(turret, limelight, -0.5).withTimeout(0.15), // 0.5
+                    new AutoAim(turret, limelight, -0.5).withTimeout(0.15),
                     new SpinShooter(shooter, 3500)
                 ),
                 new ParallelRaceGroup(
