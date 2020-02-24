@@ -29,12 +29,27 @@ public class ManualClimb extends CommandBase {
 
     @Override
     public void execute() {
+
         if ((climber.getLeftPosition() >= climber.getMaxPosition() && percent > 0)
                 || (climber.getLeftPosition() <= climber.getMinPosition() && percent < 0)) {
-            climber.setSpeedPercentage(0);
+            climber.setLeftPercentage(0);
+        } else if ((climber.getLeftPosition() >= climber.getMaxPosition() - 20000 && percent > 0)
+                || (climber.getLeftPosition() <= climber.getMinPosition() + 20000 && percent < 0)){
+            climber.setLeftPercentage(percent / 3);
         } else {
-            climber.setSpeedPercentage(percent);
+            climber.setLeftPercentage(percent);
         }
+
+        if ((climber.getRightPosition() >= climber.getMaxPosition() && percent > 0)
+                || (climber.getRightPosition() <= climber.getMinPosition() && percent < 0)) {
+            climber.setRightPercentage(0);
+        } else if ((climber.getRightPosition() >= climber.getMaxPosition() - 20000 && percent > 0)
+                || (climber.getRightPosition() <= climber.getMinPosition() + 20000 && percent < 0)){
+            climber.setRightPercentage(percent / 3);
+        } else {
+            climber.setRightPercentage(percent);
+        }
+
     }
 
     @Override

@@ -34,8 +34,8 @@ public class Climber extends SubsystemBase {
     private static final int TIMEOUT = 10; // ms
     private static final int CRUISE_ACCEL = 15000;
     private static final int CRUISE_VEL = 15000;
-    private static final double MAX_POSITION = -40000;
-    private static final double MIN_POSITION = -160000;
+    private static final double MAX_POSITION = 0;
+    private static final double MIN_POSITION = -197500;
 
     /**
      * Constructs a new Climber object and configures devices.
@@ -106,7 +106,7 @@ public class Climber extends SubsystemBase {
      * Sets the right motor to run at a percentage of the max speed (-1.0, 1.0).
      */
     public void setRightPercentage(double percentage) {
-        climberLeftMotor.set(percentage);
+        climberRightMotor.set(percentage);
     }
 
     /**

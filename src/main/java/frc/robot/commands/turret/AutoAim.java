@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
-import frc.robot.subsystems.Limelight.CameraMode;
 import frc.robot.subsystems.Limelight.LedMode;
 
 /**
@@ -14,7 +13,7 @@ public class AutoAim extends CommandBase {
 
     private final Turret turret;
     private final Limelight limelight;
-    private double adjust;
+    private double adjust, offset;
 
     /**
      * Constructs new AutoAim command to turn turret to keep vision target centered.
@@ -22,11 +21,12 @@ public class AutoAim extends CommandBase {
      * @param turret - Turret subsystem to use.
      * @param limelight - Limelight subsystem to use.
      */
-    public AutoAim(Turret turret, Limelight limelight) {
+    public AutoAim(Turret turret, Limelight limelight, double offset) {
         addRequirements(turret);
         this.turret = turret;
         this.limelight = limelight;
-        SmartDashboard.putNumber("Turret Aim adjust", 0.0);
+        SmartDashboard.putNumber("Turret Aim adjust", 1.5);
+        this.offset = offset;
     }
 
     @Override
@@ -36,8 +36,9 @@ public class AutoAim extends CommandBase {
 
     @Override
     public void execute() {
-        adjust = SmartDashboard.getNumber("Turret Aim adjust", 0.0);
-        turret.set((-limelight.getHorizontalAngle() + adjust) / 47.0);
+        adjust = SmartDashboard.getNumber("Turret Aim adjust", 1.5);
+        turret.set((-limelight.getHorizontalAngle() + adjust + offset) / 47.0);
+        turret.setTracking(true);
     }
 
     @Override
@@ -47,6 +48,7 @@ public class AutoAim extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        turret.setTracking(false);
         turret.set(0);
     }
 

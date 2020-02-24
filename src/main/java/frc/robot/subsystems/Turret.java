@@ -32,11 +32,13 @@ public class Turret extends SubsystemBase {
     private static final double MAX_ANG = 370;
     private static final double MIN_ANG = -10;
 
+    private boolean isTracking;
+
     /**
      * Constructs new Turret object and configures devices.
      */
     public Turret() {
-        resetEncoders();
+        //resetEncoders();
         setRampRate();
         controllerInit();
         SmartDashboard.putNumber("Turret offset (deg)", 0.0);
@@ -57,6 +59,7 @@ public class Turret extends SubsystemBase {
         SmartDashboard.putNumber("Turret pos (deg)", getPosition());
         SmartDashboard.putNumber("Turret temp", turretMotor.getMotorTemperature());
         SmartDashboard.putNumber("Turret raw vel", turretEncoder.getVelocity());
+        SmartDashboard.putBoolean("Auto Aim", isTracking);
     }
 
     /**
@@ -134,5 +137,9 @@ public class Turret extends SubsystemBase {
     /** Returns temperature of motor based off Falcon ID. */
     public double getMotorTemperature() {
         return turretMotor.getMotorTemperature();
+    }
+
+    public void setTracking(boolean track) {
+        isTracking = track;
     }
 }
