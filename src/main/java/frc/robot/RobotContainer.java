@@ -154,6 +154,8 @@ public class RobotContainer {
         copilot.getDpadDownButtonObj().whileHeld(new ManualClimb(climber, 0.6));
         copilot.getDpadDownButtonObj().whenReleased(new ManualClimb(climber, 0));
 
+        copilot.getLbButtonObj().toggleWhenPressed(new SpinShooter(shooter, 3600));
+
         /*copilot.getRbButtonObj().whileHeld(new SpinIntake(intake, 1.0));
         copilot.getRbButtonObj().whenReleased(new SpinIntake(intake, 0.0));
         copilot.getLbButtonObj().whileHeld(new SpinIntake(intake, -.85));

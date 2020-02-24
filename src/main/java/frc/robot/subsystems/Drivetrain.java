@@ -47,7 +47,6 @@ public class Drivetrain extends SubsystemBase {
     private static final double TICKS_PER_REV = 2048; // encoder units
     private static final double ENCODER_TO_METERS =
             (Math.PI * WHEEL_DIAMETER) / (GEAR_RATIO * TICKS_PER_REV);
-    private double throtle = 1.0;
 
     // controls
     private final DifferentialDriveOdometry odometry;
@@ -156,7 +155,7 @@ public class Drivetrain extends SubsystemBase {
      * @param zRotation - Rotational percent output - ccw positive.
      */
     public void arcade(double xSpeed, double zRotation) {
-        double xSpeedMetersPerSec = xSpeed * ARCADE_MAX_VEL * throtle;
+        double xSpeedMetersPerSec = xSpeed * ARCADE_MAX_VEL;
         double zRotRadPerSec = zRotation * ARCADE_MAX_ROT;
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeedMetersPerSec, 0.0, zRotRadPerSec);
         DifferentialDriveWheelSpeeds speeds = kinematics.toWheelSpeeds(chassisSpeeds);
@@ -401,9 +400,5 @@ public class Drivetrain extends SubsystemBase {
             System.err.println("Error: index " + index + " not in array of drive falcons.");
         }
         return temp;
-    }
-
-    public void setThrotle(double idk) {
-        throtle = idk;
     }
 }
