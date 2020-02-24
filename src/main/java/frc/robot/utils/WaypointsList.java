@@ -85,10 +85,18 @@ public class WaypointsList {
             ), true
     );
 
-    /*public static final Waypoints MID_BACK_UP = new Waypoints(
+    public static final Waypoints MID_DRIVE_AWAY = new Waypoints(
             List.of(
-                new Pose2d(3.45, )
-            )
-    );*/
+                new Pose2d(3.45, -3.0, new Rotation2d()),
+                new Pose2d(4.55, -3.0, new Rotation2d())
+            ), false
+    );
+
+    public static final Waypoints MID_DRIVE_TOWARD = new Waypoints(
+            List.of(
+                new Pose2d(3.45, -3.0, new Rotation2d()),
+                new Pose2d(2.35, -3.0, new Rotation2d())
+            ), false
+    );
 
 }
