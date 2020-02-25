@@ -134,11 +134,16 @@ public class Turret extends SubsystemBase {
         return MIN_ANG;
     }
 
-    /** Returns temperature of motor based off Falcon ID. */
+    /** 
+     * Returns temperature of motor based off CANSpark ID. 
+     */
     public double getMotorTemperature() {
         return turretMotor.getMotorTemperature();
     }
 
+    /**
+     * Sets the isTracking variable (for SmartDashboard purposes).
+     */
     public void setTracking(boolean track) {
         isTracking = track;
     }

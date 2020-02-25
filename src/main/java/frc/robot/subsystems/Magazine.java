@@ -58,7 +58,9 @@ public class Magazine extends SubsystemBase {
         magMotor.setOpenLoopRampRate(RAMP_RATE);
     }
 
-    /** Returns temperature of motor based off Falcon ID. */
+    /** 
+     * Returns temperature of motor based off CANSpark ID.
+     */
     public double getMotorTemperature() {
         return magMotor.getMotorTemperature();
     }

@@ -3,9 +3,6 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
-/**
- * Spins indexer motors a given percentage.
- */
 public class SpinIndexer extends CommandBase {
 
     Intake intake;

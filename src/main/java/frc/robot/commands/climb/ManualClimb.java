@@ -1,4 +1,4 @@
-package frc.robot.commands.climber;
+package frc.robot.commands.climb;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
@@ -30,6 +30,9 @@ public class ManualClimb extends CommandBase {
     @Override
     public void execute() {
 
+        /**
+         * Will independently command motors if they are uneven in height.
+         */
         if ((climber.getLeftPosition() >= climber.getMaxPosition() && percent > 0)
                 || (climber.getLeftPosition() <= climber.getMinPosition() && percent < 0)) {
             climber.setLeftPercentage(0);

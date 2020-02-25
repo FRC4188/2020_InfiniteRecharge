@@ -4,18 +4,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 
 /**
- * Turns off vision tracking for limelight.
+ * Zooms limelight on target.
  */
-public class LimelightAsCamera extends CommandBase {
+public class CameraZoomTrack extends CommandBase {
 
-    Limelight limelight;
+    private final Limelight limelight;
 
     /**
-     * Constructs a new LimelightAsCamera command to stop vision tracking.
+     * Creates a new CameraZoomTrack command to zoom limelight on target and turn on tracking.
      *
      * @param limelight - Limelight subsystem to use.
      */
-    public LimelightAsCamera(Limelight limelight) {
+    public CameraZoomTrack(Limelight limelight) {
         this.limelight = limelight;
     }
 
@@ -25,7 +25,7 @@ public class LimelightAsCamera extends CommandBase {
 
     @Override
     public void execute() {
-        limelight.useAsCamera();
+        limelight.zoomTarget();
     }
 
     @Override

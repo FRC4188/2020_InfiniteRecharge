@@ -7,7 +7,7 @@ import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
 /**
- * Runs magazine motors to feed cells if shooter is at correct rpm.
+ * Runs magazine and indexer motors to feed cells if shooter is at correct rpm.
  */
 public class AutoMagazine extends CommandBase {
 
@@ -22,6 +22,7 @@ public class AutoMagazine extends CommandBase {
      * @param magazine - Magazine subsystem to use for turning motors.
      * @param limelight - Limelight subsystem to use for determining correct shooter rpm.
      * @param shooter - Shooter subsystem to use for getting current shooter rpm.
+     * @param intake - Intake subsystem that feeds into the magazine.
      */
     public AutoMagazine(Magazine magazine, Intake intake, Limelight limelight, Shooter shooter) {
         addRequirements(magazine, intake);

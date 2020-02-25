@@ -1,17 +1,17 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.commands.climber.FireBrake;
-import frc.robot.commands.climber.ManualClimb;
+import frc.robot.commands.climb.FireBrake;
+import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.ManualDrive;
-import frc.robot.commands.groups.AutoShoot;
 import frc.robot.commands.groups.LeftEnemyTrenchAuto;
+import frc.robot.commands.groups.MidDriveAwayAuto;
+import frc.robot.commands.groups.MidDriveTowardAuto;
 import frc.robot.commands.groups.RightTrenchAuto;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.SpinIntake;
@@ -23,13 +23,11 @@ import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.shooter.SpinShooterFormula;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.ManualTurret;
-import frc.robot.commands.turret.Spin360;
 import frc.robot.commands.turret.TurretAngle;
-import frc.robot.commands.turret.TurretToAngle;
 import frc.robot.commands.turret.ZeroTurret;
-import frc.robot.commands.vision.CameraOff;
-import frc.robot.commands.vision.CameraTrack;
-import frc.robot.commands.vision.CameraZoom;
+import frc.robot.commands.vision.CameraCloseTrack;
+import frc.robot.commands.vision.CameraZoomTrack;
+import frc.robot.commands.vision.UseAsCamera;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
@@ -113,9 +111,9 @@ public class RobotContainer {
                 drivetrain, limelight, () -> pilot.getY(Hand.kLeft)
         ));
 
-        pilot.getDpadRightButtonObj().whenPressed(new CameraOff(limelight));
-        pilot.getDpadLeftButtonObj().whenPressed(new CameraTrack(limelight));
-        pilot.getLbButtonObj().whenPressed(new CameraZoom(limelight));
+        pilot.getDpadRightButtonObj().whenPressed(new UseAsCamera(limelight));
+        pilot.getDpadLeftButtonObj().whenPressed(new CameraCloseTrack(limelight));
+        pilot.getLbButtonObj().whenPressed(new CameraZoomTrack(limelight));
 
         pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
         pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
@@ -181,7 +179,15 @@ public class RobotContainer {
         autoChooser.addOption("Right Trench", new RightTrenchAuto(drivetrain, magazine, shooter,
                 limelight, turret, intake
         ));
-        autoChooser.addOption("Left Enemy Trench", new LeftEnemyTrenchAuto(drivetrain));
+        autoChooser.addOption("Left Enemy Trench", new LeftEnemyTrenchAuto(drivetrain, magazine,
+                shooter, limelight, turret, intake
+        ));
+        autoChooser.addOption("Mid Drive Away", new MidDriveAwayAuto(drivetrain, magazine, shooter, 
+                limelight, turret
+        ));
+        autoChooser.addOption("Mid Drive Toward", new MidDriveTowardAuto(drivetrain, magazine, shooter, 
+                limelight, turret
+        ));
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 

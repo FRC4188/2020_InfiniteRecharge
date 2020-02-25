@@ -171,15 +171,23 @@ public class Climber extends SubsystemBase {
                 * ENCODER_TO_REV * 600;// sensor units for rpm
     }
 
+    /**
+     * Returns the maximum position of the climber in raw encoder ticks.
+     */
     public double getMaxPosition() {
         return MAX_POSITION;
     }
 
+    /**
+     * Returns the minimum position of the climber in raw encoder ticks.
+     */
     public double getMinPosition() {
         return MIN_POSITION;
     }
 
-    /** Returns temperature of motor based off Falcon ID. */
+    /** 
+     * Returns temperature of motor based off Falcon ID. 
+     */
     public double getMotorTemperature(int index) {
         WPI_TalonFX[] falcons = new WPI_TalonFX[] { climberRightMotor, climberLeftMotor, };
         index -= 1;

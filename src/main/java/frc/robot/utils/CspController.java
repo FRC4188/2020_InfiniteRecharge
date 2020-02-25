@@ -1,8 +1,10 @@
 package frc.robot.utils;
 
+import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
  * Subclass of XboxController to handle joystick scaling, deadbands, and button initialization.
@@ -10,11 +12,12 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
 public class CspController extends XboxController {
 
     private static final double DEADBAND = 0.1;
+    private static final double TRIGGER_THRESHOLD = 0.6;
 
     /**
      * Class containing button mappings for Logitech F310.
      */
-    private final class Controller {
+    private final class F310 {
         static final int A = 1;
         static final int B = 2;
         static final int X = 3;
@@ -30,22 +33,6 @@ public class CspController extends XboxController {
         static final int DPAD_DOWN = 180;
         static final int DPAD_LEFT = 270;
     }
-
-    // button initialization
-    private final JoystickButton aButton = new JoystickButton(this, Controller.A);
-    private final JoystickButton bButton = new JoystickButton(this, Controller.B);
-    private final JoystickButton xButton = new JoystickButton(this, Controller.X);
-    private final JoystickButton yButton = new JoystickButton(this, Controller.Y);
-    private final JoystickButton leftBumperButton = new JoystickButton(this, Controller.LB);
-    private final JoystickButton rightBumperButton = new JoystickButton(this, Controller.RB);
-    private final JoystickButton backButton = new JoystickButton(this, Controller.BACK);
-    private final JoystickButton startButton = new JoystickButton(this, Controller.START);
-    private final JoystickButton leftStickButton = new JoystickButton(this, Controller.LS);
-    private final JoystickButton rightStickButton = new JoystickButton(this, Controller.RS);
-    private final POVButton dpadUpButton = new POVButton(this, Controller.DPAD_UP);
-    private final POVButton dpadRightButton = new POVButton(this, Controller.DPAD_RIGHT);
-    private final POVButton dpadDownButton = new POVButton(this, Controller.DPAD_DOWN);
-    private final POVButton dpadLeftButton = new POVButton(this, Controller.DPAD_LEFT);
 
     /**
      * Options to scale joystick input.
@@ -111,98 +98,112 @@ public class CspController extends XboxController {
      * Returns the JoystickButton object for the A button.
      */
     public JoystickButton getAButtonObj() {
-        return aButton;
+        return new JoystickButton(this, F310.A);
     }
 
     /**
      * Returns the JoystickButton object for the B button.
      */
     public JoystickButton getBButtonObj() {
-        return bButton;
+        return new JoystickButton(this, F310.B);
     }
 
     /**
      * Returns the JoystickButton object for the X button.
      */
     public JoystickButton getXButtonObj() {
-        return xButton;
+        return new JoystickButton(this, F310.X);
     }
 
     /**
      * Returns the JoystickButton object for the Y button.
      */
     public JoystickButton getYButtonObj() {
-        return yButton;
+        return new JoystickButton(this, F310.Y);
     }
 
     /**
      * Returns the JoystickButton object for the left bumper button.
      */
     public JoystickButton getLbButtonObj() {
-        return leftBumperButton;
+        return new JoystickButton(this, F310.LB);
     }
 
     /**
      * Returns the JoystickButton object for the right bumper button.
      */
     public JoystickButton getRbButtonObj() {
-        return rightBumperButton;
+        return new JoystickButton(this, F310.RB);
     }
 
     /**
      * Returns the JoystickButton object for the back button.
      */
     public JoystickButton getBackButtonObj() {
-        return backButton;
+        return new JoystickButton(this, F310.BACK);
     }
 
     /**
      * Returns the JoystickButton object for the start button.
      */
     public JoystickButton getStartButtonObj() {
-        return startButton;
+        return new JoystickButton(this, F310.START);
     }
 
     /**
      * Returns the JoystickButton object for the left stick button.
      */
     public JoystickButton getLsButtonObj() {
-        return leftStickButton;
+        return new JoystickButton(this, F310.LS);
     }
 
     /**
      * Returns the JoystickButton object for the right stick button.
      */
     public JoystickButton getRsButtonObj() {
-        return rightStickButton;
+        return new JoystickButton(this, F310.RS);
     }
 
     /**
      * Returns the POVButton object for the D-pad up button.
      */
     public POVButton getDpadUpButtonObj() {
-        return dpadUpButton;
+        return new POVButton(this, F310.DPAD_UP);
     }
 
     /**
      * Returns the POVButton object for the D-pad right button.
      */
     public POVButton getDpadRightButtonObj() {
-        return dpadRightButton;
+        return new POVButton(this, F310.DPAD_RIGHT);
     }
 
     /**
      * Returns the POVButton object for the D-pad down button.
      */
     public POVButton getDpadDownButtonObj() {
-        return dpadDownButton;
+        return new POVButton(this, F310.DPAD_DOWN);
     }
 
     /**
      * Returns the POVButton object for the D-pad left button.
      */
     public POVButton getDpadLeftButtonObj() {
-        return dpadLeftButton;
+        return new POVButton(this, F310.DPAD_LEFT);
+    }
+
+    /**
+     * Returns the Trigger object for the left trigger.
+     */
+    public Trigger getLtButtonObj() {
+        return new Trigger(() -> super.getTriggerAxis(Hand.kLeft) > TRIGGER_THRESHOLD);
+    }
+
+    /**
+     * Returns the Trigger object for the right trigger.
+     */
+    public Trigger getRtButtonObj() {
+        return new Trigger(() -> super.getTriggerAxis(Hand.kRight) > TRIGGER_THRESHOLD);
     }
 
 }

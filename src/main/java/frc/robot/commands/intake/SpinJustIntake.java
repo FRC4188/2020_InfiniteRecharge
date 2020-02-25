@@ -3,16 +3,13 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
-/**
- * Spins intake motors a given percentage.
- */
 public class SpinJustIntake extends CommandBase {
 
     private final Intake intake;
     private final double percent;
 
     /**
-     * Constructs new SpinIntake command to spin intake motors a given percentage.
+     * Constructs new SpinJustIntake command to spin just the intake motors a given percentage.
      *
      * @param intake - Intake subsystem to use.
      * @param percent - percent output to command motors.

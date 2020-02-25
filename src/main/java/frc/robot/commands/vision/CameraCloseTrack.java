@@ -4,18 +4,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 
 /**
- * Zooms limelight on target.
+ * Sets limelight to track target.
  */
-public class CameraZoom extends CommandBase {
+public class CameraCloseTrack extends CommandBase {
 
     private final Limelight limelight;
 
     /**
-     * Creates a new CameraZoom command to zoom limelight on target.
+     * Constructs a new CameraCloseTrack command to set limelight to track target at close distances.
      *
      * @param limelight - Limelight subsystem to use.
      */
-    public CameraZoom(Limelight limelight) {
+    public CameraCloseTrack(Limelight limelight) {
         this.limelight = limelight;
     }
 
@@ -25,7 +25,7 @@ public class CameraZoom extends CommandBase {
 
     @Override
     public void execute() {
-        limelight.zoomTarget();
+        limelight.trackTarget();
     }
 
     @Override
