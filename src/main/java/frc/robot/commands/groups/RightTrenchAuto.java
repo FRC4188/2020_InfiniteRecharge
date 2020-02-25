@@ -40,7 +40,7 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
 
                 // Auto aims toward the port and revs up shooter to 6000 rpm.
                 new ParallelRaceGroup(
-                    new AutoAim(turret, limelight, -1.5).withTimeout(0.15),
+                    new AutoAim(turret, limelight, -1.5).withTimeout(0.5),
                     new SpinShooter(shooter, 6000)
                 ),
 
@@ -55,22 +55,21 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 ),
 
                 // Lowers the intake.
-                new LowerIntake(intake).withTimeout(0.15),
+                new LowerIntake(intake),
 
                 // Drives backward into the right-side trench, running intake at the same time.
                 new ParallelRaceGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.RIGHT_TO_BACK_TRENCH),
-                    new SpinIntake(intake, 1).withTimeout(2.5)
+                    new SpinIntake(intake, 1)
                 ),
 
                 /**
-                 * Drives back to the front of the trench.
-                 * Continues to spin intake and magazine to prevent balls from falling out.
+                 * Drives forward to the front of the trench.
+                 * Runs magazine and intake at the same time to keep balls from falling out.
                  */
                 new ParallelRaceGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.BACK_TO_FRONT_TRENCH),
-                    new SpinIntake(intake, 0.4),
-                    new RunMagazine(magazine, 0.4).withTimeout(2.5)
+                    new SpinIntake(intake, 0.4)
                 ),
                 
                 // Auto aims and revs up shooter to 3500 rpm.
@@ -86,17 +85,16 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                  */
                 new ParallelRaceGroup(
                     new AutoAim(turret, limelight, -0.5),
-                    new RaiseIntake(intake),
                     new SpinShooter(shooter, 3500),
                     new SpinIndexer(intake, 0.8),
                     new SpinPolyRoller(intake, 0.8),
                     new RunMagazine(magazine, 0.8).withTimeout(4.5)
-                )
+                ),
 
                 // May add this to take the robot to the bar in the future.
-                /*new ParallelRaceGroup(
+                new ParallelRaceGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.FRONT_TRENCH_TO_BAR)
-                )*/
+                )
         );
     }
 

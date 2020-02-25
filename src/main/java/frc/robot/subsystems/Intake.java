@@ -41,6 +41,11 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         updateShuffleboard();
+        if (isRaised) {
+            intakeSolenoid.set(false);
+        } else {
+            intakeSolenoid.set(true);
+        }
     }
 
     /**
@@ -50,7 +55,7 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("Intake Position", getIntakePosition());
         SmartDashboard.putNumber("Indexer Position", getIndexerPosition());
         SmartDashboard.putNumber("PolyRoller Position", getPolyRollerPosition());
-
+        SmartDashboard.putBoolean("Intake Raised", isRaised());
     }
 
     /**
@@ -85,16 +90,14 @@ public class Intake extends SubsystemBase {
      * Raises intake by firing solenoids.
      */
     public void raise() {
-        intakeSolenoid.set(false);
-        isRaised = false;
+        isRaised = true;
     }
 
     /**
      * Lowers intake by firing solenoid.
      */
     public void lower() {
-        intakeSolenoid.set(true);
-        isRaised = true;
+        isRaised = false;
     }
 
     /**

@@ -26,17 +26,20 @@ public class ToggleIntake extends CommandBase {
 
     @Override
     public void execute() {
-        intake.lower();
+        if (intake.isRaised()) {
+            intake.lower();
+        } else {
+            intake.raise();
+        }
     }
 
     @Override
     public void end(boolean interrupted) {
-        intake.raise();
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
 }
