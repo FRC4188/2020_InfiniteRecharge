@@ -10,6 +10,7 @@ import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.ManualDrive;
 import frc.robot.commands.groups.LeftEnemyTrenchAuto;
+import frc.robot.commands.groups.MidDriveAwayAuto;
 import frc.robot.commands.groups.RightTrenchAuto;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.SpinIntake;
@@ -177,6 +178,12 @@ public class RobotContainer {
         ));
         autoChooser.addOption("Left Enemy Trench", new LeftEnemyTrenchAuto(drivetrain, magazine,
                 shooter, limelight, turret, intake
+        ));
+        autoChooser.addOption("Mid Drive Away", new MidDriveAwayAuto(drivetrain, magazine, shooter, 
+                limelight, turret
+        ));
+        autoChooser.addOption("Mid Drive Toward", new MidDriveAwayAuto(drivetrain, magazine, shooter, 
+                limelight, turret
         ));
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
