@@ -136,7 +136,9 @@ public class Shooter extends SubsystemBase {
         return (rightShooter.getSelectedSensorVelocity() * 600) / ENCODER_TICKS_PER_REV;
     }
 
-    /** Returns temperature of motor based off Falcon ID. */
+    /** 
+     * Returns temperature of motor based off Falcon ID. 
+     */
     public double getMotorTemperature(int index) {
         WPI_TalonFX[] falcons = new WPI_TalonFX[] {
             leftShooter,

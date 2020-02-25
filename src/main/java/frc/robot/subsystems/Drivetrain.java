@@ -382,11 +382,17 @@ public class Drivetrain extends SubsystemBase {
         return gyro.getRate();
     }
 
+    /**
+     * Sets the cooler solenoid on or off.
+     * @param output - The value to set cooler solenoid to.
+     */
     public void setCooler(boolean output) {
         cooler.set(output);
     }
 
-    /** Returns temperature of motor based off Falcon ID. */
+    /** 
+     * Returns temperature of motor based off Falcon ID. 
+     */
     public double getMotorTemperature(int index) {
         WPI_TalonFX[] falcons = new WPI_TalonFX[]{
             leftMotor,

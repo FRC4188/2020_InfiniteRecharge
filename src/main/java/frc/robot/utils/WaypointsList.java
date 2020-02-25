@@ -85,6 +85,9 @@ public class WaypointsList {
             ), true
     );
 
+    /**
+     * Starts from directly in front of the port and drives away in a straight line.
+     */
     public static final Waypoints MID_DRIVE_AWAY = new Waypoints(
             List.of(
                 new Pose2d(3.45, -3.0, new Rotation2d()),
@@ -92,6 +95,9 @@ public class WaypointsList {
             ), false
     );
 
+    /**
+     * Starts from directly in front of the port and drives forward in a straight line.
+     */
     public static final Waypoints MID_DRIVE_TOWARD = new Waypoints(
             List.of(
                 new Pose2d(3.45, -3.0, new Rotation2d()),

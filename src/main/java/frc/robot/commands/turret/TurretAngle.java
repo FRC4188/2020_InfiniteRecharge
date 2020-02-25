@@ -19,15 +19,32 @@ public class TurretAngle extends CommandBase {
     private static final double TOLERANCE = 3.0; // degrees
 
     /**
-     * Constructs a new Spin360 command to spin turret 360 degrees.
+     * Constructs a new TurretAngle command to spin turret to a given number degree.
      *
      * @param turret - Turret subsystem to use.
-     * @param limelight - Limelight subsystem to use.
+     * @param targetPosition - Position to set the turret to.
      */
     public TurretAngle(Turret turret, double targetPosition) {
         addRequirements(turret);
         this.turret = turret;
         this.targetPosition = targetPosition;
+    }
+
+    /**
+     * Constructs a new TurretAngle command to spin turret 360 degrees to face target.
+     *
+     * @param turret - Turret subsystem to use.
+     * @param limelight - Limelight subsystem to use.
+     */
+    public TurretAngle(Turret turret, Limelight limelight) {
+        addRequirements(turret);
+        this.turret = turret;
+        targetPosition = turret.getPosition() - limelight.getHorizontalAngle() + 
+                SmartDashboard.getNumber("Turret Aim adjust", 0.0) - 360 * 
+                Math.signum(turret.getPosition() - 180
+        );
+        if (targetPosition > turret.getMaxPosition() || targetPosition < turret.getMinPosition()) 
+            targetPosition = turret.getPosition();
     }
 
     @Override

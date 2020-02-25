@@ -26,19 +26,29 @@ public class MidDriveTowardAuto extends CspSequentialCommandGroup {
     public MidDriveTowardAuto(Drivetrain drivetrain, Magazine magazine, Shooter shooter,
             Limelight limelight, Turret turret) {
         addCommands(
+                // Turns turret around and revs up shooter to default rpm.
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 3000),
                     new TurretAngle(turret, 180)
                 ),
+
+                // Auto aims toward the port and revs up shooter to 6000 rpm.
                 new ParallelRaceGroup(
                     new AutoAim(turret, limelight, -1.5).withTimeout(0.15),
                     new SpinShooter(shooter, 6000)
                 ),
+
+                /* 
+                 * Continues to auto aim and spin shooter at 6000 rpm.
+                 * Runs magazine to shoot pre-loaded balls. 
+                 */
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 6000),
                     new AutoAim(turret, limelight, -1.5),
                     new RunMagazine(magazine, 0.8).withTimeout(1.5)
                 ),
+
+                // Drives toward the port to move out of the way for other robots' paths.
                 new FollowTrajectory(drivetrain, WaypointsList.MID_DRIVE_TOWARD)
         );
     }

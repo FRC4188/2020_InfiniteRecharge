@@ -1,9 +1,7 @@
 package frc.robot.utils;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 
 /**
  * Subclass of XboxController to handle joystick scaling, deadbands, and button initialization.
@@ -14,8 +12,6 @@ public class ButtonBox extends Joystick {
         super(port);
         // TODO Auto-generated constructor stub
     }
-
-    private static final double DEADBAND = 0.1;
 
     /**
      * Class containing button mappings for Logitech F310.

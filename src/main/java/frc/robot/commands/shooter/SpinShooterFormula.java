@@ -13,7 +13,7 @@ public class SpinShooterFormula extends CommandBase {
     private final Limelight limelight;
 
     /**
-     * Constructs a new SpinShooter command to spin shooter to a velocity calculated by Limelight.
+     * Constructs a new SpinShooterFormula command to spin shooter to a velocity calculated by Limelight.
      *
      * @param shooter - Shooter subsystem to use.
      * @param limelight - Limelight subsystem to use.
