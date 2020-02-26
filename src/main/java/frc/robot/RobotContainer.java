@@ -28,6 +28,8 @@ import frc.robot.commands.turret.ZeroTurret;
 import frc.robot.commands.vision.CameraCloseTrack;
 import frc.robot.commands.vision.CameraZoomTrack;
 import frc.robot.commands.vision.UseAsCamera;
+import frc.robot.commands.wheel.SpinWheel;
+import frc.robot.commands.wheel.ToggleWheel;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
@@ -36,6 +38,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.WheelSpinner;
 import frc.robot.utils.ButtonBox;
 import frc.robot.utils.CspController;
 import frc.robot.utils.CspSequentialCommandGroup;
@@ -56,6 +59,7 @@ public class RobotContainer {
     private final Intake intake = new Intake();
     private final Hood hood = new Hood();
     private final Limelight limelight = new Limelight();
+    private final WheelSpinner wheelSpinner = new WheelSpinner();
     private final TempManager tempManager = new TempManager(climber, drivetrain, intake, magazine, shooter, turret);
 
     // controller initialization
@@ -114,6 +118,13 @@ public class RobotContainer {
         pilot.getDpadRightButtonObj().whenPressed(new UseAsCamera(limelight));
         pilot.getDpadLeftButtonObj().whenPressed(new CameraCloseTrack(limelight));
         pilot.getLbButtonObj().whenPressed(new CameraZoomTrack(limelight));
+
+        pilot.getLtButtonObj().whileActiveContinuous(new SpinWheel(wheelSpinner, -0.7));
+        pilot.getLtButtonObj().whenInactive(new SpinWheel(wheelSpinner, 0));
+        pilot.getRtButtonObj().whileActiveContinuous(new SpinWheel(wheelSpinner, 0.7));
+        pilot.getRtButtonObj().whenInactive(new SpinWheel(wheelSpinner, 0));
+
+        pilot.getDpadDownButtonObj().whenPressed(new ToggleWheel(wheelSpinner));
 
         pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
         pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
