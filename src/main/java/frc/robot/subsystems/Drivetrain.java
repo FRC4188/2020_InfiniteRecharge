@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstraint;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -38,6 +39,7 @@ public class Drivetrain extends SubsystemBase {
     private static final double kP = 3.5;
     private static final double AUTO_MAX_VEL = 1.75; // meters / second
     private static final double AUTO_MAX_ACCEL = 3; // meters / second squared
+    private static final double AUTO_MAX_CENTRIP = 1.0; // meters / second squared
     private static final double AUTO_MAX_VOLTAGE = 10; // volts
     private static final double ARCADE_MAX_VEL = 3; // meters / second
     private static final double ARCADE_MAX_ROT = 2 * Math.PI; // rads / second
@@ -57,10 +59,13 @@ public class Drivetrain extends SubsystemBase {
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
     private final DifferentialDriveVoltageConstraint voltageConstraint =
             new DifferentialDriveVoltageConstraint(feedforward, kinematics, AUTO_MAX_VOLTAGE);
+    private final CentripetalAccelerationConstraint centripAccelConstraint =
+            new CentripetalAccelerationConstraint(AUTO_MAX_CENTRIP);
     private final TrajectoryConfig trajectoryConfig =
             new TrajectoryConfig(AUTO_MAX_VEL, AUTO_MAX_ACCEL)
             .setKinematics(kinematics)
-            .addConstraint(voltageConstraint);
+            .addConstraint(voltageConstraint)
+            .addConstraint(centripAccelConstraint);
 
 
     // state vars
