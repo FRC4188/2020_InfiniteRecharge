@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class CspController extends XboxController {
 
-    private static final double DEADBAND = 0.1;
+    private static final double DEADBAND = 0.15;
     private static final double TRIGGER_THRESHOLD = 0.6;
 
     /**
