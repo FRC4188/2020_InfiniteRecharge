@@ -69,7 +69,8 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                  */
                 new ParallelRaceGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.BACK_TO_FRONT_TRENCH),
-                    new SpinIntake(intake, 0.3)
+                    new SpinIntake(intake, 0.3),
+                    new SpinShooter(shooter, 3000)
                 ),
                 
                 // Auto aims and revs up shooter to 3500 rpm.
@@ -89,9 +90,9 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                     new SpinIndexer(intake, 0.8),
                     new SpinPolyRoller(intake, 0.8),
                     new RunMagazine(magazine, 0.8).withTimeout(4.5)
-                ),
+                )
 
-                new RaiseIntake(intake)
+                // new RaiseIntake(intake)
                 /*
                 // May add this to take the robot to the bar in the future.
                 new ParallelRaceGroup(

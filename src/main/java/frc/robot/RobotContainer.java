@@ -12,10 +12,9 @@ import frc.robot.commands.drive.ManualDrive;
 import frc.robot.commands.groups.LeftEnemyTrenchAuto;
 import frc.robot.commands.groups.MidDriveAwayAuto;
 import frc.robot.commands.groups.MidDriveTowardAuto;
+import frc.robot.commands.groups.MidLoopLeftBarAuto;
 import frc.robot.commands.groups.RightTrenchAuto;
 import frc.robot.commands.hood.ToggleHood;
-import frc.robot.commands.intake.LowerIntake;
-import frc.robot.commands.intake.RaiseIntake;
 import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.intake.SpinJustIntake;
 import frc.robot.commands.intake.ToggleIntake;
@@ -203,6 +202,9 @@ public class RobotContainer {
                 limelight, turret
         ));
         autoChooser.addOption("Mid Drive Toward", new MidDriveTowardAuto(drivetrain, magazine, shooter, 
+                limelight, turret
+        ));
+        autoChooser.addOption("Mid Loop to Left Bar", new MidLoopLeftBarAuto(drivetrain, magazine, shooter, 
                 limelight, turret
         ));
         SmartDashboard.putData("Auto Chooser", autoChooser);
