@@ -120,4 +120,18 @@ public class WaypointsList {
             ), false
     );
 
+    public static final Waypoints MID_TO_LEFT_BAR = new Waypoints(
+            List.of(
+                new Pose2d(3.45, -3.89, new Rotation2d()),
+                new Pose2d(5.25, -3.89, new Rotation2d())
+            ), false
+    );
+
+    public static final Waypoints LEFT_BAR_THIRD = new Waypoints(
+            List.of(
+                new Pose2d(5.25, -3.89, Rotation2d.fromDegrees(-40)),
+                new Pose2d(5.45, -3.95, Rotation2d.fromDegrees(-40))
+            ), false
+    );
+
 }
