@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import java.util.ArrayList;
 
 /**
  * Subclass of XboxController to handle joystick scaling, deadbands, and button initialization.
@@ -81,8 +82,7 @@ public class CspController extends XboxController {
     /**
      * Returns the Y value of the joystick for a given hand.
      */
-    @Override
-    public double getX(Hand hand) {
+    public double getX(Hand hand, ArrayList arr) {
         return getOutput(super.getX(hand), Scaling.SQUARED);
     }
 

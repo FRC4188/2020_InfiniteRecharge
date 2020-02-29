@@ -102,7 +102,7 @@ public class WaypointsList {
             List.of(
                 new Pose2d(3.45, -2.45, new Rotation2d()),
                 new Pose2d(2.35, -2.45, new Rotation2d())
-            ), false
+            ), true
     );
 
 }
