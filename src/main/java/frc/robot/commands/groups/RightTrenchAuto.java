@@ -1,6 +1,7 @@
 package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.intake.LowerIntake;
@@ -32,9 +33,10 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
     public RightTrenchAuto(Drivetrain drivetrain, Magazine magazine, Shooter shooter,
             Limelight limelight, Turret turret, Intake intake) {
         addCommands(
+
                 // Turns turret around and revs up shooter to default rpm.
                 new ParallelRaceGroup(
-                    new SpinShooter(shooter, 3000).withTimeout(1),
+                    new SpinShooter(shooter, 3400).withTimeout(1),
                     new TurretAngle(turret, 195)
                 ),
 
@@ -67,11 +69,12 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                  * Drives forward to the front of the trench.
                  * Runs magazine and intake at the same time to keep balls from falling out.
                  */
-                new ParallelRaceGroup(
+                new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.BACK_TO_FRONT_TRENCH),
-                    new SpinIntake(intake, 0.3)
+                    new SpinIntake(intake, 0.3),
+                    new TurretAngle(turret, 167.0)
                 ),
-                
+
                 // Auto aims and revs up shooter to 3500 rpm.
                 new ParallelRaceGroup(
                     new AutoAim(turret, limelight, -2.0).withTimeout(0.25),
@@ -92,11 +95,13 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 ),
 
                 new RaiseIntake(intake)
+
                 /*
                 // May add this to take the robot to the bar in the future.
                 new ParallelRaceGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.FRONT_TRENCH_TO_BAR)
                 )*/
+
         );
     }
 

@@ -155,7 +155,7 @@ public class RobotContainer {
 
         copilot.getXButtonObj().toggleWhenPressed(new AutoAim(turret, limelight, 0));
 
-        copilot.getRbButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
+        //copilot.getRbButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
 
         copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, 0.3));
         copilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));
@@ -163,13 +163,13 @@ public class RobotContainer {
         copilot.getDpadRightButtonObj().whenReleased(new ManualTurret(turret, 0));
 
         
-        copilot.getDpadUpButtonObj().whileHeld(new ManualClimb(climber, -0.9));
-        copilot.getDpadUpButtonObj().whenReleased(new ManualClimb(climber, 0));
-        copilot.getDpadDownButtonObj().whileHeld(new ManualClimb(climber, 0.6));
-        copilot.getDpadDownButtonObj().whenReleased(new ManualClimb(climber, 0));
+        copilot.getRbButtonObj().whileHeld(new ManualClimb(climber, -0.9));
+        copilot.getRbButtonObj().whenReleased(new ManualClimb(climber, 0));
+        copilot.getLbButtonObj().whileHeld(new ManualClimb(climber, 0.6));
+        copilot.getLbButtonObj().whenReleased(new ManualClimb(climber, 0));
 
-        copilot.getLbButtonObj().whileHeld(new SpinJustIntake(intake, -1));
-        copilot.getLbButtonObj().whenReleased(new SpinJustIntake(intake, 0));
+        copilot.getDpadUpButtonObj().whileHeld(new SpinJustIntake(intake, -1));
+        copilot.getDpadUpButtonObj().whenReleased(new SpinJustIntake(intake, 0));
 
         /*copilot.getRbButtonObj().whileHeld(new SpinIntake(intake, 1.0));
         copilot.getRbButtonObj().whenReleased(new SpinIntake(intake, 0.0));
@@ -183,7 +183,8 @@ public class RobotContainer {
         buttonBox.getButton5Obj().toggleWhenPressed(new SpinShooter(shooter, 4550));
         buttonBox.getButton6Obj().toggleWhenPressed(new SpinShooter(shooter, 6000));
         buttonBox.getButton7Obj().toggleWhenPressed(new SpinShooter(shooter, 2250));
-        buttonBox.getButton8Obj().whenPressed(new ToggleWheel(wheelSpinner));
+        buttonBox.getButton8Obj().whileHeld(new SpinJustIntake(intake, -1.0));
+        buttonBox.getButton8Obj().whenReleased(new SpinJustIntake(intake, 0));
 
     }
 
