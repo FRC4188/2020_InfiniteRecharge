@@ -30,27 +30,29 @@ public class ManualClimb extends CommandBase {
     @Override
     public void execute() {
 
+        climber.engagePneuBrake(true);
+
         /**
          * Will independently command motors if they are uneven in height.
          */
         if ((climber.getLeftPosition() >= climber.getMaxPosition() && percent > 0)
                 || (climber.getLeftPosition() <= climber.getMinPosition() && percent < 0)) {
-            climber.setLeftPercentage(0);
+            climber.setLeft(0);
         } else if ((climber.getLeftPosition() >= climber.getMaxPosition() - 20000 && percent > 0)
                 || (climber.getLeftPosition() <= climber.getMinPosition() + 20000 && percent < 0)){
-            climber.setLeftPercentage(percent / 3);
+            climber.setLeft(percent / 3.0);
         } else {
-            climber.setLeftPercentage(percent);
+            climber.setLeft(percent);
         }
 
         if ((climber.getRightPosition() >= climber.getMaxPosition() && percent > 0)
                 || (climber.getRightPosition() <= climber.getMinPosition() && percent < 0)) {
-            climber.setRightPercentage(0);
+            climber.setRight(0);
         } else if ((climber.getRightPosition() >= climber.getMaxPosition() - 20000 && percent > 0)
                 || (climber.getRightPosition() <= climber.getMinPosition() + 20000 && percent < 0)){
-            climber.setRightPercentage(percent / 3);
+            climber.setRight(percent / 3.0);
         } else {
-            climber.setRightPercentage(percent);
+            climber.setRight(percent);
         }
 
     }

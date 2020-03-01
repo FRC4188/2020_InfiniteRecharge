@@ -40,8 +40,8 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
 
                 // Auto aims toward the port and revs up shooter to 6000 rpm.
                 new ParallelRaceGroup(
-                    new AutoAim(turret, limelight, -1.5).withTimeout(0.5),
-                    new SpinShooter(shooter, 6000)
+                    new AutoAim(turret, limelight, -2.0).withTimeout(0.5),
+                    new SpinShooter(shooter, 3400)
                 ),
 
                 /* 
@@ -49,8 +49,8 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                  * Runs magazine to shoot pre-loaded balls. 
                  */
                 new ParallelRaceGroup(
-                    new SpinShooter(shooter, 6000),
-                    new AutoAim(turret, limelight, -1.5),
+                    new SpinShooter(shooter, 3400),
+                    new AutoAim(turret, limelight, -2.0),
                     new RunMagazine(magazine, 0.8).withTimeout(1.5)
                 ),
 
@@ -74,8 +74,8 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 
                 // Auto aims and revs up shooter to 3500 rpm.
                 new ParallelRaceGroup(
-                    new AutoAim(turret, limelight, -0.5).withTimeout(0.15),
-                    new SpinShooter(shooter, 3500)
+                    new AutoAim(turret, limelight, -2.0).withTimeout(0.25),
+                    new SpinShooter(shooter, 3400)
                 ),
 
                 /**
@@ -84,8 +84,8 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                  * Raises intake.
                  */
                 new ParallelRaceGroup(
-                    new AutoAim(turret, limelight, -0.5),
-                    new SpinShooter(shooter, 3500),
+                    new AutoAim(turret, limelight, -2.0),
+                    new SpinShooter(shooter, 3400),
                     new SpinIndexer(intake, 0.8),
                     new SpinPolyRoller(intake, 0.8),
                     new RunMagazine(magazine, 0.8).withTimeout(4.5)

@@ -1,0 +1,51 @@
+<xml version="1.0">
+<dashboard>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.CameraServerViewer">
+		<location x="14" y="9"/>
+		<width>984</width>
+		<height>496</height>
+		<property name="Camera Choice" value=""/>
+	</static-widget>
+	<widget field="Auto Chooser" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="176" y="105"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="Right Position"/>
+	<hidden field="Limelight distance reading"/>
+	<hidden field="Turret Aim adjust"/>
+	<hidden field="Right Vel Setpoint"/>
+	<hidden field="Indexer Position"/>
+	<hidden field="Left Vel Setpoint"/>
+	<hidden field="Intake Position"/>
+	<hidden field="Wheel Spinner Raised"/>
+	<hidden field="Odometry"/>
+	<hidden field="Turret pos (deg)"/>
+	<hidden field="limelight_Stream"/>
+	<hidden field="Temp Warnings"/>
+	<hidden field="Formula RPM"/>
+	<hidden field="Gyro Angle"/>
+	<hidden field="Right climber velocity"/>
+	<hidden field="Left shooter rpm"/>
+	<hidden field="Right climber height"/>
+	<hidden field="Auto Aim"/>
+	<hidden field="Left Velocity"/>
+	<hidden field="Magazine Encoder Position"/>
+	<hidden field="PolyRoller Position"/>
+	<hidden field="Left climber velocity"/>
+	<hidden field="Right shooter rpm"/>
+	<hidden field="M24 temp"/>
+	<hidden field="Turret offset (deg)"/>
+	<hidden field="Set shooter rpm"/>
+	<hidden field="limelight_Interface"/>
+	<hidden field="limelight_PipelineName"/>
+	<hidden field="Right Velocity"/>
+	<hidden field="Turret raw vel"/>
+	<hidden field="Hood Raised"/>
+	<hidden field="Magazine velocity"/>
+	<hidden field="Intake Raised"/>
+	<hidden field="Left climber height"/>
+	<hidden field="Left Position"/>
+	<hidden field="Turret temp"/>
+</xml>

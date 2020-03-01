@@ -49,7 +49,8 @@ public class WaypointsList {
     public static final Waypoints BACK_TO_FRONT_TRENCH = new Waypoints(
             List.of(
                 new Pose2d(7.55, -0.75, new Rotation2d()),
-                new Pose2d(5, -0.75, new Rotation2d())
+                new Pose2d(5, -0.75, new Rotation2d()),
+                new Pose2d(3.45, -1.5, new Rotation2d())
             ), true
     );
 

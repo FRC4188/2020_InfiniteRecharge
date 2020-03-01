@@ -14,8 +14,6 @@ import frc.robot.commands.groups.MidDriveAwayAuto;
 import frc.robot.commands.groups.MidDriveTowardAuto;
 import frc.robot.commands.groups.RightTrenchAuto;
 import frc.robot.commands.hood.ToggleHood;
-import frc.robot.commands.intake.LowerIntake;
-import frc.robot.commands.intake.RaiseIntake;
 import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.intake.SpinJustIntake;
 import frc.robot.commands.intake.ToggleIntake;
@@ -108,7 +106,7 @@ public class RobotContainer {
                 () -> pilot.getX(Hand.kRight),
                 () -> pilot.getBumper(Hand.kLeft)
         ));
-        shooter.setDefaultCommand(new SpinShooter(shooter, 0)); // 3000
+        shooter.setDefaultCommand(new SpinShooter(shooter, 3000));
     }
 
     /**
@@ -179,9 +177,10 @@ public class RobotContainer {
         copilot.getLbButtonObj().whenReleased(new SpinIntake(intake, 0.0));*/
         
         buttonBox.getButton1Obj().whenPressed(new TurretAngle(turret, 0));
+        buttonBox.getButton2Obj().toggleWhenPressed(new SpinShooter(shooter, 3400));
         buttonBox.getButton3Obj().toggleWhenPressed(new SpinShooter(shooter, 3600));
         buttonBox.getButton4Obj().whenPressed(new TurretAngle(turret, 180));
-        buttonBox.getButton5Obj().toggleWhenPressed(new SpinShooter(shooter, 4400));
+        buttonBox.getButton5Obj().toggleWhenPressed(new SpinShooter(shooter, 4550));
         buttonBox.getButton6Obj().toggleWhenPressed(new SpinShooter(shooter, 6000));
         buttonBox.getButton7Obj().toggleWhenPressed(new SpinShooter(shooter, 2250));
         buttonBox.getButton8Obj().whenPressed(new ToggleWheel(wheelSpinner));

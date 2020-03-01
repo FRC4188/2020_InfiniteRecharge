@@ -25,7 +25,7 @@ public class AutoAim extends CommandBase {
         addRequirements(turret);
         this.turret = turret;
         this.limelight = limelight;
-        SmartDashboard.putNumber("Turret Aim adjust", 1.5);
+        SmartDashboard.putNumber("Turret Aim adjust", -3.0);
         this.offset = offset;
     }
 
@@ -36,7 +36,7 @@ public class AutoAim extends CommandBase {
 
     @Override
     public void execute() {
-        adjust = SmartDashboard.getNumber("Turret Aim adjust", 1.5);
+        adjust = SmartDashboard.getNumber("Turret Aim adjust", -3.0);
         turret.set((-limelight.getHorizontalAngle() + adjust + offset) / 47.0);
         turret.setTracking(true);
     }
