@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -14,9 +16,13 @@ public class Magazine extends SubsystemBase {
     // device initialization
     private final CANSparkMax magMotor = new CANSparkMax(24, MotorType.kBrushless);
     private final CANEncoder magEncoder = new CANEncoder(magMotor);
+    private final DigitalInput botBeam = new DigitalInput(0);
+    private final DigitalInput topBeam = new DigitalInput(1);
 
     // constants
     private static final double RAMP_RATE = 0.2; // seconds
+
+    private double count = 0;
 
     /**
      * Constructs new magazine object and configures devices.
@@ -64,4 +70,25 @@ public class Magazine extends SubsystemBase {
     public double getMotorTemperature() {
         return magMotor.getMotorTemperature();
     }
+
+    public boolean getBotBeam() {
+        return botBeam.get();
+    }
+
+    public boolean getTopBeam() {
+        return topBeam.get();
+    }
+
+    public void setCount(double count) {
+        this.count = count;
+    }
+
+    public void setCount() {
+        count++;
+    }
+
+    public double getCount() {
+        return count;
+    }
+    
 }
