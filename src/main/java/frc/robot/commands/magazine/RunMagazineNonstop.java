@@ -6,7 +6,7 @@ import frc.robot.subsystems.Magazine;
 /**
  * Runs magazine motor at a given percentage.
  */
-public class RunMagazine extends CommandBase {
+public class RunMagazineNonstop extends CommandBase {
 
     private final Magazine magazine;
     private final double percent;
@@ -16,7 +16,7 @@ public class RunMagazine extends CommandBase {
      * @param magazine - Magazine subsystem to use.
      * @param percent - Percent to run motors [-1.0, 1.0], positive feeds shooter.
      */
-    public RunMagazine(Magazine magazine, double percent) {
+    public RunMagazineNonstop(Magazine magazine, double percent) {
         addRequirements(magazine);
         this.magazine = magazine;
         this.percent = percent;
@@ -33,11 +33,12 @@ public class RunMagazine extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     @Override
     public void end(boolean interrupted) {
+        magazine.set(0);
     }
 
 }

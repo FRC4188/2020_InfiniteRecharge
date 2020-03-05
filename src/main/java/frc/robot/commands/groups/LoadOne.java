@@ -1,4 +1,4 @@
-package frc.robot.commands.magazine;
+package frc.robot.commands.groups;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Magazine;
@@ -6,20 +6,18 @@ import frc.robot.subsystems.Magazine;
 /**
  * Runs magazine motor at a given percentage.
  */
-public class RunMagazine extends CommandBase {
+public class LoadOne extends CommandBase {
 
     private final Magazine magazine;
-    private final double percent;
 
     /**
      * Constructs a new RunMagazine command to run magazine motor at a given percentage.
      * @param magazine - Magazine subsystem to use.
-     * @param percent - Percent to run motors [-1.0, 1.0], positive feeds shooter.
+     * @param intake - Intake subsystem to use.
      */
-    public RunMagazine(Magazine magazine, double percent) {
+    public LoadOne(Magazine magazine) {
         addRequirements(magazine);
         this.magazine = magazine;
-        this.percent = percent;
     }
 
     @Override
@@ -28,12 +26,20 @@ public class RunMagazine extends CommandBase {
 
     @Override
     public void execute() {
-        magazine.set(percent);
+        if(magazine.getTopBeam()) {
+            if (!magazine.getBotBeam()) {
+                magazine.set(0.8);
+            }
+            else magazine.set(0);
+        }
+        else {
+            magazine.set(0);
+        }
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     @Override

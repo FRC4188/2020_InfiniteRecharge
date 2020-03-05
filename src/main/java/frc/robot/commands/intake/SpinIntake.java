@@ -2,22 +2,25 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Magazine;
 
 public class SpinIntake extends CommandBase {
 
     private final Intake intake;
+    private final Magazine magazine;
     private final double percent;
 
     /**
-     * Constructs new SpinIntake command to spin intake, indexer,
-     * and poly roller motors a given percentage.
+     * Constructs new SpinIntake command to spin intake, indexer, and poly roller motors a given percentage.
      *
      * @param intake - Intake subsystem to use.
      * @param percent - percent output to command motors.
      */
-    public SpinIntake(Intake intake, double percent) {
+    public SpinIntake(Intake intake, Magazine magazine, double percent) {
         this.percent = percent;
+        this.magazine = magazine;
         this.intake = intake;
+        addRequirements(intake);
     }
 
     @Override
@@ -26,7 +29,12 @@ public class SpinIntake extends CommandBase {
 
     @Override
     public void execute() {
-        intake.spin(percent);
+        if (magazine.getTopBeam()) intake.spin(percent);
+        else if (magazine.getBotBeam()) {
+            intake.spinIndexer(-0.1);
+            intake.spinIntake(percent);
+        }
+        else intake.spinIntake(percent);
     }
 
     @Override

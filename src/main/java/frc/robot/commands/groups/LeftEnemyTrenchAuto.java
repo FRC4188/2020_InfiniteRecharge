@@ -11,6 +11,7 @@ import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.intake.SpinJustIntake;
 import frc.robot.commands.intake.SpinPolyRoller;
 import frc.robot.commands.magazine.RunMagazine;
+import frc.robot.commands.magazine.RunMagazineNonstop;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.TurretAngle;
@@ -65,7 +66,7 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 3500),
                     new AutoAim(turret, limelight, 0),
-                    new RunMagazine(magazine, 0.8).withTimeout(2.0),
+                    new RunMagazineNonstop(magazine, 0.8).withTimeout(2.0),
                     new SpinIndexer(intake, 1.0),
                     new SpinPolyRoller(intake, -1.0),
                     new SpinJustIntake(intake, 1.0)
@@ -74,7 +75,7 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
                 // Pick up two more balls from front of bar and turn turret.
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.SHOOT_TO_BAR),
-                    new SpinIntake(intake, 1.0),
+                    new SpinIntake(intake, magazine, 1.0),
                     new TurretAngle(turret, 160.0)
                 ),
 
@@ -89,7 +90,7 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 3600),
                     new AutoAim(turret, limelight, 0),
-                    new RunMagazine(magazine, 0.8).withTimeout(5.0),
+                    new RunMagazineNonstop(magazine, 0.8).withTimeout(5.0),
                     new SpinIndexer(intake, 1.0),
                     new SpinPolyRoller(intake, -1.0),
                     new SpinJustIntake(intake, 1.0)
