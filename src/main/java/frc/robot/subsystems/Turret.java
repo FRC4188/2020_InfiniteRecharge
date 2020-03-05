@@ -134,16 +134,17 @@ public class Turret extends SubsystemBase {
     }
 
     /**
-     * Returns temperature of motor based off CANSpark ID.
-     */
-    public double getMotorTemperature() {
-        return turretMotor.getMotorTemperature();
-    }
-
-    /**
      * Sets the isTracking variable (for SmartDashboard purposes).
      */
     public void setTracking(boolean track) {
         isTracking = track;
     }
+
+    /**
+     * Returns turret motor temperature in Celcius.
+     */
+    public double getTemp() {
+        return turretMotor.getMotorTemperature();
+    }
+
 }

@@ -147,21 +147,24 @@ public class Intake extends SubsystemBase {
     }
 
     /**
-     * Returns temperature of motor based off CANSpark ID.
+     * Returns intake motor temperature in Celcius.
      */
-    public double getMotorTemperature(int index) {
-        CANSparkMax[] sparks = new CANSparkMax[] {
-            intakeMotor,
-            indexerMotor,
-            polyRoller,
-        };
-        index -= 1;
-        double temp = -1.0;
-        try {
-            temp = sparks[index - 10].getMotorTemperature();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.err.println("Error: index " + index + " not in array of intake sparks.");
-        }
-        return temp;
+    public double getIntakeTemp() {
+        return intakeMotor.getMotorTemperature();
     }
+
+    /**
+     * Returns indexer motor temperature in Celcius.
+     */
+    public double getIndexerTemp() {
+        return indexerMotor.getMotorTemperature();
+    }
+
+    /**
+     * Returns poly roller motor temperature in Celcius.
+     */
+    public double getPolyRollerTemp() {
+        return polyRoller.getMotorTemperature();
+    }
+
 }

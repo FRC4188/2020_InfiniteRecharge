@@ -237,6 +237,13 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
+     * Sets the cooler solenoid on or off.
+     */
+    public void setCooler(boolean output) {
+        cooler.set(output);
+    }
+
+    /**
      * Resets necessary sensors and odometry for drivetrain.
      */
     public void reset(Pose2d initialPose) {
@@ -387,30 +394,31 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Sets the cooler solenoid on or off.
-     * @param output - The value to set cooler solenoid to.
+     * Returns left master motor temperature in Celcius.
      */
-    public void setCooler(boolean output) {
-        cooler.set(output);
+    public double getLeftMasterTemp() {
+        return leftMotor.getTemperature();
     }
 
     /**
-     * Returns temperature of motor based off Falcon ID.
+     * Returns right master motor temperature in Celcius.
      */
-    public double getMotorTemperature(int index) {
-        WPI_TalonFX[] falcons = new WPI_TalonFX[]{
-            leftMotor,
-            leftSlave,
-            rightMotor,
-            rightSlave,
-        };
-        double temp = -1.0;
-        try {
-            temp = falcons[index].getTemperature();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.err.println("Error: index " + index + " not in array of drive falcons.");
-        }
-        return temp;
+    public double getRightMasterTemp() {
+        return rightMotor.getTemperature();
+    }
+
+    /**
+     * Returns left slave motor temperature in Celcius.
+     */
+    public double getLeftSlaveTemp() {
+        return leftSlave.getTemperature();
+    }
+
+    /**
+     * Returns right slave motor temperature in Celcius.
+     */
+    public double getRightSlaveTemp() {
+        return rightSlave.getTemperature();
     }
 
 }

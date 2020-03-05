@@ -59,9 +59,10 @@ public class Magazine extends SubsystemBase {
     }
 
     /**
-     * Returns temperature of motor based off CANSpark ID.
+     * Returns magazine motor temperature in Celcius.
      */
-    public double getMotorTemperature() {
+    public double getTemp() {
         return magMotor.getMotorTemperature();
     }
+
 }

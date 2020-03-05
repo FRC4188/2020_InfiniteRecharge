@@ -215,18 +215,17 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * Returns temperature of motor based off Falcon ID.
+     * Returns left climber motor temperature in Celcius.
      */
-    public double getMotorTemperature(int index) {
-        WPI_TalonFX[] falcons = new WPI_TalonFX[] { climberRightMotor, climberLeftMotor, };
-        index -= 1;
-        double temp = -1.0;
-        try {
-            temp = falcons[index - 30].getTemperature();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.err.println("Error: index " + index + " not in array of climb falcons.");
-        }
-        return temp;
+    public double getLeftTemp() {
+        return climberLeftMotor.getTemperature();
+    }
+
+    /**
+     * Returns right climber motor temperature in Celcius.
+     */
+    public double getRightTemp() {
+        return climberRightMotor.getTemperature();
     }
 
 }

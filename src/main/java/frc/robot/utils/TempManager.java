@@ -12,8 +12,6 @@ import frc.robot.subsystems.Turret;
 public class TempManager {
 
     private static final int MAX_TEMP = 50; // cel
-    private static final int FALCON_TEMP = 50; // cel
-    private boolean cool;
 
     private final Climber climber;
     private final Drivetrain drivetrain;
@@ -40,39 +38,44 @@ public class TempManager {
      */
     public void run() {
         final StringBuilder sb = new StringBuilder();
-        for (int i = 31; i < 32; i++) {
-            if (climber.getMotorTemperature(i) > MAX_TEMP) {
-                final double tempInC = climber.getMotorTemperature(i);
-                sb.append("C" + i + ": " + tempInC + ", ");
-            }
+        if (climber.getLeftTemp() > MAX_TEMP) {
+            sb.append("C32: " + climber.getLeftTemp() + ", ");
         }
-        for (int i = 0; i < 4; i++) {
-            if (drivetrain.getMotorTemperature(i) > MAX_TEMP) {
-                final double tempInC = drivetrain.getMotorTemperature(i);
-                // add here to do pneumatic cooling
-                sb.append("D" + i + ": " + tempInC + ", ");
-            }
+        if (climber.getRightTemp() > MAX_TEMP) {
+            sb.append("C31: " + climber.getRightTemp() + ", ");
         }
-        for (int i = 11; i < 13; i++) {
-            if (intake.getMotorTemperature(i) > MAX_TEMP) {
-                final double tempInC = intake.getMotorTemperature(i);
-                sb.append("I" + i + ": " + tempInC + ", ");
-            }
+        if (drivetrain.getLeftMasterTemp() > MAX_TEMP) {
+            sb.append("D1: " + drivetrain.getLeftMasterTemp() + ", ");
         }
-        if (magazine.getMotorTemperature() > MAX_TEMP) {
-            final double tempInC = magazine.getMotorTemperature();
-            sb.append("M" + 24 + ": " + tempInC + ", ");
+        if (drivetrain.getRightMasterTemp() > MAX_TEMP) {
+            sb.append("D3: " + drivetrain.getRightMasterTemp() + ", ");
         }
-        for (int i = 26; i < 27; i++) {
-            if (shooter.getMotorTemperature(i) > MAX_TEMP) {
-                final double tempInC = shooter.getMotorTemperature(i);
-                //add here to do pneumatic cooling
-                sb.append("S" + i + ": " + tempInC + ", ");
-            }
+        if (drivetrain.getLeftSlaveTemp() > MAX_TEMP) {
+            sb.append("D2: " + drivetrain.getLeftSlaveTemp() + ", ");
         }
-        if (turret.getMotorTemperature() > MAX_TEMP) {
-            final double tempInC = turret.getMotorTemperature();
-            sb.append("T" + 23 + ": " + tempInC + ", ");
+        if (drivetrain.getRightSlaveTemp() > MAX_TEMP) {
+            sb.append("D4: " + drivetrain.getRightSlaveTemp() + ", ");
+        }
+        if (intake.getIntakeTemp() > MAX_TEMP) {
+            sb.append("I11: " + intake.getIntakeTemp() + ", ");
+        }
+        if (intake.getIndexerTemp() > MAX_TEMP) {
+            sb.append("I12: " + intake.getIndexerTemp() + ", ");
+        }
+        if (intake.getPolyRollerTemp() > MAX_TEMP) {
+            sb.append("I13: " + intake.getPolyRollerTemp() + ", ");
+        }
+        if (magazine.getTemp() > MAX_TEMP) {
+            sb.append("M: " + magazine.getTemp() + ", ");
+        }
+        if (shooter.getLeftTemp() > MAX_TEMP) {
+            sb.append("S21: " + shooter.getLeftTemp() + ", ");
+        }
+        if (shooter.getRightTemp() > MAX_TEMP) {
+            sb.append("S22: " + shooter.getRightTemp() + ", ");
+        }
+        if (turret.getTemp() > MAX_TEMP) {
+            sb.append("T: " + turret.getTemp() + ", ");
         }
         SmartDashboard.putString("Temp Warnings", sb.toString());
     }
