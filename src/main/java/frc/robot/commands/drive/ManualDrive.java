@@ -20,8 +20,8 @@ public class ManualDrive extends CommandBase {
     private static final double SPEED_CONST = 0.5;
     private static final double ROTATION_CONST = 0.5;
 
-    private SlewRateLimiter speedLimiter = new SlewRateLimiter(3);
-    private SlewRateLimiter rotLimiter = new SlewRateLimiter(3);
+    private SlewRateLimiter speedLimiter = new SlewRateLimiter(1.5);
+    private SlewRateLimiter rotLimiter = new SlewRateLimiter(1.5);
 
 
     /**

@@ -34,21 +34,23 @@ public class Climber extends SubsystemBase {
     private static final int TIMEOUT = 10; // ms
     private static final int CRUISE_ACCEL = 15000;
     private static final int CRUISE_VEL = 15000;
-    private static final double MAX_POSITION = -40000;
-    private static final double MIN_POSITION = -160000;
+    private static final double MAX_POSITION = 0;
+    private static final double MIN_POSITION = -197500;
 
     /**
      * Constructs a new Climber object and configures devices.
      */
     public Climber() {
 
-        // setup encoders
+        // setup encoders and inversions
         climberLeftMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 10);
         climberRightMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 10);
+        climberLeftMotor.setInverted(true);
+
+        // init
         controllerInit();
         setBrake();
-
-        climberLeftMotor.setInverted(true);
+        setRampRate();
 
         // reset devices
         resetEncoders();
@@ -71,6 +73,7 @@ public class Climber extends SubsystemBase {
         SmartDashboard.putNumber("Right climber height", getRightPosition());
         SmartDashboard.putNumber("Left climber velocity", getLeftVelocity());
         SmartDashboard.putNumber("Right climber velocity", getRightVelocity());
+        SmartDashboard.putBoolean("Climber brake", !climberSolenoid.get());
     }
 
     /**
@@ -88,33 +91,49 @@ public class Climber extends SubsystemBase {
     }
 
     /**
-     * Sets both of the motors to run at a percentage of the max speed (-1.0, 1.0).
+     * Sets both climber motors to a given percentage [-1.0, 1.0].
      */
-    public void setSpeedPercentage(double percentage) {
-        climberLeftMotor.set(percentage);
-        climberRightMotor.set(percentage);
+    public void set(double percent) {
+        climberLeftMotor.set(percent);
+        climberRightMotor.set(percent);
     }
 
     /**
-     * Sets the left motor to run at a percentage of the max speed (-1.0, 1.0).
+     * Sets left climber motor to a given percentage [-1.0, 1.0].
      */
-    public void setLeftPercentage(double percentage) {
-        climberLeftMotor.set(percentage);
+    public void setLeft(double percent) {
+        climberLeftMotor.set(percent);
     }
 
     /**
-     * Sets the right motor to run at a percentage of the max speed (-1.0, 1.0).
+     * Sets left climber motor to a given percentage [-1.0, 1.0].
      */
-    public void setRightPercentage(double percentage) {
-        climberLeftMotor.set(percentage);
+    public void setRight(double percent) {
+        climberRightMotor.set(percent);
     }
 
     /**
-     * set the motors to run at the given velocity in rpm.
+     * Sets both motors to run at a given percentage [-1.0, 1.0] of max velocity.
      */
-    public void setVelocity(double velocity) {
-        velocity = velocity / (ENCODER_TO_REV * 600);
+    public void setVelocity(double percent) {
+        double velocity = (percent * MAX_VELOCITY) / (ENCODER_TO_REV * 600);
         climberLeftMotor.set(ControlMode.Velocity, velocity);
+        climberRightMotor.set(ControlMode.Velocity, velocity);
+    }
+
+    /**
+     * Sets left motor to run at a given percentage [-1.0, 1.0] of max velocity.
+     */
+    public void setLeftVelocity(double percent) {
+        double velocity = (percent * MAX_VELOCITY) / (ENCODER_TO_REV * 600);
+        climberLeftMotor.set(ControlMode.Velocity, velocity);
+    }
+
+    /**
+     * Sets right motor to run at a given percentage [-1.0, 1.0] of max velocity.
+     */
+    public void setRightVelocity(double percent) {
+        double velocity = (percent * MAX_VELOCITY) / (ENCODER_TO_REV * 600);
         climberRightMotor.set(ControlMode.Velocity, velocity);
     }
 
@@ -131,6 +150,16 @@ public class Climber extends SubsystemBase {
     public void setBrake() {
         climberLeftMotor.setNeutralMode(NeutralMode.Brake);
         climberRightMotor.setNeutralMode(NeutralMode.Brake);
+    }
+
+    /**
+     * Sets climber ramp rates.
+     */
+    public void setRampRate() {
+        climberLeftMotor.configOpenloopRamp(RAMP_RATE);
+        climberLeftMotor.configClosedloopRamp(0);
+        climberRightMotor.configOpenloopRamp(RAMP_RATE);
+        climberRightMotor.configClosedloopRamp(0);
     }
 
     /**
@@ -171,12 +200,33 @@ public class Climber extends SubsystemBase {
                 * ENCODER_TO_REV * 600;// sensor units for rpm
     }
 
+    /**
+     * Returns the maximum position of the climber in raw encoder ticks.
+     */
     public double getMaxPosition() {
         return MAX_POSITION;
     }
 
+    /**
+     * Returns the minimum position of the climber in raw encoder ticks.
+     */
     public double getMinPosition() {
         return MIN_POSITION;
+    }
+
+    /** 
+     * Returns temperature of motor based off Falcon ID. 
+     */
+    public double getMotorTemperature(int index) {
+        WPI_TalonFX[] falcons = new WPI_TalonFX[] { climberRightMotor, climberLeftMotor, };
+        index -= 1;
+        double temp = -1.0;
+            try {
+        temp = falcons[index - 30].getTemperature();
+            } catch (ArrayIndexOutOfBoundsException e) {
+          System.err.println("Error: index " + index + " not in array of climb falcons.");
+            }
+        return temp;
     }
 
 }

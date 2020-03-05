@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
@@ -14,6 +15,7 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstraint;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -28,6 +30,7 @@ public class Drivetrain extends SubsystemBase {
     private final WPI_TalonFX rightMotor = new WPI_TalonFX(3);
     private final WPI_TalonFX rightSlave = new WPI_TalonFX(4);
     private final ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+    private final Solenoid cooler = new Solenoid(3);
 
     // constants
     private static final double kS = 1.34; // volts
@@ -36,6 +39,7 @@ public class Drivetrain extends SubsystemBase {
     private static final double kP = 3.5;
     private static final double AUTO_MAX_VEL = 1.75; // meters / second
     private static final double AUTO_MAX_ACCEL = 3; // meters / second squared
+    private static final double AUTO_MAX_CENTRIP = 1.0; // meters / second squared
     private static final double AUTO_MAX_VOLTAGE = 10; // volts
     private static final double ARCADE_MAX_VEL = 3; // meters / second
     private static final double ARCADE_MAX_ROT = 2 * Math.PI; // rads / second
@@ -55,10 +59,13 @@ public class Drivetrain extends SubsystemBase {
     private final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(kS, kV, kA);
     private final DifferentialDriveVoltageConstraint voltageConstraint =
             new DifferentialDriveVoltageConstraint(feedforward, kinematics, AUTO_MAX_VOLTAGE);
+    private final CentripetalAccelerationConstraint centripAccelConstraint =
+            new CentripetalAccelerationConstraint(AUTO_MAX_CENTRIP);
     private final TrajectoryConfig trajectoryConfig =
             new TrajectoryConfig(AUTO_MAX_VEL, AUTO_MAX_ACCEL)
             .setKinematics(kinematics)
-            .addConstraint(voltageConstraint);
+            .addConstraint(voltageConstraint)
+            .addConstraint(centripAccelConstraint);
 
 
     // state vars
@@ -377,6 +384,33 @@ public class Drivetrain extends SubsystemBase {
      */
     public double getGyroRate() {
         return gyro.getRate();
+    }
+
+    /**
+     * Sets the cooler solenoid on or off.
+     * @param output - The value to set cooler solenoid to.
+     */
+    public void setCooler(boolean output) {
+        cooler.set(output);
+    }
+
+    /** 
+     * Returns temperature of motor based off Falcon ID. 
+     */
+    public double getMotorTemperature(int index) {
+        WPI_TalonFX[] falcons = new WPI_TalonFX[]{
+            leftMotor,
+            leftSlave,
+            rightMotor,
+            rightSlave,
+        };
+        double temp = -1.0;
+        try {
+            temp = falcons[index].getTemperature();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.err.println("Error: index " + index + " not in array of drive falcons.");
+        }
+        return temp;
     }
 
 }

@@ -33,11 +33,12 @@ public class RunMagazine extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return true;
+        return false;
     }
 
     @Override
     public void end(boolean interrupted) {
+        magazine.set(0);
     }
 
 }

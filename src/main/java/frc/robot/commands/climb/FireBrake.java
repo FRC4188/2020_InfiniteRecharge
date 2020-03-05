@@ -16,7 +16,6 @@ public class FireBrake extends CommandBase {
      * @param climber - Climber subsystem to use.
      */
     public FireBrake(Climber climber) {
-        addRequirements(climber);
         this.climber = climber;
     }
 
@@ -26,12 +25,12 @@ public class FireBrake extends CommandBase {
 
     @Override
     public void execute() {
-        climber.engagePneuBrake(true);
+        climber.engagePneuBrake(false);
     }
 
     @Override
     public void end(boolean interrupted) {
-        climber.engagePneuBrake(false);
+        climber.engagePneuBrake(true);
     }
 
     @Override

@@ -49,7 +49,8 @@ public class WaypointsList {
     public static final Waypoints BACK_TO_FRONT_TRENCH = new Waypoints(
             List.of(
                 new Pose2d(7.55, -0.75, new Rotation2d()),
-                new Pose2d(5, -0.75, new Rotation2d())
+                new Pose2d(5, -0.75, new Rotation2d()),
+                new Pose2d(3.45, -1.5, new Rotation2d())
             ), true
     );
 
@@ -59,7 +60,7 @@ public class WaypointsList {
     public static final Waypoints FRONT_TRENCH_TO_BAR = new Waypoints(
             List.of(
                 new Pose2d(5, -0.75, new Rotation2d()),
-                new Pose2d(5.65, -2.5, Rotation2d.fromDegrees(-67.5))
+                new Pose2d(5.7, -2.5, Rotation2d.fromDegrees(-69))
             ), false
     );
 
@@ -69,8 +70,9 @@ public class WaypointsList {
      */
     public static final Waypoints LEFT_TO_ENEMY_TRENCH = new Waypoints(
             List.of(
-                new Pose2d(3.45, -7.5, new Rotation2d()),
-                new Pose2d(5.85, -7.5, new Rotation2d())
+                new Pose2d(3.45, -6.5, new Rotation2d()),
+                new Pose2d(4.85, -6.5, new Rotation2d()),
+                new Pose2d(6.125, -7.5, Rotation2d.fromDegrees(-60))
             ), false
     );
 
@@ -79,9 +81,28 @@ public class WaypointsList {
      */
     public static final Waypoints ENEMY_TRENCH_TO_SHOOT = new Waypoints(
             List.of(
-                new Pose2d(5.85, -7.5, new Rotation2d()),
-                new Pose2d(4.85, -6, Rotation2d.fromDegrees(-90)),
-                new Pose2d(4.85, -4.5, Rotation2d.fromDegrees(-90))
+                new Pose2d(6.125, -7.5, Rotation2d.fromDegrees(-60)),
+                new Pose2d(4.75, -3.85, Rotation2d.fromDegrees(-60))
+            ), true
+    );
+
+    /**
+     * Starts from directly in front of the port and drives away in a straight line.
+     */
+    public static final Waypoints MID_DRIVE_AWAY = new Waypoints(
+            List.of(
+                new Pose2d(3.45, -2.45, new Rotation2d()),
+                new Pose2d(4.55, -2.45, new Rotation2d())
+            ), false
+    );
+
+    /**
+     * Starts from directly in front of the port and drives forward in a straight line.
+     */
+    public static final Waypoints MID_DRIVE_TOWARD = new Waypoints(
+            List.of(
+                new Pose2d(3.45, -2.45, new Rotation2d()),
+                new Pose2d(2.35, -2.45, new Rotation2d())
             ), true
     );
 

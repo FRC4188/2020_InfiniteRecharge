@@ -1,39 +1,54 @@
 package frc.robot.commands.turret;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
 
-public class Spin360 extends CommandBase {
+public class TurretAngle extends CommandBase {
 
     private final Turret turret;
-    private final Limelight limelight;
 
     private double counter;
     private double targetPosition;
     private double lastError;
 
-    private static final double kP = 0.000005;
+    private static final double kP = 0.0000055;
     private static final double kD = 0.75;
     private static final double DELTA_T = 0.02;
     private static final double TOLERANCE = 3.0; // degrees
 
     /**
-     * Constructs a new Spin360 command to spin turret 360 degrees.
+     * Constructs a new TurretAngle command to spin turret to a given number degree.
+     *
+     * @param turret - Turret subsystem to use.
+     * @param targetPosition - Position to set the turret to.
+     */
+    public TurretAngle(Turret turret, double targetPosition) {
+        addRequirements(turret);
+        this.turret = turret;
+        this.targetPosition = targetPosition;
+    }
+
+    /**
+     * Constructs a new TurretAngle command to spin turret 360 degrees to face target.
      *
      * @param turret - Turret subsystem to use.
      * @param limelight - Limelight subsystem to use.
      */
-    public Spin360(Turret turret, Limelight limelight) {
+    public TurretAngle(Turret turret, Limelight limelight) {
         addRequirements(turret);
         this.turret = turret;
-        this.limelight = limelight;
+        targetPosition = turret.getPosition() - limelight.getHorizontalAngle() + 
+                SmartDashboard.getNumber("Turret Aim adjust", 0.0) - 360 * 
+                Math.signum(turret.getPosition() - 180
+        );
+        if (targetPosition > turret.getMaxPosition() || targetPosition < turret.getMinPosition()) 
+            targetPosition = turret.getPosition();
     }
 
     @Override
     public void initialize() {
-        targetPosition = turret.getPosition() + limelight.getHorizontalAngle() - 360
-                * Math.signum(turret.getPosition() - 180);
     }
 
     @Override

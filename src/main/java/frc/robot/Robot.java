@@ -21,6 +21,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+        robotContainer.getTempManager().run();
     }
 
     @Override
@@ -29,12 +30,12 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledPeriodic() {
-        autonomousCommand = robotContainer.getAutoCommand();
-        robotContainer.resetSubsystems();
     }
 
     @Override
     public void autonomousInit() {
+        autonomousCommand = robotContainer.getAutoCommand();
+        robotContainer.resetSubsystems();
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }

@@ -41,6 +41,11 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         updateShuffleboard();
+        if (isRaised) {
+            intakeSolenoid.set(false);
+        } else {
+            intakeSolenoid.set(true);
+        }
     }
 
     /**
@@ -50,13 +55,20 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("Intake Position", getIntakePosition());
         SmartDashboard.putNumber("Indexer Position", getIndexerPosition());
         SmartDashboard.putNumber("PolyRoller Position", getPolyRollerPosition());
-
+        SmartDashboard.putBoolean("Intake Raised", isRaised());
     }
 
     /**
      * Spins the intake motor a given percent [-1.0, 1.0].
      */
     public void spin(double percent) {
+        if (intakeSolenoid.get()) intakeMotor.set(percent);
+        else intakeMotor.set(percent / 3);
+        indexerMotor.set(percent);
+        polyRoller.set(percent);
+    }
+
+    public void spinIntake(double percent) {
         intakeMotor.set(percent);
     }
 
@@ -78,7 +90,6 @@ public class Intake extends SubsystemBase {
      * Raises intake by firing solenoids.
      */
     public void raise() {
-        intakeSolenoid.set(true);
         isRaised = true;
     }
 
@@ -86,7 +97,7 @@ public class Intake extends SubsystemBase {
      * Lowers intake by firing solenoid.
      */
     public void lower() {
-        intakeSolenoid.set(false);
+        isRaised = false;
     }
 
     /**
@@ -135,4 +146,22 @@ public class Intake extends SubsystemBase {
         return polyRollerEncoder.getPosition();
     }
 
+    /** 
+     * Returns temperature of motor based off CANSpark ID. 
+     */
+    public double getMotorTemperature(int index) {
+        CANSparkMax[] sparks = new CANSparkMax[] {
+            intakeMotor,
+            indexerMotor,
+            polyRoller,
+        };
+        index -= 1;
+        double temp = -1.0;
+        try {
+            temp = sparks[index - 10].getMotorTemperature();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.err.println("Error: index " + index + " not in array of intake sparks.");
+        }
+        return temp;
+    }
 }

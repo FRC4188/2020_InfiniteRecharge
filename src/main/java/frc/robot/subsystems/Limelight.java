@@ -15,12 +15,16 @@ public class Limelight extends SubsystemBase {
     private static final double CAMERA_WIDTH = 320; // pixels
     private static final double CAMERA_FOV_HOR = Math.toRadians(59.6); // rads
     private static final double CAMERA_FOV_VER = Math.toRadians(49.7); // rads
-    private static final double FORMULA_RATIO = 86.0;
-    private static final double PORT_HEIGHT = 8.1875; // meters
+    private static final double CLOSE_FORMULA_RATIO = 1952;
+    private static final double MID_FORMULA_RATIO = -903;
+    private static final double FAR_FORMULA_RATIO = 65.4;
+    private static final double SUPER_FAR_FORMULA_RATIO = 80.9;
+    private static final double PORT_HEIGHT = 8.1875; // feet
     private static final double TAPE_HEIGHT = 2.5 / 2.0; // between bottom and top, feet
-    private static final double SHOOTER_HEIGHT = 3.0 + (5.5 / 12.0); // feet
+    private static final double SHOOTER_HEIGHT = 3.0 + (1.0 / 12.0); // feet
     private static final double HEIGHT_DIFF = PORT_HEIGHT - SHOOTER_HEIGHT; // feet
-    private static final double CAMERA_ANGLE = 26; // degrees
+    private static final double CAMERA_ANGLE = 13; // degrees
+    private static final double DIRECT_TO_FLAT_DISTANCE = 1 / Math.cos(Math.toRadians(CAMERA_ANGLE));
 
     // state vars
     private NetworkTable limelightTable = null;
@@ -59,7 +63,9 @@ public class Limelight extends SubsystemBase {
         }
     }
 
-    // pipeline enum
+    /**
+     * Enum to control Limelight's pipeline.
+     */
     public enum Pipeline {
         CLOSE(0), ZOOM(1), OFF(2);
 
@@ -94,7 +100,7 @@ public class Limelight extends SubsystemBase {
      */
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Formula RPM", formulaRpm());
-        SmartDashboard.putNumber("Direct line distance", getDistance());
+        SmartDashboard.putNumber("Limelight distance reading", getDistance());
     }
 
     /**
@@ -147,14 +153,19 @@ public class Limelight extends SubsystemBase {
      * Returns horizontal distance in feet from the target.
      */
     public double getDistance() {
-        return HEIGHT_DIFF / (Math.tan(Math.toRadians(getVerticalAngle() + CAMERA_ANGLE)));
+        double dist = HEIGHT_DIFF / (Math.tan(Math.toRadians(getVerticalAngle() + CAMERA_ANGLE)));
+        return dist; //* DIRECT_TO_FLAT_DISTANCE;
     }
 
     /**
      * Returns rpm to spin shooter to based on vision target formula.
      */
     public double formulaRpm() {
-        return (FORMULA_RATIO * getDistance()) + 3900;
+        if (getDistance() <= 10) return (CLOSE_FORMULA_RATIO * getDistance() - 18190);
+        else if (getDistance() > 10 && getDistance() <= 13) return (MID_FORMULA_RATIO * getDistance() + 17326);
+        else if (getDistance() > 13 && getDistance() <= 35) return (FAR_FORMULA_RATIO * getDistance()) + 2320;
+        else if (getDistance() > 35) return (SUPER_FAR_FORMULA_RATIO * getDistance() + 2290);
+        else return 0;
     }
 
     /**

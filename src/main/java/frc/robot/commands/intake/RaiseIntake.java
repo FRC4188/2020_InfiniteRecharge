@@ -3,9 +3,6 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
-/**
- * Raises intake by firing solenoids.
- */
 public class RaiseIntake extends CommandBase {
 
     private final Intake intake;
@@ -34,7 +31,7 @@ public class RaiseIntake extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
 }

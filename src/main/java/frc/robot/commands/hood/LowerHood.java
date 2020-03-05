@@ -3,9 +3,6 @@ package frc.robot.commands.hood;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hood;
 
-/**
- * Lowers hood by firing solenoids.
- */
 public class LowerHood extends CommandBase {
 
     private final Hood hood;

@@ -11,9 +11,8 @@ public class ToggleIntake extends CommandBase {
     private final Intake intake;
 
     /**
-     * Constructs new Toggleintake command to fire intake solenoids to
-     *  raises intake if it is currently lowered and vice versa.
-     *
+     * Constructs new Toggleintake command to fire intake solenoids.
+     * Raises intake if it is currently lowered and vice versa.
      * @param intake - intake subsystem to use.
      */
     public ToggleIntake(Intake intake) {
@@ -40,7 +39,7 @@ public class ToggleIntake extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
 }
