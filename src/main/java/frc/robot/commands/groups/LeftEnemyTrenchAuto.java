@@ -33,7 +33,9 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
      */
     public LeftEnemyTrenchAuto(Drivetrain drivetrain, Magazine magazine, Shooter shooter,
             Limelight limelight, Turret turret, Intake intake) {
+
         addCommands(
+
                 // Lowers intake.
                 new LowerIntake(intake),
 
@@ -44,10 +46,8 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
                     new TurretAngle(turret, 240)
                 ),
 
-                /**
-                 * Drives to a shooting position and revs up shooter to default rpm.
-                 * Spins intake slowly to make sure picked up balls don't fall out.
-                 */
+                // Drives to a shooting position and revs up shooter to default rpm.
+                // Spins intake slowly to make sure picked up balls don't fall out.
                 new ParallelRaceGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.ENEMY_TRENCH_TO_SHOOT),
                     new SpinShooter(shooter, 3600),
@@ -61,10 +61,8 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
                     new SpinShooter(shooter, 3600)
                 ),
 
-                /**
-                 * Continues to auto aim and spin shooter at Limelight's formula rpm.
-                 * Runs magazine and indexer to shoot at the port.
-                 */
+                // Continues to auto aim and spin shooter at Limelight's formula rpm.
+                // Runs magazine and indexer to shoot at the port.
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 3600),
                     new AutoAim(turret, limelight, -3),

@@ -28,10 +28,9 @@ import frc.robot.commands.turret.ZeroTurret;
 import frc.robot.commands.vision.CameraCloseTrack;
 import frc.robot.commands.vision.CameraZoomTrack;
 import frc.robot.commands.vision.UseAsCamera;
-import frc.robot.commands.wheel.SpinWheel;
 import frc.robot.commands.wheel.LowerWheel;
 import frc.robot.commands.wheel.RaiseWheel;
-import frc.robot.commands.wheel.ToggleWheel;
+import frc.robot.commands.wheel.SpinWheel;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
@@ -62,7 +61,8 @@ public class RobotContainer {
     private final Hood hood = new Hood();
     private final Limelight limelight = new Limelight();
     private final WheelSpinner wheelSpinner = new WheelSpinner();
-    private final TempManager tempManager = new TempManager(climber, drivetrain, intake, magazine, shooter, turret);
+    private final TempManager tempManager =
+            new TempManager(climber, drivetrain, intake, magazine, shooter, turret);
 
     // controller initialization
     private final CspController pilot = new CspController(0);
@@ -140,7 +140,9 @@ public class RobotContainer {
         pilot.getAButtonObj().whileHeld(new SpinIntake(intake, -.85));
         pilot.getAButtonObj().whenReleased(new SpinIntake(intake, 0));
 
-        pilot.getBackButtonObj().toggleWhenPressed(new AutoMagazine(magazine, intake, limelight, shooter));
+        pilot.getBackButtonObj().toggleWhenPressed(
+                new AutoMagazine(magazine, intake, limelight, shooter)
+        );
 
         pilot.getStartButtonObj().whenPressed(new KillAll());
         copilot.getStartButtonObj().whenPressed(new KillAll());
@@ -155,14 +157,12 @@ public class RobotContainer {
 
         copilot.getXButtonObj().toggleWhenPressed(new AutoAim(turret, limelight, 0));
 
-        //copilot.getRbButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
-
         copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, 0.3));
         copilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));
         copilot.getDpadRightButtonObj().whileHeld(new ManualTurret(turret, -0.3));
         copilot.getDpadRightButtonObj().whenReleased(new ManualTurret(turret, 0));
 
-        
+
         copilot.getRbButtonObj().whileHeld(new ManualClimb(climber, -0.9));
         copilot.getRbButtonObj().whenReleased(new ManualClimb(climber, 0));
         copilot.getLbButtonObj().whileHeld(new ManualClimb(climber, 0.6));
@@ -171,13 +171,8 @@ public class RobotContainer {
         copilot.getDpadUpButtonObj().whileHeld(new SpinJustIntake(intake, -1));
         copilot.getDpadUpButtonObj().whenReleased(new SpinJustIntake(intake, 0));
 
-        /*copilot.getRbButtonObj().whileHeld(new SpinIntake(intake, 1.0));
-        copilot.getRbButtonObj().whenReleased(new SpinIntake(intake, 0.0));
-        copilot.getLbButtonObj().whileHeld(new SpinIntake(intake, -.85));
-        copilot.getLbButtonObj().whenReleased(new SpinIntake(intake, 0.0));*/
-        
         buttonBox.getButton1Obj().whenPressed(new TurretAngle(turret, 0));
-        buttonBox.getButton2Obj().toggleWhenPressed(new SpinShooter(shooter, 3400));
+        buttonBox.getButton2Obj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
         buttonBox.getButton3Obj().toggleWhenPressed(new SpinShooter(shooter, 3600));
         buttonBox.getButton4Obj().whenPressed(new TurretAngle(turret, 180));
         buttonBox.getButton5Obj().toggleWhenPressed(new SpinShooter(shooter, 4550));
@@ -199,11 +194,11 @@ public class RobotContainer {
         autoChooser.addOption("Left Enemy Trench", new LeftEnemyTrenchAuto(drivetrain, magazine,
                 shooter, limelight, turret, intake
         ));
-        autoChooser.addOption("Mid Drive Away", new MidDriveAwayAuto(drivetrain, magazine, shooter, 
+        autoChooser.addOption("Mid Drive Away", new MidDriveAwayAuto(drivetrain, magazine, shooter,
                 limelight, turret
         ));
-        autoChooser.addOption("Mid Drive Toward", new MidDriveTowardAuto(drivetrain, magazine, shooter, 
-                limelight, turret
+        autoChooser.addOption("Mid Drive Toward", new MidDriveTowardAuto(drivetrain, magazine,
+                shooter, limelight, turret
         ));
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }

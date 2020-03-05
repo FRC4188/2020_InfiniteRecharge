@@ -146,8 +146,8 @@ public class Intake extends SubsystemBase {
         return polyRollerEncoder.getPosition();
     }
 
-    /** 
-     * Returns temperature of motor based off CANSpark ID. 
+    /**
+     * Returns temperature of motor based off CANSpark ID.
      */
     public double getMotorTemperature(int index) {
         CANSparkMax[] sparks = new CANSparkMax[] {

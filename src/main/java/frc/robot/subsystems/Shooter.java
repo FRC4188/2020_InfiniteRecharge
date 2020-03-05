@@ -90,7 +90,8 @@ public class Shooter extends SubsystemBase {
      * Sets shooter motors to a given velocity in rpm.
      */
     public void setVelocity(double velocity) {
-        double adjust = SmartDashboard.getNumber("Set shooter rpm", 0.0) * ENCODER_TICKS_PER_REV / 600;
+        double adjust = SmartDashboard.getNumber("Set shooter rpm", 0.0)
+                * ENCODER_TICKS_PER_REV / 600;
         velocity *= (ENCODER_TICKS_PER_REV) / 600;
         leftShooter.set(ControlMode.Velocity, velocity + adjust);
         rightShooter.set(ControlMode.Velocity, velocity + adjust);
@@ -136,8 +137,8 @@ public class Shooter extends SubsystemBase {
         return (rightShooter.getSelectedSensorVelocity() * 600) / ENCODER_TICKS_PER_REV;
     }
 
-    /** 
-     * Returns temperature of motor based off Falcon ID. 
+    /**
+     * Returns temperature of motor based off Falcon ID.
      */
     public double getMotorTemperature(int index) {
         WPI_TalonFX[] falcons = new WPI_TalonFX[] {

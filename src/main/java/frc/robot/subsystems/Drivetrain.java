@@ -394,8 +394,8 @@ public class Drivetrain extends SubsystemBase {
         cooler.set(output);
     }
 
-    /** 
-     * Returns temperature of motor based off Falcon ID. 
+    /**
+     * Returns temperature of motor based off Falcon ID.
      */
     public double getMotorTemperature(int index) {
         WPI_TalonFX[] falcons = new WPI_TalonFX[]{

@@ -48,8 +48,7 @@ public class AutoMagazine extends CommandBase {
             magazine.set(0);
             intake.spinIndexer(0);
             intake.spinPolyRollers(0);
-        }
-        else {
+        } else {
             magazine.set(0.9);
             intake.spinIndexer(0.9);
             intake.spinPolyRollers(0.9);

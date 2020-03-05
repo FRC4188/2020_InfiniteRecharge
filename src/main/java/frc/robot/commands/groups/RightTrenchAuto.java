@@ -32,6 +32,7 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
      */
     public RightTrenchAuto(Drivetrain drivetrain, Magazine magazine, Shooter shooter,
             Limelight limelight, Turret turret, Intake intake) {
+
         addCommands(
 
                 // Turns turret around and revs up shooter to default rpm.
@@ -46,10 +47,8 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                     new SpinShooter(shooter, 3400)
                 ),
 
-                /* 
-                 * Continues to auto aim and spin shooter at 6000 rpm.
-                 * Runs magazine to shoot pre-loaded balls. 
-                 */
+                // Continues to auto aim and spin shooter at 6000 rpm.
+                // Runs magazine to shoot pre-loaded balls.
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 3400),
                     new AutoAim(turret, limelight, -2.0),
@@ -65,10 +64,8 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                     new SpinIntake(intake, 1)
                 ),
 
-                /**
-                 * Drives forward to the front of the trench.
-                 * Runs magazine and intake at the same time to keep balls from falling out.
-                 */
+                // Drives forward to the front of the trench.
+                // Runs magazine and intake at the same time to keep balls from falling out.
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.BACK_TO_FRONT_TRENCH),
                     new SpinIntake(intake, 0.3),
@@ -81,11 +78,8 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                     new SpinShooter(shooter, 3400)
                 ),
 
-                /**
-                 * Continues to auto aim and spin shooter at 3500 rpm.
-                 * Runs magazine and indexer to shoot balls picked up from trench.
-                 * Raises intake.
-                 */
+                // Continues to auto aim and spin shooter at 3500 rpm.
+                // Runs magazine and indexer to shoot balls picked up from trench.
                 new ParallelRaceGroup(
                     new AutoAim(turret, limelight, -2.0),
                     new SpinShooter(shooter, 3400),
@@ -96,13 +90,13 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
 
                 new RaiseIntake(intake)
 
-                /*
                 // May add this to take the robot to the bar in the future.
-                new ParallelRaceGroup(
-                    new FollowTrajectory(drivetrain, WaypointsList.FRONT_TRENCH_TO_BAR)
-                )*/
+                //new ParallelRaceGroup(
+                //    new FollowTrajectory(drivetrain, WaypointsList.FRONT_TRENCH_TO_BAR)
+                //)
 
         );
+
     }
 
     /**
