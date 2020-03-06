@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.intake.LowerIntake;
-import frc.robot.commands.intake.RaiseIntake;
 import frc.robot.commands.intake.SpinIndexer;
 import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.intake.SpinJustIntake;

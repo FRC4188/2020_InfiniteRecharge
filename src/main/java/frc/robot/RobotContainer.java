@@ -31,7 +31,6 @@ import frc.robot.commands.vision.CameraZoomTrack;
 import frc.robot.commands.vision.UseAsCamera;
 import frc.robot.commands.wheel.LowerWheel;
 import frc.robot.commands.wheel.RaiseWheel;
-import frc.robot.commands.wheel.SpinWheel;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;

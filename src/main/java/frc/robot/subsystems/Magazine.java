@@ -22,7 +22,8 @@ public class Magazine extends SubsystemBase {
     // constants
     private static final double RAMP_RATE = 0.2; // seconds
 
-    private double count = 0;
+    private double ballCount = 0;
+    private boolean loadedFire = false;
 
     /**
      * Constructs new magazine object and configures devices.
@@ -38,6 +39,8 @@ public class Magazine extends SubsystemBase {
     @Override
     public void periodic() {
         updateShuffleboard();
+        if (ballCount >= 3) loadedFire = true;
+        else loadedFire = false;
     }
 
     /**
@@ -47,6 +50,8 @@ public class Magazine extends SubsystemBase {
         SmartDashboard.putNumber("Magazine velocity", magEncoder.getVelocity());
         SmartDashboard.putNumber("Magazine Encoder Position", magEncoder.getPosition());
         SmartDashboard.putNumber("M24 temp", magMotor.getMotorTemperature());
+        SmartDashboard.putNumber("Ball count in magazine", getCount());
+        SmartDashboard.putBoolean("Mag loaded", getLoadedFire());
     }
 
     /**
@@ -80,15 +85,23 @@ public class Magazine extends SubsystemBase {
     }
 
     public void setCount(double count) {
-        this.count = count;
+        ballCount = count;
     }
 
     public void setCount() {
-        count++;
+        ballCount++;
     }
 
     public double getCount() {
-        return count;
+        return ballCount;
+    }
+
+    public void setLoadedFire(boolean loaded) {
+        loadedFire = loaded;
+    }
+
+    public boolean getLoadedFire() {
+        return loadedFire;
     }
     
 }
