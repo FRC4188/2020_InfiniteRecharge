@@ -16,7 +16,7 @@ public class Magazine extends SubsystemBase {
     // device initialization
     private final CANSparkMax magMotor = new CANSparkMax(24, MotorType.kBrushless);
     private final CANEncoder magEncoder = new CANEncoder(magMotor);
-    private final DigitalInput botBeam = new DigitalInput(0);
+    private final DigitalInput botBeam = new DigitalInput(2);
     private final DigitalInput topBeam = new DigitalInput(1);
 
     // constants
@@ -30,6 +30,7 @@ public class Magazine extends SubsystemBase {
     public Magazine() {
         magMotor.setInverted(true);
         setRampRate();
+        SmartDashboard.putNumber("Magazine Speed", 0.0);
     }
 
     /**
@@ -53,6 +54,16 @@ public class Magazine extends SubsystemBase {
      * Sets belt motor to a given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
+        double newPercent = SmartDashboard.getNumber("Magazine Speed", percent);
+        if(percent < 0) {
+        percent = -1 * newPercent;
+        }
+        else if(percent == 0.0) {
+            percent = 0;
+        }
+        else {
+            percent = newPercent;
+        }
         magMotor.set(percent);
     }
 

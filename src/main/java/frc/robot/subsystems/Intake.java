@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,12 +22,15 @@ public class Intake extends SubsystemBase {
     private CANEncoder indexerMotorEncoder = indexerMotor.getEncoder();
     private CANEncoder polyRollerEncoder = polyRoller.getEncoder();
     private Solenoid intakeSolenoid = new Solenoid(0);
+    private DigitalInput beamBreaker = new DigitalInput(0);
 
     // constants
     private static final double RAMP_RATE = 0.5; // seconds
 
     // state vars
     private boolean isRaised = true;
+    public static int ballCount = 0;
+    private boolean lsRelease = true;
 
     /**
      * Constructs new Intake object.
@@ -33,6 +38,8 @@ public class Intake extends SubsystemBase {
     public Intake() {
         resetEncoders();
         setRampRate();
+        SmartDashboard.putNumber("Indexer Speed", 0.0);
+        SmartDashboard.putNumber("PolyRoller Speed", 0.0);
     }
 
     /**
@@ -41,11 +48,25 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         updateShuffleboard();
+
+        ballCount = (int) SmartDashboard.getNumber("Beam Breaker", ballCount);
         if (isRaised) {
             intakeSolenoid.set(false);
         } else {
             intakeSolenoid.set(true);
         }
+
+        if(beamBreaker.get() != lsRelease) {
+            if(beamBreaker.get() == true) {
+              lsRelease = true;
+            }
+            else {
+              ballCount++;
+              lsRelease = false;
+            }
+          }
+
+        
     }
 
     /**
@@ -56,6 +77,8 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("Indexer Position", getIndexerPosition());
         SmartDashboard.putNumber("PolyRoller Position", getPolyRollerPosition());
         SmartDashboard.putBoolean("Intake Raised", isRaised());
+        SmartDashboard.putBoolean("Beam Breaker", beamBreaker.get());
+        SmartDashboard.putNumber("Ball Count", ballCount);
     }
 
     /**
@@ -63,9 +86,26 @@ public class Intake extends SubsystemBase {
      */
     public void spin(double percent) {
         if (intakeSolenoid.get()) intakeMotor.set(percent);
-        else intakeMotor.set(percent / 3);
+        else intakeMotor.set(percent / 3);   
+        double newPercent = 0.0;
+
+        if(percent < 0) {    
+        percent = -1 * SmartDashboard.getNumber("Indexer Speed", percent);
         indexerMotor.set(percent);
+        percent = -1 * SmartDashboard.getNumber("PolyRoller Speed", percent);
         polyRoller.set(percent);
+        }
+        else if (percent == 0) {
+            percent = 0;
+            indexerMotor.set(percent);
+            polyRoller.set(percent);
+        }
+        else {
+            percent = SmartDashboard.getNumber("Indexer Speed", percent);
+        indexerMotor.set(percent);
+        percent = SmartDashboard.getNumber("PolyRoller Speed", percent);
+        polyRoller.set(percent);
+        }
     }
 
     public void spinIntake(double percent) {
