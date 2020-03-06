@@ -12,6 +12,9 @@ public class AutoLoad extends CommandBase {
 
     private final Magazine magazine;
     private final Intake intake;
+    private final double DELTA_T = 0.02;
+    private final double TIMEOUT = 5 / DELTA_T;
+    private double timer;
     private double count;
 
     /**
@@ -27,6 +30,7 @@ public class AutoLoad extends CommandBase {
 
     @Override
     public void initialize() {
+        timer = 0;
     }
 
     @Override
@@ -37,20 +41,27 @@ public class AutoLoad extends CommandBase {
                 if (!magazine.getBotBeam()) {
                     intake.spinIndexer(0.6);
                     intake.spinPolyRollers(0.6);
+                    magazine.set(0.1);
+                    timer++;
                 }
-                else new LoadOne(magazine, intake);
+                else {
+                    new LoadOne(magazine, intake);
+                    timer = 0;
+                }
             }
         }
     }
 
     @Override
     public boolean isFinished() {
-        return count >= 3;
+        return count >= 3 || timer >= TIMEOUT || magazine.getTopBeam();
     }
 
     @Override
     public void end(boolean interrupted) {
         magazine.set(0);
+        intake.spinIndexer(0);
+        intake.spinPolyRollers(0);
     }
 
 }

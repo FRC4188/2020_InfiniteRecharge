@@ -15,6 +15,8 @@ public class AutoMagazine extends CommandBase {
     private final Intake intake;
     private final Limelight limelight;
     private final Shooter shooter;
+    private double count;
+    private boolean can;
 
     /**
      * Constructs a new AutoMagazine command to feed cells if shooter is at correct rpm.
@@ -42,6 +44,8 @@ public class AutoMagazine extends CommandBase {
         // get current shooter velocity and target velocity
         double currentVel = shooter.getLeftVelocity();
         double targetVel = limelight.formulaRpm();
+        boolean loadedFire = magazine.getLoadedFire();
+        count = magazine.getCount();
 
         // feed shooter only if at correct rpm
         if (Math.abs(currentVel - targetVel) > 50) {
@@ -50,9 +54,20 @@ public class AutoMagazine extends CommandBase {
             intake.spinPolyRollers(0);
         }
         else {
-            magazine.set(0.9);
-            intake.spinIndexer(0.9);
-            intake.spinPolyRollers(0.9);
+            if (loadedFire) magazine.set(0.9);
+            else {
+                magazine.set(0.9);
+                intake.spinIndexer(0.9);
+                intake.spinPolyRollers(0.9);
+            }
+        }
+
+        if (magazine.getTopBeam()) {
+            can = true;
+        }
+        else {
+            if (can) magazine.setCount(count - 1);
+            can = false;
         }
 
     }
