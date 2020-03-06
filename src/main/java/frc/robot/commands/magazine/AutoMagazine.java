@@ -36,6 +36,7 @@ public class AutoMagazine extends CommandBase {
 
     @Override
     public void initialize() {
+        can = false;
     }
 
     @Override

@@ -40,11 +40,6 @@ public class LoadOne extends CommandBase {
                 intake.spinPolyRollers(0.3);
                 timer = 0;
             }
-            else {
-                intake.spinIndexer(0.6);
-                intake.spinPolyRollers(0.6);
-                timer++;
-            }
         }
     }
 
