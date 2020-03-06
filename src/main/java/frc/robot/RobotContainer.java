@@ -9,7 +9,9 @@ import frc.robot.commands.climb.FireBrake;
 import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.ManualDrive;
+import frc.robot.commands.groups.AutoLoad;
 import frc.robot.commands.groups.LeftEnemyTrenchAuto;
+import frc.robot.commands.groups.LoadOne;
 import frc.robot.commands.groups.MidDriveAwayAuto;
 import frc.robot.commands.groups.MidDriveTowardAuto;
 import frc.robot.commands.groups.RightTrenchAuto;
@@ -146,6 +148,9 @@ public class RobotContainer {
         copilot.getStartButtonObj().whenPressed(new KillAll());
 
         copilot.getBackButtonObj().toggleWhenPressed(new FireBrake(climber));
+
+        copilot.getLtButtonObj().whenActive(new LoadOne(magazine, intake));
+        copilot.getRtButtonObj().whenActive(new AutoLoad(magazine, intake));
 
         copilot.getYButtonObj().whenPressed(new ZeroTurret(turret));
 

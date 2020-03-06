@@ -11,6 +11,9 @@ public class LoadOne extends CommandBase {
 
     private final Magazine magazine;
     private final Intake intake;
+    private final double DELTA_T = 0.02;
+    private final double TIMEOUT = 5 / DELTA_T;
+    private double timer;
 
     /**
      * Constructs a new RunMagazine command to run magazine motor at a given percentage.
@@ -25,20 +28,24 @@ public class LoadOne extends CommandBase {
 
     @Override
     public void initialize() {
+        timer = 0;
     }
 
     @Override
     public void execute() {
-        if (magazine.getBotBeam()) {
-            magazine.set(0.8);
-            intake.spinIndexer(0.8);
-            intake.spinPolyRollers(0.8);
+        if (magazine.getCount() < 3) {
+            if (magazine.getBotBeam()) {
+                magazine.set(0.8);
+                intake.spinIndexer(0.3);
+                intake.spinPolyRollers(0.3);
+                timer = 0;
+            }
         }
     }
 
     @Override
     public boolean isFinished() {
-        return true;
+        return (!magazine.getBotBeam()) || timer > TIMEOUT || magazine.getCount() >= 3;
     }
 
     @Override
