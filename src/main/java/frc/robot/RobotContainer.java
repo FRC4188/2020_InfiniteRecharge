@@ -3,7 +3,11 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.drive.ManualDrive;
+import frc.robot.commands.wheel.SpinRotations;
+import frc.robot.commands.wheel.SpinColor;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.NewWheel;
+import frc.robot.subsystems.NewWheel.Color;
 import frc.robot.utils.CspController;
 
 /**
@@ -13,6 +17,7 @@ public class RobotContainer {
 
     // subsystem initialization
     private final Drivetrain drivetrain = new Drivetrain();
+    private final NewWheel wheel = new NewWheel();
 
     // controller initialization
     private final CspController pilot = new CspController(0);
@@ -49,6 +54,8 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         pilot.getAButtonObj().whenPressed(new FollowTrajectory(drivetrain));
+        pilot.getBButtonObj().whenPressed(new SpinRotations(wheel));
+        pilot.getXButtonObj().whenPressed(new SpinColor(wheel, Color.BLUE));
     }
 
 }
