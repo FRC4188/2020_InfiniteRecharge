@@ -106,4 +106,33 @@ public class WaypointsList {
             ), true
     );
 
+    /*public static final Waypoints MID_LOOP_LEFT_BAR = new Waypoints(
+            List.of(
+                new Pose2d(3.45, -2.375, new Rotation2d()),
+                new Pose2d(5.71, -6.10, Rotation2d.fromDegrees(-67.5)),
+                new Pose2d(6.95, -5.28, Rotation2d.fromDegrees(22.5))
+            ), false
+    );
+
+    public static final Waypoints LEFT_BAR_COLLECT_3 = new Waypoints(
+            List.of(
+                new Pose2d(6.95, -5.28, Rotation2d.fromDegrees(22.5)),
+                new Pose2d(6.25, -3.85, Rotation2d.fromDegrees(112.5))
+            ), false
+    );*/
+
+    public static final Waypoints MID_TO_LEFT_BAR = new Waypoints(
+            List.of(
+                new Pose2d(3.45, -3.89, new Rotation2d()),
+                new Pose2d(5.25, -3.89, new Rotation2d())
+            ), false
+    );
+
+    public static final Waypoints LEFT_BAR_THIRD = new Waypoints(
+            List.of(
+                new Pose2d(5.25, -3.89, Rotation2d.fromDegrees(-40)),
+                new Pose2d(5.45, -3.95, Rotation2d.fromDegrees(-40))
+            ), false
+    );
+
 }

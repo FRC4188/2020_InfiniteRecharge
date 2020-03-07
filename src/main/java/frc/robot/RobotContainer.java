@@ -9,11 +9,11 @@ import frc.robot.commands.climb.FireBrake;
 import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.ManualDrive;
-import frc.robot.commands.groups.AutoLoad;
 import frc.robot.commands.groups.LeftEnemyTrenchAuto;
 import frc.robot.commands.groups.LoadOne;
 import frc.robot.commands.groups.MidDriveAwayAuto;
 import frc.robot.commands.groups.MidDriveTowardAuto;
+import frc.robot.commands.groups.MidToLeftBarAuto;
 import frc.robot.commands.groups.RightTrenchAuto;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.SpinIntake;
@@ -152,8 +152,6 @@ public class RobotContainer {
 
         copilot.getBackButtonObj().toggleWhenPressed(new FireBrake(climber));
 
-        copilot.getRtButtonObj().whenActive(new AutoLoad(magazine, intake));
-
         copilot.getYButtonObj().whenPressed(new ZeroTurret(turret));
 
         copilot.getBButtonObj().toggleWhenPressed(new ToggleHood(hood));
@@ -212,6 +210,9 @@ public class RobotContainer {
         ));
         autoChooser.addOption("Mid Drive Toward", new MidDriveTowardAuto(drivetrain, magazine, shooter, 
                 limelight, turret
+        ));
+        autoChooser.addOption("Mid To Left Bar", new MidToLeftBarAuto(drivetrain, magazine, shooter, 
+                limelight, turret, intake
         ));
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
