@@ -36,16 +36,16 @@ public class AutoLoad extends CommandBase {
     @Override
     public void execute() {
         count = magazine.getCount();
-        if (!magazine.getTopBeam()) {
+        if (magazine.getTopBeam()) {
             if (count < 3){
-                if (!magazine.getBotBeam()) {
+                if (magazine.getBotBeam()) {
                     intake.spinIndexer(0.6);
                     intake.spinPolyRollers(0.6);
                     magazine.set(0.1);
                     timer++;
                 }
                 else {
-                    new LoadOne(magazine, intake);
+                    new LoadOne(magazine);
                     timer = 0;
                 }
             }
@@ -54,7 +54,7 @@ public class AutoLoad extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return count >= 3 || timer >= TIMEOUT || magazine.getTopBeam();
+        return count >= 3 || timer >= TIMEOUT || !magazine.getTopBeam();
     }
 
     @Override

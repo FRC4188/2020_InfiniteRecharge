@@ -19,7 +19,9 @@ import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.intake.SpinJustIntake;
 import frc.robot.commands.intake.ToggleIntake;
+import frc.robot.commands.magazine.AutoLoadMag;
 import frc.robot.commands.magazine.AutoMagazine;
+import frc.robot.commands.magazine.MagBallCount;
 import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.shooter.SpinShooterFormula;
@@ -109,6 +111,7 @@ public class RobotContainer {
                 () -> pilot.getBumper(Hand.kLeft)
         ));
         shooter.setDefaultCommand(new SpinShooter(shooter, 3000));
+        magazine.setDefaultCommand(new LoadOne(magazine));
     }
 
     /**
@@ -137,10 +140,10 @@ public class RobotContainer {
         pilot.getYButtonObj().whileHeld(new RunMagazine(magazine, 1.0));
         pilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
 
-        pilot.getBButtonObj().whileHeld(new SpinIntake(intake, 0.9));
-        pilot.getBButtonObj().whenReleased(new SpinIntake(intake, 0));
-        pilot.getAButtonObj().whileHeld(new SpinIntake(intake, -.85));
-        pilot.getAButtonObj().whenReleased(new SpinIntake(intake, 0));
+        pilot.getBButtonObj().whileHeld(new SpinIntake(intake, magazine, 0.9));
+        pilot.getBButtonObj().whenReleased(new SpinIntake(intake, magazine, 0));
+        pilot.getAButtonObj().whileHeld(new SpinIntake(intake, magazine, -.85));
+        pilot.getAButtonObj().whenReleased(new SpinIntake(intake, magazine, 0));
 
         pilot.getBackButtonObj().toggleWhenPressed(new AutoMagazine(magazine, intake, limelight, shooter));
 
@@ -149,7 +152,6 @@ public class RobotContainer {
 
         copilot.getBackButtonObj().toggleWhenPressed(new FireBrake(climber));
 
-        copilot.getLtButtonObj().whenActive(new LoadOne(magazine, intake));
         copilot.getRtButtonObj().whenActive(new AutoLoad(magazine, intake));
 
         copilot.getYButtonObj().whenPressed(new ZeroTurret(turret));
@@ -160,7 +162,9 @@ public class RobotContainer {
 
         copilot.getXButtonObj().toggleWhenPressed(new AutoAim(turret, limelight, 0));
 
-        //copilot.getRbButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
+        copilot.getDpadDownButtonObj().whenPressed(new MagBallCount(magazine, -1));
+
+        copilot.getDpadUpButtonObj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
 
         copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, 0.3));
         copilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));
@@ -182,7 +186,6 @@ public class RobotContainer {
         copilot.getLbButtonObj().whenReleased(new SpinIntake(intake, 0.0));*/
         
         buttonBox.getButton1Obj().whenPressed(new TurretAngle(turret, 0));
-        buttonBox.getButton2Obj().toggleWhenPressed(new SpinShooter(shooter, 3400));
         buttonBox.getButton3Obj().toggleWhenPressed(new SpinShooter(shooter, 3600));
         buttonBox.getButton4Obj().whenPressed(new TurretAngle(turret, 180));
         buttonBox.getButton5Obj().toggleWhenPressed(new SpinShooter(shooter, 4550));

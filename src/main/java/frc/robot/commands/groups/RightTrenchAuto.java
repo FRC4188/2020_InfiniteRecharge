@@ -7,9 +7,9 @@ import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.intake.RaiseIntake;
 import frc.robot.commands.intake.SpinIndexer;
-import frc.robot.commands.intake.SpinIntake;
+import frc.robot.commands.intake.SpinJustIntake;
 import frc.robot.commands.intake.SpinPolyRoller;
-import frc.robot.commands.magazine.RunMagazine;
+import frc.robot.commands.magazine.RunMagazineNonstop;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.TurretAngle;
@@ -53,7 +53,7 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 3400),
                     new AutoAim(turret, limelight, -2.0),
-                    new RunMagazine(magazine, 0.8).withTimeout(1.5)
+                    new RunMagazineNonstop(magazine, 0.8).withTimeout(1.5)
                 ),
 
                 // Lowers the intake.
@@ -62,7 +62,9 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 // Drives backward into the right-side trench, running intake at the same time.
                 new ParallelRaceGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.RIGHT_TO_BACK_TRENCH),
-                    new SpinIntake(intake, 1)
+                    new SpinJustIntake(intake, 1),
+                    new SpinPolyRoller(intake, 1),
+                    new SpinIndexer(intake, 1)
                 ),
 
                 /**
@@ -71,7 +73,9 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                  */
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.BACK_TO_FRONT_TRENCH),
-                    new SpinIntake(intake, 0.3),
+                    new SpinJustIntake(intake, 1),
+                    new SpinPolyRoller(intake, 1),
+                    new SpinIndexer(intake, 1),
                     new TurretAngle(turret, 167.0)
                 ),
 
@@ -91,7 +95,7 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                     new SpinShooter(shooter, 3400),
                     new SpinIndexer(intake, 0.8),
                     new SpinPolyRoller(intake, 0.8),
-                    new RunMagazine(magazine, 0.8).withTimeout(4.5)
+                    new RunMagazineNonstop(magazine, 0.8).withTimeout(4.5)
                 ),
 
                 new RaiseIntake(intake)

@@ -15,6 +15,7 @@ public class AutoMagazine extends CommandBase {
     private final Intake intake;
     private final Limelight limelight;
     private final Shooter shooter;
+    private final double TOLERANCE = 80;
     private double count;
     private boolean can;
 
@@ -44,32 +45,32 @@ public class AutoMagazine extends CommandBase {
 
         // get current shooter velocity and target velocity
         double currentVel = shooter.getLeftVelocity();
-        double targetVel = limelight.formulaRpm();
-        boolean loadedFire = magazine.getLoadedFire();
-        count = magazine.getCount();
+        double targetVel = shooter.getTargetVel();
+        /*boolean loadedFire = magazine.getLoadedFire();
+        count = magazine.getCount();*/
 
         // feed shooter only if at correct rpm
-        if (Math.abs(currentVel - targetVel) > 50) {
+        if (Math.abs(currentVel - targetVel) > TOLERANCE) {
             magazine.set(0);
             intake.spinIndexer(0);
             intake.spinPolyRollers(0);
         }
         else {
-            if (loadedFire) magazine.set(0.9);
-            else {
+            /*if (loadedFire) magazine.set(0.9);
+            else {*/
                 magazine.set(0.9);
                 intake.spinIndexer(0.9);
                 intake.spinPolyRollers(0.9);
-            }
+            //}
         }
 
-        if (magazine.getTopBeam()) {
+        /*if (magazine.getTopBeam()) {
             can = true;
         }
         else {
             if (can) magazine.setCount(count - 1);
             can = false;
-        }
+        }*/
 
     }
 
@@ -81,6 +82,8 @@ public class AutoMagazine extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         magazine.set(0);
+        intake.spinPolyRollers(0);
+        intake.spinIndexer(0);
     }
 
 }

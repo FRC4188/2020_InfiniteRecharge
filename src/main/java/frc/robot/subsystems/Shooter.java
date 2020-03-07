@@ -23,7 +23,8 @@ public class Shooter extends SubsystemBase {
     private static final double MAX_VELOCITY = 21300.0;
     private static final double kF = 1023 / MAX_VELOCITY;
     private static final double ENCODER_TICKS_PER_REV = 2048;
-    private static final double RAMP_RATE = 0.25; // seconds
+    private static final double RAMP_RATE = 0.075; // seconds
+    private static double targetVel;
 
     /**
      * Constructs new Shooter object and configures devices.
@@ -61,6 +62,7 @@ public class Shooter extends SubsystemBase {
     private void updateShuffleboard() {
         SmartDashboard.putNumber("Left shooter rpm", getLeftVelocity());
         SmartDashboard.putNumber("Right shooter rpm", getRightVelocity());
+        SmartDashboard.putNumber("Shooter target velocity", targetVel);
     }
 
     /**
@@ -84,6 +86,7 @@ public class Shooter extends SubsystemBase {
         double adjust = SmartDashboard.getNumber("Set shooter rpm", 0.0) / MAX_VELOCITY;
         leftShooter.set(percent + adjust);
         rightShooter.set(percent + adjust);
+        targetVel = percent * MAX_VELOCITY * 600 / ENCODER_TICKS_PER_REV + adjust * MAX_VELOCITY;
     }
 
     /**
@@ -91,6 +94,7 @@ public class Shooter extends SubsystemBase {
      */
     public void setVelocity(double velocity) {
         double adjust = SmartDashboard.getNumber("Set shooter rpm", 0.0) * ENCODER_TICKS_PER_REV / 600;
+        targetVel = velocity + adjust * 600 / ENCODER_TICKS_PER_REV;
         velocity *= (ENCODER_TICKS_PER_REV) / 600;
         leftShooter.set(ControlMode.Velocity, velocity + adjust);
         rightShooter.set(ControlMode.Velocity, velocity + adjust);
@@ -134,6 +138,14 @@ public class Shooter extends SubsystemBase {
      */
     public double getRightVelocity() {
         return (rightShooter.getSelectedSensorVelocity() * 600) / ENCODER_TICKS_PER_REV;
+    }
+
+    public void setTargetVel(double target) {
+        targetVel = target;
+    }
+
+    public double getTargetVel() {
+        return targetVel;
     }
 
     /** 

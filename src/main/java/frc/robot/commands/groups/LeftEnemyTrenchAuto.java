@@ -10,7 +10,7 @@ import frc.robot.commands.intake.SpinIndexer;
 import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.intake.SpinJustIntake;
 import frc.robot.commands.intake.SpinPolyRoller;
-import frc.robot.commands.magazine.RunMagazine;
+import frc.robot.commands.magazine.RunMagazineNonstop;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.TurretAngle;
@@ -68,7 +68,7 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 3600),
                     new AutoAim(turret, limelight, -3),
-                    new RunMagazine(magazine, 0.9).withTimeout(4.5),
+                    new RunMagazineNonstop(magazine, 0.9).withTimeout(4.5),
                     new SpinIndexer(intake, 0.5),
                     new SpinPolyRoller(intake, 0.9),
                     new SpinJustIntake(intake, 0.8)

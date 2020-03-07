@@ -3,7 +3,7 @@ package frc.robot.commands.groups;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.commands.drive.FollowTrajectory;
-import frc.robot.commands.magazine.RunMagazine;
+import frc.robot.commands.magazine.RunMagazineNonstop;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.TurretAngle;
@@ -45,7 +45,7 @@ public class MidDriveAwayAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 6000),
                     new AutoAim(turret, limelight, -1.5),
-                    new RunMagazine(magazine, 0.8).withTimeout(1.5)
+                    new RunMagazineNonstop(magazine, 0.8).withTimeout(1.5)
                 ),
 
                 // Drives toward the port to move out of the way for other robots' paths.

@@ -31,25 +31,24 @@ public class RunMagazine extends CommandBase {
 
     @Override
     public void execute() {
-        count = magazine.getCount();
-        if (magazine.getTopBeam()) {
+        /*count = magazine.getCount();
+        if (!magazine.getTopBeam()) {
             can = true;
         }
         else {
             if (can) magazine.setCount(count - 1);
             can = false;
-        }
+        }*/
         magazine.set(percent);
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return true;
     }
 
     @Override
     public void end(boolean interrupted) {
-        magazine.set(0);
     }
 
 }
