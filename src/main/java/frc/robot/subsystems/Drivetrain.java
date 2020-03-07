@@ -17,10 +17,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Drivetrain extends SubsystemBase {
 
     // device initialization
+<<<<<<< HEAD
     private WPI_TalonFX leftMotor = new WPI_TalonFX(1);
     private WPI_TalonFX leftSlave = new WPI_TalonFX(2);
     private WPI_TalonFX rightMotor = new WPI_TalonFX(3);
     private WPI_TalonFX rightSlave = new WPI_TalonFX(4);
+=======
+    private WPI_TalonSRX leftMotor = new WPI_TalonSRX(7);
+    private WPI_TalonSRX leftSlave = new WPI_TalonSRX(8);
+    private WPI_TalonSRX rightMotor = new WPI_TalonSRX(6);
+    private WPI_TalonSRX rightSlave = new WPI_TalonSRX(5);
+>>>>>>> 6b38d0c76c86587d631781dc85afae55046915ad
     private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
     private DifferentialDriveOdometry odometry;
 
@@ -88,13 +95,13 @@ public class Drivetrain extends SubsystemBase {
      * Controls the drivetrain using an arcade model.
      */
     public void arcade(double xSpeed, double zRotation) {
-		double leftOutput = xSpeed + zRotation;
-		double rightOutput = xSpeed - zRotation;
-		if(Math.abs(leftOutput) > 1.0 || Math.abs(rightOutput) > 1.0) {
-			if(Math.abs(rightOutput) > Math.abs(leftOutput)) {
-				leftOutput = (leftOutput / rightOutput) * Math.signum(leftOutput);
-				rightOutput = 1.0 * Math.signum(rightOutput);
-			} else  {
+        double leftOutput = xSpeed + zRotation;
+        double rightOutput = xSpeed - zRotation;
+        if (Math.abs(leftOutput) > 1.0 || Math.abs(rightOutput) > 1.0) {
+            if (Math.abs(rightOutput) > Math.abs(leftOutput)) {
+                leftOutput = (leftOutput / rightOutput) * Math.signum(leftOutput);
+                rightOutput = 1.0 * Math.signum(rightOutput);
+            } else  {
                 rightOutput = (rightOutput / leftOutput) * Math.signum(rightOutput);
                 leftOutput = 1.0 * Math.signum(leftOutput);
             }
