@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstraint;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -37,7 +38,7 @@ public class Drivetrain extends SubsystemBase {
     private static final double kV = 2.12; // volt seconds / meter
     private static final double kA = 0.363; // volt seconds squared / meter
     private static final double kP = 3.5;
-    private static final double AUTO_MAX_VEL = 1.75; // meters / second
+    private static final double AUTO_MAX_VEL = 2.25; // meters / second
     private static final double AUTO_MAX_ACCEL = 3; // meters / second squared
     private static final double AUTO_MAX_CENTRIP = 1.0; // meters / second squared
     private static final double AUTO_MAX_VOLTAGE = 10; // volts
@@ -89,7 +90,6 @@ public class Drivetrain extends SubsystemBase {
         // reset devices
         resetEncoders();
         resetGyro();
-        gyro.calibrate();
 
         // configuration
         setBrake();
@@ -119,6 +119,7 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("Right Velocity", getRightVelocity());
         SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
         SmartDashboard.putString("Odometry", getPose().toString());
+        SmartDashboard.putData("Calibrate Gyro", new InstantCommand(gyro::calibrate));
     }
 
     /**

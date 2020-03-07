@@ -10,7 +10,6 @@ public class ButtonBox extends Joystick {
 
     public ButtonBox(int port) {
         super(port);
-        // TODO Auto-generated constructor stub
     }
 
     /**

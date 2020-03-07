@@ -49,8 +49,7 @@ public class WaypointsList {
     public static final Waypoints BACK_TO_FRONT_TRENCH = new Waypoints(
             List.of(
                 new Pose2d(7.55, -0.75, new Rotation2d()),
-                new Pose2d(5, -0.75, new Rotation2d()),
-                new Pose2d(3.45, -1.5, new Rotation2d())
+                new Pose2d(5, -0.75, new Rotation2d())
             ), true
     );
 
@@ -60,8 +59,18 @@ public class WaypointsList {
     public static final Waypoints FRONT_TRENCH_TO_BAR = new Waypoints(
             List.of(
                 new Pose2d(5, -0.75, new Rotation2d()),
-                new Pose2d(5.7, -2.5, Rotation2d.fromDegrees(-69))
+                new Pose2d(6.1, -2.7, Rotation2d.fromDegrees(-60))
             ), false
+    );
+
+    /**
+     * Starts from front of trench and drives to bar.
+     */
+    public static final Waypoints BAR_TO_SHOOT = new Waypoints(
+            List.of(
+                new Pose2d(6.1, -2.7, Rotation2d.fromDegrees(-60)),
+                new Pose2d(5.5, -2.3, Rotation2d.fromDegrees(0))
+            ), true
     );
 
     /**
@@ -70,8 +79,7 @@ public class WaypointsList {
      */
     public static final Waypoints LEFT_TO_ENEMY_TRENCH = new Waypoints(
             List.of(
-                new Pose2d(3.45, -6.5, new Rotation2d()),
-                new Pose2d(4.85, -6.5, new Rotation2d()),
+                new Pose2d(3.45, -7.5, new Rotation2d()),
                 new Pose2d(6.125, -7.5, Rotation2d.fromDegrees(-60))
             ), false
     );

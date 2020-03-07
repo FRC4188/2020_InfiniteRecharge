@@ -8,6 +8,7 @@ import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.intake.RaiseIntake;
 import frc.robot.commands.intake.SpinIndexer;
 import frc.robot.commands.intake.SpinIntake;
+import frc.robot.commands.intake.SpinJustIntake;
 import frc.robot.commands.intake.SpinPolyRoller;
 import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.shooter.SpinShooter;
@@ -38,12 +39,12 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 // Turns turret around and revs up shooter to default rpm.
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 3400).withTimeout(1),
-                    new TurretAngle(turret, 195)
+                    new TurretAngle(turret, 190.0)
                 ),
 
                 // Auto aims toward the port and revs up shooter to 6000 rpm.
                 new ParallelRaceGroup(
-                    new AutoAim(turret, limelight, -2.0).withTimeout(0.5),
+                    new AutoAim(turret, limelight, -3.25).withTimeout(0.5),
                     new SpinShooter(shooter, 3400)
                 ),
 
@@ -51,17 +52,18 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 // Runs magazine to shoot pre-loaded balls.
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 3400),
-                    new AutoAim(turret, limelight, -2.0),
-                    new RunMagazine(magazine, 0.8).withTimeout(1.5)
+                    new AutoAim(turret, limelight, -3.25).withTimeout(1.5),
+                    new RunMagazine(magazine, 0.8)
                 ),
 
                 // Lowers the intake.
                 new LowerIntake(intake),
 
                 // Drives backward into the right-side trench, running intake at the same time.
-                new ParallelRaceGroup(
+                new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.RIGHT_TO_BACK_TRENCH),
-                    new SpinIntake(intake, 1)
+                    new TurretAngle(turret, 180.0),
+                    new SpinIntake(intake, 1.0)
                 ),
 
                 // Drives forward to the front of the trench.
@@ -69,31 +71,29 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.BACK_TO_FRONT_TRENCH),
                     new SpinIntake(intake, 0.3),
-                    new TurretAngle(turret, 167.0)
+                    new RunMagazine(magazine, 0.25),
+                    new TurretAngle(turret, 180.0)
                 ),
 
-                // Auto aims and revs up shooter to 3500 rpm.
+                // Pickup balls from bar, auto aims and revs up shooter to 3500 rpm.
                 new ParallelRaceGroup(
-                    new AutoAim(turret, limelight, -2.0).withTimeout(0.25),
-                    new SpinShooter(shooter, 3400)
+                    new FollowTrajectory(drivetrain, WaypointsList.FRONT_TRENCH_TO_BAR),
+                    new SpinIntake(intake, 1.0),
+                    new SpinShooter(shooter, 3500)
                 ),
+
+                new FollowTrajectory(drivetrain, WaypointsList.BAR_TO_SHOOT),
 
                 // Continues to auto aim and spin shooter at 3500 rpm.
                 // Runs magazine and indexer to shoot balls picked up from trench.
                 new ParallelRaceGroup(
                     new AutoAim(turret, limelight, -2.0),
-                    new SpinShooter(shooter, 3400),
-                    new SpinIndexer(intake, 0.8),
-                    new SpinPolyRoller(intake, 0.8),
+                    new SpinShooter(shooter, 3500),
+                    new SpinJustIntake(intake, 1.0),
+                    new SpinIndexer(intake, 1.0),
+                    new SpinPolyRoller(intake, -1.0),
                     new RunMagazine(magazine, 0.8).withTimeout(4.5)
-                ),
-
-                new RaiseIntake(intake)
-
-                // May add this to take the robot to the bar in the future.
-                //new ParallelRaceGroup(
-                //    new FollowTrajectory(drivetrain, WaypointsList.FRONT_TRENCH_TO_BAR)
-                //)
+                )
 
         );
 
