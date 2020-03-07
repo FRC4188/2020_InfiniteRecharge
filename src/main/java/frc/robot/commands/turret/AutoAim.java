@@ -32,7 +32,7 @@ public class AutoAim extends CommandBase {
 
     @Override
     public void initialize() {
-        limelight.setLightMode(LedMode.ON);
+        limelight.trackTarget();
     }
 
     @Override
