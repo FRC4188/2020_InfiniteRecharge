@@ -15,7 +15,7 @@ public class AutoMagazine extends CommandBase {
     private final Intake intake;
     private final Limelight limelight;
     private final Shooter shooter;
-    private final double TOLERANCE = 80;
+    private final double TOLERANCE = 120;
     private double count;
     private boolean can;
 

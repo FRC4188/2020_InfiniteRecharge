@@ -9,17 +9,16 @@ import frc.robot.commands.climb.FireBrake;
 import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.ManualDrive;
-import frc.robot.commands.groups.AutoLoad;
 import frc.robot.commands.groups.LeftEnemyTrenchAuto;
 import frc.robot.commands.groups.LoadOne;
 import frc.robot.commands.groups.MidDriveAwayAuto;
 import frc.robot.commands.groups.MidDriveTowardAuto;
 import frc.robot.commands.groups.RightTrenchAuto;
 import frc.robot.commands.hood.ToggleHood;
+import frc.robot.commands.intake.SpinIndexer;
 import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.intake.SpinJustIntake;
 import frc.robot.commands.intake.ToggleIntake;
-import frc.robot.commands.magazine.AutoLoadMag;
 import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.magazine.MagBallCount;
 import frc.robot.commands.magazine.RunMagazine;
@@ -111,7 +110,7 @@ public class RobotContainer {
                 () -> pilot.getBumper(Hand.kLeft)
         ));
         shooter.setDefaultCommand(new SpinShooter(shooter, 3000));
-        magazine.setDefaultCommand(new LoadOne(magazine));
+        magazine.setDefaultCommand(new LoadOne(magazine, intake));
     }
 
     /**
@@ -127,9 +126,9 @@ public class RobotContainer {
         pilot.getDpadLeftButtonObj().whenPressed(new CameraCloseTrack(limelight));
         pilot.getLbButtonObj().whenPressed(new CameraZoomTrack(limelight));
 
-        pilot.getLtButtonObj().whileActiveContinuous(new SpinWheel(wheelSpinner, -0.7));
+        pilot.getLtButtonObj().whileActiveContinuous(new SpinIndexer(intake, -0.8));
         pilot.getLtButtonObj().whenInactive(new SpinWheel(wheelSpinner, 0));
-        pilot.getRtButtonObj().whileActiveContinuous(new SpinWheel(wheelSpinner, 0.7));
+        pilot.getRtButtonObj().whileActiveContinuous(new SpinIndexer(intake, 0.8));
         pilot.getRtButtonObj().whenInactive(new SpinWheel(wheelSpinner, 0));
 
         pilot.getDpadDownButtonObj().whenPressed(new LowerWheel(wheelSpinner));
@@ -151,8 +150,6 @@ public class RobotContainer {
         copilot.getStartButtonObj().whenPressed(new KillAll());
 
         copilot.getBackButtonObj().toggleWhenPressed(new FireBrake(climber));
-
-        copilot.getRtButtonObj().whenActive(new AutoLoad(magazine, intake));
 
         copilot.getYButtonObj().whenPressed(new ZeroTurret(turret));
 
@@ -186,6 +183,7 @@ public class RobotContainer {
         copilot.getLbButtonObj().whenReleased(new SpinIntake(intake, 0.0));*/
         
         buttonBox.getButton1Obj().whenPressed(new TurretAngle(turret, 0));
+        buttonBox.getButton2Obj().toggleWhenPressed(new SpinShooter(shooter, 4100));
         buttonBox.getButton3Obj().toggleWhenPressed(new SpinShooter(shooter, 3600));
         buttonBox.getButton4Obj().whenPressed(new TurretAngle(turret, 180));
         buttonBox.getButton5Obj().toggleWhenPressed(new SpinShooter(shooter, 4550));

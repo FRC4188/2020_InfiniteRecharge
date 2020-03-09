@@ -29,7 +29,7 @@ public class SpinIntake extends CommandBase {
 
     @Override
     public void execute() {
-        if (magazine.getTopBeam()) intake.spin(percent);
+        if (magazine.getTopBeam() && magazine.getBotBeam()) intake.spin(percent);
         else intake.spinIntake(percent);
     }
 
