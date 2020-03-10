@@ -85,25 +85,8 @@ public class Intake extends SubsystemBase {
     public void spin(double percent) {
         if (intakeSolenoid.get()) intakeMotor.set(percent);
         else intakeMotor.set(percent / 3);   
-        double newPercent = 0.0;
-
-            if(percent < 0) {    
-            percent = -1 * SmartDashboard.getNumber("Indexer Speed", percent);
-            indexerMotor.set(percent);
-            percent = -1 * SmartDashboard.getNumber("PolyRoller Speed", percent);
-            polyRoller.set(percent);
-            }
-            else if (percent == 0) {
-                percent = 0;
-                indexerMotor.set(percent);
-                polyRoller.set(percent);
-            }
-            else {
-                percent = SmartDashboard.getNumber("Indexer Speed", percent);
-            indexerMotor.set(percent);
-            percent = SmartDashboard.getNumber("PolyRoller Speed", percent);
-            polyRoller.set(percent);
-            }
+        indexerMotor.set(percent * 0.8);
+        polyRoller.set(percent);
     }
 
     public void spinIntake(double percent) {

@@ -9,7 +9,6 @@ import frc.robot.commands.climb.FireBrake;
 import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.ManualDrive;
-import frc.robot.commands.groups.AutoLoad;
 import frc.robot.commands.groups.LeftEnemyTrenchAuto;
 import frc.robot.commands.groups.LoadOne;
 import frc.robot.commands.groups.MidDriveAwayAuto;
@@ -19,7 +18,6 @@ import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.intake.SpinJustIntake;
 import frc.robot.commands.intake.ToggleIntake;
-import frc.robot.commands.magazine.AutoLoadMag;
 import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.magazine.MagBallCount;
 import frc.robot.commands.magazine.RunMagazine;
@@ -145,14 +143,12 @@ public class RobotContainer {
         pilot.getAButtonObj().whileHeld(new SpinIntake(intake, magazine, -.85));
         pilot.getAButtonObj().whenReleased(new SpinIntake(intake, magazine, 0));
 
-        pilot.getBackButtonObj().toggleWhenPressed(new AutoMagazine(magazine, intake, limelight, shooter));
+        pilot.getBackButtonObj().toggleWhenPressed(new AutoMagazine(magazine, intake, shooter));
 
         pilot.getStartButtonObj().whenPressed(new KillAll());
         copilot.getStartButtonObj().whenPressed(new KillAll());
 
         copilot.getBackButtonObj().toggleWhenPressed(new FireBrake(climber));
-
-        copilot.getRtButtonObj().whenActive(new AutoLoad(magazine, intake));
 
         copilot.getYButtonObj().whenPressed(new ZeroTurret(turret));
 

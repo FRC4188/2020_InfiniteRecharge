@@ -10,8 +10,6 @@ public class RunMagazine extends CommandBase {
 
     private final Magazine magazine;
     private final double percent;
-    private boolean can;
-    private double count;
 
     /**
      * Constructs a new RunMagazine command to run magazine motor at a given percentage.
@@ -26,19 +24,10 @@ public class RunMagazine extends CommandBase {
 
     @Override
     public void initialize() {
-        can = false;
     }
 
     @Override
     public void execute() {
-        /*count = magazine.getCount();
-        if (!magazine.getTopBeam()) {
-            can = true;
-        }
-        else {
-            if (can) magazine.setCount(count - 1);
-            can = false;
-        }*/
         magazine.set(percent);
     }
 

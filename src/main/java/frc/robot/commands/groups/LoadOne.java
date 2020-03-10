@@ -26,12 +26,6 @@ public class LoadOne extends CommandBase {
 
     @Override
     public void execute() {
-        /*if (magazine.getCount() < 3) {
-            if (!magazine.getBotBeam()) {
-                magazine.set(0.8);
-                timer++;
-            }
-        }*/
         if(magazine.getTopBeam()) {
             if (!magazine.getBotBeam()) {
                 magazine.set(0.8);
@@ -50,8 +44,6 @@ public class LoadOne extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        magazine.setCount();
-        magazine.set(0);
     }
 
 }
