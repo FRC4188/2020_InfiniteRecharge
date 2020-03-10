@@ -5,10 +5,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.intake.LowerIntake;
-import frc.robot.commands.intake.SpinIndexer;
 import frc.robot.commands.intake.SpinIntake;
-import frc.robot.commands.intake.SpinJustIntake;
-import frc.robot.commands.intake.SpinPolyRoller;
 import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.magazine.RunMagazineNonstop;
 import frc.robot.commands.shooter.SpinShooter;
@@ -89,9 +86,7 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new AutoAim(turret, limelight, -2.0),
                     new SpinShooter(shooter, 3500),
-                    new SpinJustIntake(intake, 1.0),
-                    new SpinIndexer(intake, 1.0),
-                    new SpinPolyRoller(intake, -1.0),
+                    new SpinIntake(intake, magazine, 1.0),
                     new RunMagazineNonstop(magazine, 0.8).withTimeout(4.5)
                 )
 

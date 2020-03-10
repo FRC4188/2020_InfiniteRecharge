@@ -44,7 +44,8 @@ public class Magazine extends SubsystemBase {
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Magazine velocity", magEncoder.getVelocity());
         SmartDashboard.putNumber("M24 temp", magMotor.getMotorTemperature());
-        SmartDashboard.putBoolean("Beam Breaker", getBotBeam());
+        SmartDashboard.putBoolean("Bot Beam Breaker", getBotBeam());
+        SmartDashboard.putBoolean("Top Beam Breaker", getTopBeam());
     }
 
     /**

@@ -41,7 +41,7 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
                 // Drives into the enemy trench, running intake at the same time.
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.LEFT_TO_ENEMY_TRENCH),
-                    new SpinJustIntake(intake, 1.0),
+                    new SpinIntake(intake, magazine, 1.0),
                     new TurretAngle(turret, 240)
                 ),
 
@@ -50,7 +50,7 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.ENEMY_TRENCH_TO_SHOOT),
                     new SpinShooter(shooter, 3500),
-                    new SpinJustIntake(intake, 0.6)
+                    new SpinIntake(intake, magazine, 0.8)
                 ),
 
                 // Auto aims, and revs up shooter to rpm.
