@@ -40,6 +40,8 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         updateShuffleboard();
+
+        //ballCount = (int) SmartDashboard.getNumber("Beam Breaker", ballCount);
         if (isRaised) {
             intakeSolenoid.set(false);
         } else {

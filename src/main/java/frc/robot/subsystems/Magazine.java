@@ -51,6 +51,16 @@ public class Magazine extends SubsystemBase {
      * Sets belt motor to a given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
+        double newPercent = SmartDashboard.getNumber("Magazine Speed", percent);
+        if(percent < 0) {
+        percent = -1 * newPercent;
+        }
+        else if(percent == 0.0) {
+            percent = 0;
+        }
+        else {
+            percent = newPercent;
+        }
         magMotor.set(percent);
     }
 
