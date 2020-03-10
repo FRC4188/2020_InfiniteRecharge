@@ -62,7 +62,7 @@ public class Intake extends SubsystemBase {
      */
     public void spin(double percent) {
         if (intakeSolenoid.get()) intakeMotor.set(percent);
-        else intakeMotor.set(percent / 3);
+        else intakeMotor.set(percent / 3);   
         indexerMotor.set(percent * 0.8);
         polyRoller.set(percent);
     }
