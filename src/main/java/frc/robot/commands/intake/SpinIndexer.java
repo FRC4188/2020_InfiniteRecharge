@@ -7,7 +7,6 @@ public class SpinIndexer extends CommandBase {
 
     Intake intake;
     double percent;
-    boolean override;
 
     /**
      * Constructs new SpinIndexer command to spin indexer motors a given percentage.
@@ -33,6 +32,7 @@ public class SpinIndexer extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         intake.spinIndexer(0);
+        intake.spinPolyRollers(0);
     }
 
     @Override

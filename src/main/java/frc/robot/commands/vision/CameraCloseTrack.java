@@ -11,7 +11,8 @@ public class CameraCloseTrack extends CommandBase {
     private final Limelight limelight;
 
     /**
-     * Constructs a new CameraCloseTrack command to set limelight to track target at close distances.
+     * Constructs a new CameraCloseTrack command to set limelight
+     * to track target at close distances.
      *
      * @param limelight - Limelight subsystem to use.
      */

@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Turret;
-import frc.robot.subsystems.Limelight.LedMode;
 
 /**
  * Turns turret to keep vision target centered.
@@ -13,7 +12,8 @@ public class AutoAim extends CommandBase {
 
     private final Turret turret;
     private final Limelight limelight;
-    private double adjust, offset;
+    private double adjust;
+    private double offset;
 
     /**
      * Constructs new AutoAim command to turn turret to keep vision target centered.
@@ -31,7 +31,7 @@ public class AutoAim extends CommandBase {
 
     @Override
     public void initialize() {
-        limelight.setLightMode(LedMode.ON);
+        limelight.trackTarget();
     }
 
     @Override
@@ -43,7 +43,8 @@ public class AutoAim extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (turret.getPosition() >= turret.getMaxPosition() || turret.getPosition() <= turret.getMinPosition());
+        return (turret.getPosition() >= turret.getMaxPosition()
+                || turret.getPosition() <= turret.getMinPosition());
     }
 
     @Override

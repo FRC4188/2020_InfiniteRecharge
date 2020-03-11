@@ -9,7 +9,7 @@ public class Hood extends SubsystemBase {
     private Solenoid hoodSolenoid = new Solenoid(1);
     private boolean isRaised = false;
 
-    public void periodic(){
+    public void periodic() {
         SmartDashboard.putBoolean("Hood Raised", isRaised());
     }
 

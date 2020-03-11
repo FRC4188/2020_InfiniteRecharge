@@ -3,8 +3,6 @@ package frc.robot.subsystems;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,15 +19,12 @@ public class Intake extends SubsystemBase {
     private CANEncoder indexerMotorEncoder = indexerMotor.getEncoder();
     private CANEncoder polyRollerEncoder = polyRoller.getEncoder();
     private Solenoid intakeSolenoid = new Solenoid(0);
-    private DigitalInput beamBreaker = new DigitalInput(2);
 
     // constants
     private static final double RAMP_RATE = 0.5; // seconds
 
     // state vars
     private boolean isRaised = true;
-    public static int ballCount = 0;
-    private boolean lsRelease = true;
 
     /**
      * Constructs new Intake object.
@@ -52,18 +47,6 @@ public class Intake extends SubsystemBase {
         } else {
             intakeSolenoid.set(true);
         }
-
-        if(beamBreaker.get() != lsRelease) {
-            if(beamBreaker.get() == true) {
-              lsRelease = true;
-            }
-            else {
-              ballCount++;
-              lsRelease = false;
-            }
-          }
-
-        
     }
 
     /**
@@ -74,17 +57,16 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("Indexer Position", getIndexerPosition());
         SmartDashboard.putNumber("PolyRoller Position", getPolyRollerPosition());
         SmartDashboard.putBoolean("Intake Raised", isRaised());
-        SmartDashboard.putNumber("Ball Count", ballCount);
     }
 
     /**
      * Spins the intake motor a given percent [-1.0, 1.0].
      */
-    public void spin(double percent) {
-        if (intakeSolenoid.get()) intakeMotor.set(percent);
-        else intakeMotor.set(percent / 3);   
-        indexerMotor.set(percent * 0.8);
-        polyRoller.set(percent * 0.8);
+    public void spin(double intake, double indexer, double poly) {
+        if (intakeSolenoid.get()) intakeMotor.set(intake);
+        else intakeMotor.set(intake / 3);   
+        indexerMotor.set(indexer);
+        polyRoller.set(poly);
     }
 
     public void spinIntake(double percent) {
@@ -165,22 +147,25 @@ public class Intake extends SubsystemBase {
         return polyRollerEncoder.getPosition();
     }
 
-    /** 
-     * Returns temperature of motor based off CANSpark ID. 
+    /**
+     * Returns intake motor temperature in Celcius.
      */
-    public double getMotorTemperature(int index) {
-        CANSparkMax[] sparks = new CANSparkMax[] {
-            intakeMotor,
-            indexerMotor,
-            polyRoller,
-        };
-        index -= 1;
-        double temp = -1.0;
-        try {
-            temp = sparks[index - 10].getMotorTemperature();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.err.println("Error: index " + index + " not in array of intake sparks.");
-        }
-        return temp;
+    public double getIntakeTemp() {
+        return intakeMotor.getMotorTemperature();
     }
+
+    /**
+     * Returns indexer motor temperature in Celcius.
+     */
+    public double getIndexerTemp() {
+        return indexerMotor.getMotorTemperature();
+    }
+
+    /**
+     * Returns poly roller motor temperature in Celcius.
+     */
+    public double getPolyRollerTemp() {
+        return polyRoller.getMotorTemperature();
+    }
+
 }

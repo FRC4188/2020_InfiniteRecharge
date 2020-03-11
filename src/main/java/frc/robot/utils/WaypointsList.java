@@ -49,6 +49,13 @@ public class WaypointsList {
     public static final Waypoints BACK_TO_FRONT_TRENCH = new Waypoints(
             List.of(
                 new Pose2d(7.55, -0.75, new Rotation2d()),
+                new Pose2d(5, -0.75, new Rotation2d())
+            ), true
+    );
+
+    public static final Waypoints BACK_TRENCH_TO_SHOOT = new Waypoints(
+        List.of(
+                new Pose2d(7.55, -0.75, new Rotation2d()),
                 new Pose2d(5, -0.75, new Rotation2d()),
                 new Pose2d(3.45, -1.5, new Rotation2d())
             ), true
@@ -60,8 +67,18 @@ public class WaypointsList {
     public static final Waypoints FRONT_TRENCH_TO_BAR = new Waypoints(
             List.of(
                 new Pose2d(5, -0.75, new Rotation2d()),
-                new Pose2d(5.7, -2.5, Rotation2d.fromDegrees(-69))
+                new Pose2d(6.1, -2.7, Rotation2d.fromDegrees(-60))
             ), false
+    );
+
+    /**
+     * Starts from bar and drives to shooting position.
+     */
+    public static final Waypoints BAR_TO_SHOOT = new Waypoints(
+            List.of(
+                new Pose2d(6.1, -2.7, Rotation2d.fromDegrees(-60)),
+                new Pose2d(5.5, -2.3, Rotation2d.fromDegrees(0))
+            ), true
     );
 
     /**
@@ -70,9 +87,8 @@ public class WaypointsList {
      */
     public static final Waypoints LEFT_TO_ENEMY_TRENCH = new Waypoints(
             List.of(
-                new Pose2d(3.45, -6.5, new Rotation2d()),
-                new Pose2d(4.85, -6.5, new Rotation2d()),
-                new Pose2d(6.125, -7.5, Rotation2d.fromDegrees(-60))
+                new Pose2d(3.45, -7.5, new Rotation2d()),
+                new Pose2d(6.125, -7.5, new Rotation2d())
             ), false
     );
 
@@ -81,9 +97,19 @@ public class WaypointsList {
      */
     public static final Waypoints ENEMY_TRENCH_TO_SHOOT = new Waypoints(
             List.of(
-                new Pose2d(6.125, -7.5, Rotation2d.fromDegrees(-60)),
-                new Pose2d(4.75, -3.85, Rotation2d.fromDegrees(-60))
+                new Pose2d(6.125, -7.5, new Rotation2d()),
+                new Pose2d(3.8, -3.0, Rotation2d.fromDegrees(-60))
             ), true
+    );
+
+    /**
+     * Starts from enemy trench and drives to shooting position.
+     */
+    public static final Waypoints SHOOT_TO_BAR = new Waypoints(
+            List.of(
+                new Pose2d(3.8, -3.0, Rotation2d.fromDegrees(-60)),
+                new Pose2d(5.25, -4.3, Rotation2d.fromDegrees(30))
+            ), false
     );
 
     /**
@@ -104,6 +130,35 @@ public class WaypointsList {
                 new Pose2d(3.45, -2.45, new Rotation2d()),
                 new Pose2d(2.35, -2.45, new Rotation2d())
             ), true
+    );
+
+    /*public static final Waypoints MID_LOOP_LEFT_BAR = new Waypoints(
+            List.of(
+                new Pose2d(3.45, -2.375, new Rotation2d()),
+                new Pose2d(5.71, -6.10, Rotation2d.fromDegrees(-67.5)),
+                new Pose2d(6.95, -5.28, Rotation2d.fromDegrees(22.5))
+            ), false
+    );
+
+    public static final Waypoints LEFT_BAR_COLLECT_3 = new Waypoints(
+            List.of(
+                new Pose2d(6.95, -5.28, Rotation2d.fromDegrees(22.5)),
+                new Pose2d(6.25, -3.85, Rotation2d.fromDegrees(112.5))
+            ), false
+    );*/
+
+    public static final Waypoints MID_TO_LEFT_BAR = new Waypoints(
+            List.of(
+                new Pose2d(3.45, -3.89, new Rotation2d()),
+                new Pose2d(5.25, -3.89, new Rotation2d())
+            ), false
+    );
+
+    public static final Waypoints LEFT_BAR_THIRD = new Waypoints(
+            List.of(
+                new Pose2d(5.25, -3.89, Rotation2d.fromDegrees(-40)),
+                new Pose2d(5.45, -3.95, Rotation2d.fromDegrees(-40))
+            ), false
     );
 
 }

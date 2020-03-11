@@ -17,9 +17,9 @@ public class Shooter extends SubsystemBase {
     private WPI_TalonFX rightShooter = new WPI_TalonFX(22);
 
     // constants
-    private static final double kP = 0.3;
+    private static final double kP = 0.305;
     private static final double kI = 0.0;
-    private static final double kD = 0.3;
+    private static final double kD = 0.0;
     private static final double MAX_VELOCITY = 21300.0;
     private static final double kF = 1023 / MAX_VELOCITY;
     private static final double ENCODER_TICKS_PER_REV = 2048;
@@ -45,7 +45,6 @@ public class Shooter extends SubsystemBase {
         setRampRate();
 
         SmartDashboard.putNumber("Set shooter rpm", 0.0);
-        SmartDashboard.putNumber("Shooter kD", 0.0);
 
     }
 
@@ -71,15 +70,13 @@ public class Shooter extends SubsystemBase {
      * Configures gains for SRX closed loop controller.
      */
     private void controllerInit() {
-        double kd = SmartDashboard.getNumber("Shooter kD", 0.0);
-        SmartDashboard.putNumber("kd lul", kd);
         leftShooter.config_kP(0, kP, 10);
         leftShooter.config_kI(0, kI, 10);
-        leftShooter.config_kD(0, kd, 10);
+        leftShooter.config_kD(0, kD, 10);
         leftShooter.config_kF(0, kF, 10);
         rightShooter.config_kP(0, kP, 10);
         rightShooter.config_kI(0, kI, 10);
-        rightShooter.config_kD(0, kd, 10);
+        rightShooter.config_kD(0, kD, 10);
         rightShooter.config_kF(0, kF, 10);
     }
 
@@ -152,21 +149,18 @@ public class Shooter extends SubsystemBase {
         return targetVel;
     }
 
-    /** 
-     * Returns temperature of motor based off Falcon ID. 
+    /**
+     * Returns left shooter motor temperature in Celcius.
      */
-    public double getMotorTemperature(int index) {
-        WPI_TalonFX[] falcons = new WPI_TalonFX[] {
-            leftShooter,
-            rightShooter,
-        };
-        index -= 1;
-        double temp = -1.0;
-        try {
-            temp = falcons[index - 25].getTemperature();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.err.println("Error: index " + index + " not in array of shooter falcons.");
-        }
-        return temp;
+    public double getLeftTemp() {
+        return leftShooter.getTemperature();
     }
+
+    /**
+     * Returns right shooter motor temperature in Celcius.
+     */
+    public double getRightTemp() {
+        return rightShooter.getTemperature();
+    }
+
 }
