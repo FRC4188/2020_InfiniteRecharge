@@ -69,7 +69,9 @@ public class AutoMagazine extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        magazine.set(0);
+        if (!magazine.getManual()) {
+            magazine.set(0);
+        }
         intake.spin(0, 0, 0);
     }
 

@@ -7,7 +7,7 @@ import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.intake.SpinIndexer;
 import frc.robot.commands.intake.SpinIntake;
-import frc.robot.commands.magazine.RunMagazine;
+import frc.robot.commands.magazine.RunMagazineNonstop;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.TurretAngle;
@@ -59,7 +59,7 @@ public class MidToLeftBarAuto extends CspSequentialCommandGroup {
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.MID_TO_LEFT_BAR), 
                     new TurretAngle(turret, 165),
-                    new SpinIntake(intake, magazine, 1),
+                    new SpinIntake(intake, magazine, 1.0, 0.2, -0.9),
                     new SpinShooter(shooter, 3500)
                 ),
 
@@ -71,8 +71,8 @@ public class MidToLeftBarAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new AutoAim(turret, limelight, -3.5),
                     new SpinShooter(shooter, 3500),
-                    new SpinIntake(intake, magazine, 0.9),
-                    new RunMagazine(magazine, 0.9).withTimeout(5)
+                    new SpinIntake(intake, magazine, 0.9, 0.9, 0.9),
+                    new RunMagazineNonstop(magazine, 0.8).withTimeout(5)
                 )
 
         );
