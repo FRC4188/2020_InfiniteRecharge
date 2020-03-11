@@ -26,14 +26,16 @@ public class LoadOne extends CommandBase {
 
     @Override
     public void execute() {
-        if(magazine.getTopBeam()) {
-            if (!magazine.getBotBeam()) {
-                magazine.set(0.8);
+        if (!magazine.getManual()) {
+            if(magazine.getTopBeam()) {
+                if (!magazine.getBotBeam()) {
+                    magazine.set(0.8);
+                }
+                else magazine.set(0);
             }
-            else magazine.set(0);
-        }
-        else {
-            magazine.set(0);
+            else {
+                magazine.set(0);
+            }
         }
     }
 

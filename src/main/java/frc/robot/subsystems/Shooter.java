@@ -19,7 +19,7 @@ public class Shooter extends SubsystemBase {
     // constants
     private static final double kP = 0.3;
     private static final double kI = 0.0;
-    private static final double kD = 0.4;
+    private static final double kD = 0.0;
     private static final double MAX_VELOCITY = 21300.0;
     private static final double kF = 1023 / MAX_VELOCITY;
     private static final double ENCODER_TICKS_PER_REV = 2048;

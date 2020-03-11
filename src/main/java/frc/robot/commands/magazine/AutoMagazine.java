@@ -35,31 +35,30 @@ public class AutoMagazine extends CommandBase {
     @Override
     public void initialize() {
         loaded = !magazine.getTopBeam();
+        timer = 0;
     }
 
     @Override
     public void execute() {
 
-        if (loaded && timer < TIMEOUT) {
+        /*if (loaded && timer < TIMEOUT) {
             intake.spinIndexer(-0.15);
             magazine.set(-0.1);
             timer++;
         }
-        else {
+        else {*/
             double currentVel = shooter.getLeftVelocity();
             double targetVel = shooter.getTargetVel();
 
             if (Math.abs(currentVel - targetVel) > TOLERANCE) {
                 magazine.set(0);
-                intake.spinIndexer(0);
-                intake.spinPolyRollers(0);
+                intake.spin(0, 0, 0);
             }
             else {
-                magazine.set(0.9);
-                intake.spinIndexer(0.9);
-                intake.spinPolyRollers(0.9);
+                magazine.set(0.8);
+                intake.spin(0.6, 0.7, 1.0);
             }
-        }
+        //}
 
     }
 
@@ -71,8 +70,7 @@ public class AutoMagazine extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         magazine.set(0);
-        intake.spinPolyRollers(0);
-        intake.spinIndexer(0);
+        intake.spin(0, 0, 0);
     }
 
 }

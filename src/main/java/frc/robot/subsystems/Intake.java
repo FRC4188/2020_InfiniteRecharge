@@ -62,11 +62,11 @@ public class Intake extends SubsystemBase {
     /**
      * Spins the intake motor a given percent [-1.0, 1.0].
      */
-    public void spin(double percent) {
-        if (intakeSolenoid.get()) intakeMotor.set(percent);
-        else intakeMotor.set(percent / 3);   
-        indexerMotor.set(percent * 0.8);
-        polyRoller.set(percent);
+    public void spin(double intake, double indexer, double poly) {
+        if (intakeSolenoid.get()) intakeMotor.set(intake);
+        else intakeMotor.set(intake / 3);   
+        indexerMotor.set(indexer);
+        polyRoller.set(poly);
     }
 
     public void spinIntake(double percent) {

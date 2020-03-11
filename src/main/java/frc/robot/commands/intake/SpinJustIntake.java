@@ -5,14 +5,14 @@ import frc.robot.subsystems.Intake;
 
 public class SpinJustIntake extends CommandBase {
 
-    private final Intake intake;
-    private final double percent;
+    Intake intake;
+    double percent;
 
     /**
-     * Constructs new SpinJustIntake command to spin just the intake motors a given percentage.
+     * Constructs new SpinIndexer command to spin indexer motors a given percentage.
      *
      * @param intake - Intake subsystem to use.
-     * @param percent - percent output to command motors.
+     * @param percent - percent out to command motors.
      */
     public SpinJustIntake(Intake intake, double percent) {
         this.percent = percent;

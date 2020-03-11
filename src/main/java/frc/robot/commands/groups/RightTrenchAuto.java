@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.intake.SpinIntake;
-import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.magazine.RunMagazineNonstop;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.turret.AutoAim;
@@ -60,23 +59,22 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.RIGHT_TO_BACK_TRENCH),
                     new TurretAngle(turret, 180.0),
-                    new SpinIntake(intake, magazine, 1.0)
+                    new SpinIntake(intake, magazine, 0.6, 0.4, -0.9)
                 ),
 
                 // Drives forward to the front of the trench.
                 // Runs magazine and intake at the same time to keep balls from falling out.
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.BACK_TO_FRONT_TRENCH),
-                    new SpinIntake(intake, magazine, 0.3),
-                    new RunMagazine(magazine, 0.25),
+                    new SpinIntake(intake, magazine, 0.1, 0.2, 0.7),
                     new TurretAngle(turret, 180.0)
                 ),
 
                 // Pickup balls from bar, auto aims and revs up shooter to 3500 rpm.
                 new ParallelRaceGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.FRONT_TRENCH_TO_BAR),
-                    new SpinIntake(intake, magazine, 1.0),
-                    new SpinShooter(shooter, 3500)
+                    new SpinIntake(intake, magazine, 0.6, 0.2, -0.7),
+                    new SpinShooter(shooter, 3550)
                 ),
 
                 new FollowTrajectory(drivetrain, WaypointsList.BAR_TO_SHOOT),
@@ -85,9 +83,9 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 // Runs magazine and indexer to shoot balls picked up from trench.
                 new ParallelRaceGroup(
                     new AutoAim(turret, limelight, -2.0),
-                    new SpinShooter(shooter, 3500),
-                    new SpinIntake(intake, magazine, 1.0),
-                    new RunMagazineNonstop(magazine, 0.8).withTimeout(4.5)
+                    new SpinShooter(shooter, 3550),
+                    new SpinIntake(intake, magazine, 0.6, 0.7, 1.0),
+                    new RunMagazineNonstop(magazine, 0.8).withTimeout(3.5)
                 )
 
         );

@@ -41,6 +41,7 @@ public class Turret extends SubsystemBase {
         //resetEncoders();
         setRampRate();
         controllerInit();
+        SmartDashboard.putNumber("Turret Offset", 0.0);
     }
 
     /**
@@ -102,7 +103,7 @@ public class Turret extends SubsystemBase {
      * Resets turret encoder value to 0.
      */
     public void resetEncoders() {
-        turretEncoder.setPosition(0);
+        turretEncoder.setPosition(SmartDashboard.getNumber("Turret Offset", 0.0));
     }
 
     /**

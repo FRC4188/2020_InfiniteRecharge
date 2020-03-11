@@ -22,6 +22,8 @@ public class Magazine extends SubsystemBase {
     // constants
     private static final double RAMP_RATE = 0.05; // seconds
 
+    private boolean manual;
+
     /**
      * Constructs new magazine object and configures devices.
      */
@@ -46,22 +48,13 @@ public class Magazine extends SubsystemBase {
         SmartDashboard.putNumber("M24 temp", magMotor.getMotorTemperature());
         SmartDashboard.putBoolean("Bot Beam Breaker", getBotBeam());
         SmartDashboard.putBoolean("Top Beam Breaker", getTopBeam());
+        SmartDashboard.putBoolean("Magazine manual", getManual());
     }
 
     /**
      * Sets belt motor to a given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        double newPercent = SmartDashboard.getNumber("Magazine Speed", percent);
-        if(percent < 0) {
-        percent = -1 * newPercent;
-        }
-        else if(percent == 0.0) {
-            percent = 0;
-        }
-        else {
-            percent = newPercent;
-        }
         magMotor.set(percent);
     }
 
@@ -86,6 +79,14 @@ public class Magazine extends SubsystemBase {
 
     public boolean getTopBeam() {
         return topBeam.get();
+    }
+
+    public void setManual(boolean manual) {
+        this.manual = manual;
+    }
+
+    public boolean getManual() {
+        return manual;
     }
     
 }
