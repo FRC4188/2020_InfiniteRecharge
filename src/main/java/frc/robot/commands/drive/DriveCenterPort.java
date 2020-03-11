@@ -21,7 +21,7 @@ public class DriveCenterPort extends CommandBase {
 
     /**
      * Constructs a new CenterBay command to drive forward a certain percent while keeping
-     *      the drivetrain centered on the vision target.
+     * the drivetrain centered on the vision target.
      *
      * @param drivetrain - Drivetrain subsystem to require.
      * @param limelight - Limelight subsystem to use.

@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstraint;
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -33,17 +34,17 @@ public class Drivetrain extends SubsystemBase {
     private final Solenoid cooler = new Solenoid(3);
 
     // constants
-    private static final double kS = 1.34; // volts
+    private static final double kS = 0.233; // volts
     private static final double kV = 2.12; // volt seconds / meter
-    private static final double kA = 0.363; // volt seconds squared / meter
+    private static final double kA = 0.167; // volt seconds squared / meter
     private static final double kP = 3.5;
-    private static final double AUTO_MAX_VEL = 1.75; // meters / second
-    private static final double AUTO_MAX_ACCEL = 3; // meters / second squared
+    private static final double AUTO_MAX_VEL = 3.5; // meters / second
+    private static final double AUTO_MAX_ACCEL = 2.0; // meters / second squared
     private static final double AUTO_MAX_CENTRIP = 1.0; // meters / second squared
     private static final double AUTO_MAX_VOLTAGE = 10; // volts
     private static final double ARCADE_MAX_VEL = 3; // meters / second
     private static final double ARCADE_MAX_ROT = 2 * Math.PI; // rads / second
-    private static final double TRACKWIDTH = 0.58; // meters
+    private static final double TRACKWIDTH = 0.619; // meters
     private static final double WHEEL_DIAMETER = 0.1524; // meters
     private static final double GEAR_RATIO = (58.0 / 11.0) * (32.0 / 18.0);
     private static final double TICKS_PER_REV = 2048; // encoder units
@@ -89,7 +90,6 @@ public class Drivetrain extends SubsystemBase {
         // reset devices
         resetEncoders();
         resetGyro();
-        gyro.calibrate();
 
         // configuration
         setBrake();
@@ -119,6 +119,7 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("Right Velocity", getRightVelocity());
         SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
         SmartDashboard.putString("Odometry", getPose().toString());
+        SmartDashboard.putData("Calibrate Gyro", new InstantCommand(gyro::calibrate));
     }
 
     /**
@@ -234,6 +235,13 @@ public class Drivetrain extends SubsystemBase {
         leftSlave.setNeutralMode(NeutralMode.Coast);
         rightMotor.setNeutralMode(NeutralMode.Coast);
         rightSlave.setNeutralMode(NeutralMode.Coast);
+    }
+
+    /**
+     * Sets the cooler solenoid on or off.
+     */
+    public void setCooler(boolean output) {
+        cooler.set(output);
     }
 
     /**
@@ -387,30 +395,31 @@ public class Drivetrain extends SubsystemBase {
     }
 
     /**
-     * Sets the cooler solenoid on or off.
-     * @param output - The value to set cooler solenoid to.
+     * Returns left master motor temperature in Celcius.
      */
-    public void setCooler(boolean output) {
-        cooler.set(output);
+    public double getLeftMasterTemp() {
+        return leftMotor.getTemperature();
     }
 
-    /** 
-     * Returns temperature of motor based off Falcon ID. 
+    /**
+     * Returns right master motor temperature in Celcius.
      */
-    public double getMotorTemperature(int index) {
-        WPI_TalonFX[] falcons = new WPI_TalonFX[]{
-            leftMotor,
-            leftSlave,
-            rightMotor,
-            rightSlave,
-        };
-        double temp = -1.0;
-        try {
-            temp = falcons[index].getTemperature();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.err.println("Error: index " + index + " not in array of drive falcons.");
-        }
-        return temp;
+    public double getRightMasterTemp() {
+        return rightMotor.getTemperature();
+    }
+
+    /**
+     * Returns left slave motor temperature in Celcius.
+     */
+    public double getLeftSlaveTemp() {
+        return leftSlave.getTemperature();
+    }
+
+    /**
+     * Returns right slave motor temperature in Celcius.
+     */
+    public double getRightSlaveTemp() {
+        return rightSlave.getTemperature();
     }
 
 }

@@ -148,21 +148,18 @@ public class Shooter extends SubsystemBase {
         return targetVel;
     }
 
-    /** 
-     * Returns temperature of motor based off Falcon ID. 
+    /**
+     * Returns left shooter motor temperature in Celcius.
      */
-    public double getMotorTemperature(int index) {
-        WPI_TalonFX[] falcons = new WPI_TalonFX[] {
-            leftShooter,
-            rightShooter,
-        };
-        index -= 1;
-        double temp = -1.0;
-        try {
-            temp = falcons[index - 25].getTemperature();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            System.err.println("Error: index " + index + " not in array of shooter falcons.");
-        }
-        return temp;
+    public double getLeftTemp() {
+        return leftShooter.getTemperature();
     }
+
+    /**
+     * Returns right shooter motor temperature in Celcius.
+     */
+    public double getRightTemp() {
+        return rightShooter.getTemperature();
+    }
+
 }

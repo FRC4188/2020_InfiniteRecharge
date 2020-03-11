@@ -39,11 +39,10 @@ public class TurretAngle extends CommandBase {
     public TurretAngle(Turret turret, Limelight limelight) {
         addRequirements(turret);
         this.turret = turret;
-        targetPosition = turret.getPosition() - limelight.getHorizontalAngle() + 
-                SmartDashboard.getNumber("Turret Aim adjust", 0.0) - 360 * 
-                Math.signum(turret.getPosition() - 180
-        );
-        if (targetPosition > turret.getMaxPosition() || targetPosition < turret.getMinPosition()) 
+        targetPosition = turret.getPosition() - limelight.getHorizontalAngle()
+                + SmartDashboard.getNumber("Turret Aim adjust", 0.0) - 360
+                * Math.signum(turret.getPosition() - 180);
+        if (targetPosition > turret.getMaxPosition() || targetPosition < turret.getMinPosition())
             targetPosition = turret.getPosition();
     }
 

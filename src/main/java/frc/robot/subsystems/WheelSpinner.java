@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,7 +12,10 @@ public class WheelSpinner extends SubsystemBase {
     private CANSparkMax wheelSpinnerMotor = new CANSparkMax(26, MotorType.kBrushless);
     private boolean isRaised = true;
 
-    public void periodic(){
+    /**
+     * Runs every loop.
+     */
+    public void periodic() {
         SmartDashboard.putBoolean("Wheel Spinner Raised", isRaised());
     }
 

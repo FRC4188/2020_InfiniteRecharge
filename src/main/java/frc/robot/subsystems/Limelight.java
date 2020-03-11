@@ -24,7 +24,8 @@ public class Limelight extends SubsystemBase {
     private static final double SHOOTER_HEIGHT = 3.0 + (1.0 / 12.0); // feet
     private static final double HEIGHT_DIFF = PORT_HEIGHT - SHOOTER_HEIGHT; // feet
     private static final double CAMERA_ANGLE = 13; // degrees
-    private static final double DIRECT_TO_FLAT_DISTANCE = 1 / Math.cos(Math.toRadians(CAMERA_ANGLE));
+    private static final double DIRECT_TO_FLAT_DISTANCE =
+            1 / Math.cos(Math.toRadians(CAMERA_ANGLE));
 
     // state vars
     private NetworkTable limelightTable = null;
@@ -161,11 +162,17 @@ public class Limelight extends SubsystemBase {
      * Returns rpm to spin shooter to based on vision target formula.
      */
     public double formulaRpm() {
-        if (getDistance() <= 10) return (CLOSE_FORMULA_RATIO * getDistance() - 18190);
-        else if (getDistance() > 10 && getDistance() <= 13) return (MID_FORMULA_RATIO * getDistance() + 17326);
-        else if (getDistance() > 13 && getDistance() <= 35) return (FAR_FORMULA_RATIO * getDistance()) + 2320;
-        else if (getDistance() > 35) return (SUPER_FAR_FORMULA_RATIO * getDistance() + 2290);
-        else return 0;
+        if (getDistance() <= 10) {
+            return (CLOSE_FORMULA_RATIO * getDistance() - 18190);
+        } else if (getDistance() > 10 && getDistance() <= 13) {
+            return (MID_FORMULA_RATIO * getDistance() + 17326);
+        } else if (getDistance() > 13 && getDistance() <= 35) {
+            return (FAR_FORMULA_RATIO * getDistance()) + 2320;
+        } else if (getDistance() > 35) {
+            return (SUPER_FAR_FORMULA_RATIO * getDistance() + 2290);
+        } else {
+            return 0;
+        }
     }
 
     /**

@@ -41,7 +41,7 @@ public class Turret extends SubsystemBase {
         //resetEncoders();
         setRampRate();
         controllerInit();
-        SmartDashboard.putNumber("Turret offset (deg)", 0.0);
+        SmartDashboard.putNumber("Turret Offset", 0.0);
     }
 
     /**
@@ -103,7 +103,7 @@ public class Turret extends SubsystemBase {
      * Resets turret encoder value to 0.
      */
     public void resetEncoders() {
-        turretEncoder.setPosition(SmartDashboard.getNumber("Turret offset (deg)", 0.0) / ENCODER_TO_DEGREES);
+        turretEncoder.setPosition(SmartDashboard.getNumber("Turret Offset", 0.0));
     }
 
     /**
@@ -134,17 +134,18 @@ public class Turret extends SubsystemBase {
         return MIN_ANG;
     }
 
-    /** 
-     * Returns temperature of motor based off CANSpark ID. 
-     */
-    public double getMotorTemperature() {
-        return turretMotor.getMotorTemperature();
-    }
-
     /**
      * Sets the isTracking variable (for SmartDashboard purposes).
      */
     public void setTracking(boolean track) {
         isTracking = track;
     }
+
+    /**
+     * Returns turret motor temperature in Celcius.
+     */
+    public double getTemp() {
+        return turretMotor.getMotorTemperature();
+    }
+
 }
