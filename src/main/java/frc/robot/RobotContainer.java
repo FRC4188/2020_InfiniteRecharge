@@ -15,6 +15,7 @@ import frc.robot.commands.groups.MidDriveAwayAuto;
 import frc.robot.commands.groups.MidDriveTowardAuto;
 import frc.robot.commands.groups.MidToLeftBarAuto;
 import frc.robot.commands.groups.RightTrenchAuto;
+import frc.robot.commands.groups.RightTrenchSixAuto;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.SpinIndexer;
 import frc.robot.commands.intake.SpinIntake;
@@ -108,7 +109,7 @@ public class RobotContainer {
                 () -> pilot.getBumper(Hand.kLeft)
         ));
         shooter.setDefaultCommand(new SpinShooter(shooter, 3000));
-        magazine.setDefaultCommand(new LoadOne(magazine, intake));
+        magazine.setDefaultCommand(new LoadOne(magazine));
     }
 
     /**
@@ -139,7 +140,7 @@ public class RobotContainer {
 
         pilot.getBButtonObj().whileHeld(new SpinIntake(intake, magazine, 0.7, 1.0, 1.0));
         pilot.getBButtonObj().whenReleased(new SpinIntake(intake, magazine, 0, 0, 0));
-        pilot.getAButtonObj().whileHeld(new SpinIntake(intake, magazine, -0.7, 1.0, -1.0));
+        pilot.getAButtonObj().whileHeld(new SpinIntake(intake, magazine, -0.7, -1.0, -1.0));
         pilot.getAButtonObj().whenReleased(new SpinIntake(intake, magazine, 0, 0, 0));
 
         pilot.getBackButtonObj().toggleWhenPressed(
@@ -172,7 +173,7 @@ public class RobotContainer {
 
         buttonBox.getButton1Obj().whenPressed(new TurretAngle(turret, 0));
         buttonBox.getButton2Obj().toggleWhenPressed(new SpinShooter(shooter, 4100));
-        buttonBox.getButton3Obj().toggleWhenPressed(new SpinShooter(shooter, 3600));
+        buttonBox.getButton3Obj().toggleWhenPressed(new SpinShooter(shooter, 3700));
         buttonBox.getButton4Obj().whenPressed(new TurretAngle(turret, 180));
         buttonBox.getButton5Obj().toggleWhenPressed(new SpinShooter(shooter, 4550));
         buttonBox.getButton6Obj().toggleWhenPressed(new SpinShooter(shooter, 6000));
@@ -187,7 +188,10 @@ public class RobotContainer {
      */
     private void putChooser() {
         autoChooser.addOption("Do Nothing", null);
-        autoChooser.addOption("Right Trench", new RightTrenchAuto(drivetrain, magazine, shooter,
+        autoChooser.addOption("Right Trench(8)", new RightTrenchAuto(drivetrain, magazine, shooter,
+                limelight, turret, intake
+        ));
+        autoChooser.addOption("Right Trench(6)", new RightTrenchSixAuto(drivetrain, magazine, shooter,
                 limelight, turret, intake
         ));
         autoChooser.addOption("Left Enemy Trench", new LeftEnemyTrenchAuto(drivetrain, magazine,

@@ -33,11 +33,29 @@ public class SpinIntake extends CommandBase {
 
     @Override
     public void execute() {
-        if (magazine.getTopBeam()) intake.spin(percent, indexer, poly);
+        if (!magazine.topBeamClear()) intake.spin(percent, 0.0, 0.0);
+        else {
+            if (!magazine.midBeamClear()) {
+                intake.spin(percent, -0.2, 0.0);
+            }
+            else intake.spin(percent, indexer, poly);
+        }
+
+        // With Bot Beam
+        /*if (!magazine.topBeamClear()) intake.spin(percent, 0.0, 0.0);
+        else {
+            if (!magazine.botBeamClear()) {
+                intake.spin(percent, 0.0, 0.0);
+            }
+            else intake.spin(percent, indexer, poly);
+        }*/
+
+        // Original
+        /*if (magazine.getTopBeam()) intake.spin(percent, indexer, poly);
         else if (!magazine.getBotBeam()) {
             intake.spin(percent, -0.1, 0.0);
         }
-        else intake.spin(percent, 0.0, 0.0);
+        else intake.spin(percent, 0.0, 0.0);*/
     }
 
     @Override

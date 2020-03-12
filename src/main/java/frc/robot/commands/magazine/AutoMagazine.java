@@ -34,7 +34,7 @@ public class AutoMagazine extends CommandBase {
 
     @Override
     public void initialize() {
-        loaded = !magazine.getTopBeam();
+        loaded = !magazine.topBeamClear();
         timer = 0;
     }
 

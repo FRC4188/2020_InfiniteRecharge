@@ -50,7 +50,7 @@ public class RightTrenchSixAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 3400),
                     new AutoAim(turret, limelight, -3.25).withTimeout(1.5),
-                    new RunMagazineNonstop(magazine, 0.5)
+                    new RunMagazineNonstop(magazine, 0.4)
                 ),
 
                 // Lowers the intake.
@@ -59,7 +59,7 @@ public class RightTrenchSixAuto extends CspSequentialCommandGroup {
                 // Drives backward into the right-side trench, running intake at the same time.
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.RIGHT_TO_BACK_TRENCH),
-                    new SpinJustIntake(intake, 1.0),
+                    new SpinJustIntake(intake, 0.7),
                     new SpinIndexer(intake, 0.4)
                 ),
 
@@ -67,7 +67,7 @@ public class RightTrenchSixAuto extends CspSequentialCommandGroup {
                 // Runs magazine and intake at the same time to keep balls from falling out.
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.BACK_TRENCH_TO_SHOOT),
-                    new SpinJustIntake(intake, 0.3),
+                    new SpinJustIntake(intake, 0.2),
                     new RunMagazineNonstop(magazine, 0.1),
                     new TurretAngle(turret, 167.0),
                     new SpinShooter(shooter, 3550)
@@ -78,7 +78,7 @@ public class RightTrenchSixAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new AutoAim(turret, limelight, -2.0),
                     new SpinShooter(shooter, 3550),
-                    new SpinJustIntake(intake, 1.0),
+                    new SpinJustIntake(intake, 0.3),
                     new SpinIndexer(intake, 1.0),
                     new RunMagazineNonstop(magazine, 0.8).withTimeout(2.5)
                 )
