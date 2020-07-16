@@ -29,9 +29,12 @@ public class Turret extends SubsystemBase {
     private static final double GEAR_RATIO = 300; // angular velocity will be divided by this amount
     private static final double ENCODER_TO_DEGREES = 360.0 / GEAR_RATIO; // degrees
     private static final double RAMP_RATE = 0.5; // seconds
-    private static final double MAX_ANG = 370;
+    private static final double MAX_ANG = 248;
     private static final double MIN_ANG = -10;
+    private static final double MAX_DEAD_ZONE = 121;
+    private static final double MIN_DEAD_ZONE = 37;
 
+    private boolean inDeadZone = false;
     private boolean isTracking;
 
     /**
@@ -59,6 +62,7 @@ public class Turret extends SubsystemBase {
         SmartDashboard.putNumber("Turret temp", turretMotor.getMotorTemperature());
         SmartDashboard.putNumber("Turret raw vel", turretEncoder.getVelocity());
         SmartDashboard.putBoolean("Auto Aim", isTracking);
+        SmartDashboard.putBoolean("Dead Zone", inDeadZone);
     }
 
     /**
@@ -80,6 +84,11 @@ public class Turret extends SubsystemBase {
      */
     public void set(double percent) {
         turretMotor.set(percent);
+        if (getPosition() >= 37 && getPosition() <= 121) {
+            inDeadZone = true;
+        } else {
+            inDeadZone = false;
+        }
     }
 
     /**
@@ -131,6 +140,13 @@ public class Turret extends SubsystemBase {
      */
     public double getMinPosition() {
         return MIN_ANG;
+    }
+
+    /**
+     * Returns whether or not the turret is in the dead zone
+     */
+    public boolean getIsDeadZone() {
+        return isDeadZone;
     }
 
     /**

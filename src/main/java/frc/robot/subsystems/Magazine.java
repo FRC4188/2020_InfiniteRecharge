@@ -6,6 +6,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import frc.robot.subsystems.Turret;
+
 /**
  * Class encapsulating magazine function.
  */
@@ -47,7 +49,11 @@ public class Magazine extends SubsystemBase {
      * Sets belt motor to a given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        magMotor.set(percent);
+        if (getIsDeadZone()) {
+            magMotor.set(0.0);
+        } else {
+            magMotor.set(percent);
+        }
     }
 
     /**
