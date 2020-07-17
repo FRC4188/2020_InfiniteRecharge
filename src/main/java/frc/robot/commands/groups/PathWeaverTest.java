@@ -2,7 +2,6 @@ package frc.robot.commands.groups;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -77,21 +76,13 @@ public class PathWeaverTest extends CspSequentialCommandGroup {
         trajectory3 = TrajectoryUtil.fromPathweaverJson(trajectory3Path);
         } catch (IOException ex) {
         DriverStation.reportError("Unable to open trajectory: " + trajectory3JSON, ex.getStackTrace());
-        }
-
-        String trajectory4JSON = "paths/Test4.wpilib.json";
-        try {
-        Path trajectory4Path = Filesystem.getDeployDirectory().toPath().resolve(trajectory4JSON);
-        trajectory4 = TrajectoryUtil.fromPathweaverJson(trajectory4Path);
-        } catch (IOException ex) {
-        DriverStation.reportError("Unable to open trajectory: " + trajectory4JSON, ex.getStackTrace());
+        System.out.print("Nope didn't work");
         }
 
         addCommands(
                 new FollowTrajectory(drivetrain, trajectory1),
                 new FollowTrajectory(drivetrain, trajectory2),
-                new FollowTrajectory(drivetrain, trajectory3),
-                new FollowTrajectory(drivetrain, trajectory4)
+                new FollowTrajectory(drivetrain, trajectory3)
         );
     }
 }
