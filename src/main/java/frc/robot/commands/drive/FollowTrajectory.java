@@ -23,7 +23,7 @@ public class FollowTrajectory extends RamseteCommand {
      * @param drivetrain - Drivetrain subsystem to require.
      * @param trajectory - Trajectory to drive.
      */
-    private FollowTrajectory(Drivetrain drivetrain, Trajectory trajectory) {
+    public FollowTrajectory(Drivetrain drivetrain, Trajectory trajectory) {
         super(trajectory,
                 drivetrain::getPose,
                 new RamseteController(),
