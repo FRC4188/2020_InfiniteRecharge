@@ -12,6 +12,7 @@ import frc.robot.commands.drive.ManualDrive;
 import frc.robot.commands.groups.LeftEnemyTrenchAuto;
 import frc.robot.commands.groups.MidDriveAwayAuto;
 import frc.robot.commands.groups.MidDriveTowardAuto;
+import frc.robot.commands.groups.PathWeaverTest;
 import frc.robot.commands.groups.RightTrenchAuto;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.SpinIntake;
@@ -199,6 +200,9 @@ public class RobotContainer {
         ));
         autoChooser.addOption("Mid Drive Toward", new MidDriveTowardAuto(drivetrain, magazine,
                 shooter, limelight, turret
+        ));
+        autoChooser.addOption("PathWeaver 11-ball", new PathWeaverTest(drivetrain, magazine, shooter,
+                limelight, turret, intake
         ));
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
