@@ -59,8 +59,15 @@ public class Shooter extends SubsystemBase {
      * Writes values to Shuffleboard.
      */
     private void updateShuffleboard() {
-        SmartDashboard.putNumber("Left shooter rpm", getLeftVelocity());
-        SmartDashboard.putNumber("Right shooter rpm", getRightVelocity());
+        if (getLeftVelocity() == getRightVelocity()) {
+            SmartDashboard.putBoolean("Shooter motors equal speeds", true);
+            SmartDashboard.putNumber("Shooter RPM", getRightVelocity());
+        } else {
+            SmartDashboard.putBoolean("Shooter motors equal speeds", false);
+            SmartDashboard.putNumber("Left shooter rpm", getLeftVelocity());
+            SmartDashboard.putNumber("Right shooter rpm", getRightVelocity());
+        }
+        
     }
 
     /**

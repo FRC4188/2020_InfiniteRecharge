@@ -42,7 +42,6 @@ public class PathWeaverTest extends CspSequentialCommandGroup {
     Trajectory trajectory1;
     Trajectory trajectory2;
     Trajectory trajectory3;
-    Trajectory trajectory4;
 
     /**
      * Constructs MidDriveTowardAuto object and adds commands to group.
@@ -54,7 +53,7 @@ public class PathWeaverTest extends CspSequentialCommandGroup {
         this.limelight = limelight;
         this.turret = turret;
 
-        String trajectory1JSON = "paths/Test1.wpilib.json";
+        String trajectory1JSON = "paths/output/Test1.wpilib.json";
         try {
         Path trajectory1Path = Filesystem.getDeployDirectory().toPath().resolve(trajectory1JSON);
         trajectory1 = TrajectoryUtil.fromPathweaverJson(trajectory1Path);
@@ -62,7 +61,7 @@ public class PathWeaverTest extends CspSequentialCommandGroup {
         DriverStation.reportError("Unable to open trajectory: " + trajectory1JSON, ex.getStackTrace());
         }
 
-        String trajectory2JSON = "paths/Test2.wpilib.json";
+        String trajectory2JSON = "paths/output/Test2.wpilib.json";
         try {
         Path trajectory2Path = Filesystem.getDeployDirectory().toPath().resolve(trajectory2JSON);
         trajectory2 = TrajectoryUtil.fromPathweaverJson(trajectory2Path);
@@ -70,13 +69,12 @@ public class PathWeaverTest extends CspSequentialCommandGroup {
         DriverStation.reportError("Unable to open trajectory: " + trajectory1JSON, ex.getStackTrace());
         }
 
-        String trajectory3JSON = "paths/Test3.wpilib.json";
+        String trajectory3JSON = "paths/output/Test3.wpilib.json";
         try {
         Path trajectory3Path = Filesystem.getDeployDirectory().toPath().resolve(trajectory3JSON);
         trajectory3 = TrajectoryUtil.fromPathweaverJson(trajectory3Path);
         } catch (IOException ex) {
         DriverStation.reportError("Unable to open trajectory: " + trajectory3JSON, ex.getStackTrace());
-        System.out.print("Nope didn't work");
         }
 
         addCommands(
