@@ -45,7 +45,7 @@ public class MidDriveAwayAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 6000),
                     new AutoAim(turret, limelight, -1.5),
-                    new RunMagazine(magazine, 0.8).withTimeout(1.5)
+                    new RunMagazine(magazine, turret, 0.8).withTimeout(1.5)
                 ),
 
                 // Drives toward the port to move out of the way for other robots' paths.

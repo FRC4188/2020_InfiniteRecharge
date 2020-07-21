@@ -65,7 +65,7 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 3500),
                     new AutoAim(turret, limelight, 0),
-                    new RunMagazine(magazine, 0.8).withTimeout(2.0),
+                    new RunMagazine(magazine, turret, 0.8).withTimeout(2.0),
                     new SpinIndexer(intake, 1.0),
                     new SpinPolyRoller(intake, -1.0),
                     new SpinJustIntake(intake, 1.0)
@@ -89,7 +89,7 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 3600),
                     new AutoAim(turret, limelight, 0),
-                    new RunMagazine(magazine, 0.8).withTimeout(5.0),
+                    new RunMagazine(magazine, turret, 0.8).withTimeout(5.0),
                     new SpinIndexer(intake, 1.0),
                     new SpinPolyRoller(intake, -1.0),
                     new SpinJustIntake(intake, 1.0)

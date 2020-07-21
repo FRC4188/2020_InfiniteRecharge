@@ -47,9 +47,10 @@ public class Magazine extends SubsystemBase {
 
     /**
      * Sets belt motor to a given percentage [-1.0, 1.0].
+     * Also makes sure that the turret is not in a dead zone.
      */
-    public void set(double percent) {
-        if (getIsDeadZone()) {
+    public void set(double percent, Turret turret) {
+        if (turret.getInDeadZone()) {
             magMotor.set(0.0);
         } else {
             magMotor.set(percent);

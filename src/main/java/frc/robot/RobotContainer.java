@@ -130,10 +130,10 @@ public class RobotContainer {
         pilot.getDpadDownButtonObj().whenPressed(new LowerWheel(wheelSpinner));
         pilot.getDpadUpButtonObj().whenPressed(new RaiseWheel(wheelSpinner));
 
-        pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
-        pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
-        pilot.getYButtonObj().whileHeld(new RunMagazine(magazine, 0.9));
-        pilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
+        pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, turret, -0.9));
+        pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, turret, 0));
+        pilot.getYButtonObj().whileHeld(new RunMagazine(magazine, turret, 0.9));
+        pilot.getYButtonObj().whenReleased(new RunMagazine(magazine, turret, 0));
 
         pilot.getBButtonObj().whileHeld(new SpinIntake(intake, 1.0));
         pilot.getBButtonObj().whenReleased(new SpinIntake(intake, 0));
@@ -141,7 +141,7 @@ public class RobotContainer {
         pilot.getAButtonObj().whenReleased(new SpinIntake(intake, 0));
 
         pilot.getBackButtonObj().toggleWhenPressed(
-                new AutoMagazine(magazine, intake, limelight, shooter)
+                new AutoMagazine(magazine, intake, limelight, shooter, turret)
         );
 
         pilot.getStartButtonObj().whenPressed(new KillAll());

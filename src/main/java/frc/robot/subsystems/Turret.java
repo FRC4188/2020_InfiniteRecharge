@@ -84,7 +84,7 @@ public class Turret extends SubsystemBase {
      */
     public void set(double percent) {
         turretMotor.set(percent);
-        if (getPosition() >= 37 && getPosition() <= 121) {
+        if (getPosition() >= MIN_DEAD_ZONE && getPosition() <= MAX_DEAD_ZONE) {
             inDeadZone = true;
         } else {
             inDeadZone = false;
@@ -145,8 +145,8 @@ public class Turret extends SubsystemBase {
     /**
      * Returns whether or not the turret is in the dead zone
      */
-    public boolean getIsDeadZone() {
-        return isDeadZone;
+    public boolean getInDeadZone() {
+        return inDeadZone;
     }
 
     /**

@@ -53,7 +53,7 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 3400),
                     new AutoAim(turret, limelight, -3.25).withTimeout(1.5),
-                    new RunMagazine(magazine, 0.8)
+                    new RunMagazine(magazine, turret, 0.8)
                 ),
 
                 // Lowers the intake.
@@ -71,7 +71,7 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.BACK_TO_FRONT_TRENCH),
                     new SpinIntake(intake, 0.3),
-                    new RunMagazine(magazine, 0.25),
+                    new RunMagazine(magazine, turret, 0.25),
                     new TurretAngle(turret, 180.0)
                 ),
 
@@ -92,7 +92,7 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                     new SpinJustIntake(intake, 1.0),
                     new SpinIndexer(intake, 1.0),
                     new SpinPolyRoller(intake, -1.0),
-                    new RunMagazine(magazine, 0.8).withTimeout(4.5)
+                    new RunMagazine(magazine, turret, 0.8).withTimeout(4.5)
                 )
 
         );

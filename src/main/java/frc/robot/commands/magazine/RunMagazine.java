@@ -2,6 +2,7 @@ package frc.robot.commands.magazine;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Magazine;
+import frc.robot.subsystems.Turret;
 
 /**
  * Runs magazine motor at a given percentage.
@@ -9,6 +10,7 @@ import frc.robot.subsystems.Magazine;
 public class RunMagazine extends CommandBase {
 
     private final Magazine magazine;
+    private final Turret turret;
     private final double percent;
 
     /**
@@ -16,10 +18,11 @@ public class RunMagazine extends CommandBase {
      * @param magazine - Magazine subsystem to use.
      * @param percent - Percent to run motors [-1.0, 1.0], positive feeds shooter.
      */
-    public RunMagazine(Magazine magazine, double percent) {
+    public RunMagazine(Magazine magazine, Turret turret, double percent) {
         addRequirements(magazine);
         this.magazine = magazine;
         this.percent = percent;
+        this.turret = turret;
     }
 
     @Override
@@ -28,7 +31,8 @@ public class RunMagazine extends CommandBase {
 
     @Override
     public void execute() {
-        magazine.set(percent);
+        magazine.set(percent, turret);
+        magazine.set(0.0, turret);
     }
 
     @Override
@@ -38,7 +42,7 @@ public class RunMagazine extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        magazine.set(0);
+        magazine.set(0, this.turret);
     }
 
 }
