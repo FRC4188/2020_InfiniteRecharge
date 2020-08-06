@@ -30,9 +30,12 @@ public class RunMagazine extends CommandBase {
     }
 
     @Override
-    public void execute() {
-        magazine.set(percent, turret);
-        magazine.set(0.0, turret);
+    public void execute() { // Redundent, but it works
+        if (!turret.getInDeadZone()) {
+            magazine.set(percent, turret);
+        } else {
+            magazine.set(0.0, turret);
+        }
     }
 
     @Override
@@ -42,7 +45,7 @@ public class RunMagazine extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        magazine.set(0, this.turret);
+        magazine.set(0.0, this.turret);
     }
 
 }
