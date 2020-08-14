@@ -13,6 +13,7 @@ import frc.robot.commands.groups.LeftEnemyTrenchAuto;
 import frc.robot.commands.groups.MidDriveAwayAuto;
 import frc.robot.commands.groups.MidDriveTowardAuto;
 import frc.robot.commands.groups.PathWeaverTest;
+import frc.robot.commands.groups.TestCurve;
 import frc.robot.commands.groups.RightTrenchAuto;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.SpinIntake;
@@ -107,7 +108,7 @@ public class RobotContainer {
                 () -> pilot.getX(Hand.kRight),
                 () -> pilot.getBumper(Hand.kLeft)
         ));
-        shooter.setDefaultCommand(new SpinShooter(shooter, 3000));
+        shooter.setDefaultCommand(new SpinShooter(shooter, 0.0));
     }
 
     /**
@@ -203,6 +204,8 @@ public class RobotContainer {
         ));
         autoChooser.addOption("PathWeaver 11-ball", new PathWeaverTest(drivetrain, magazine, shooter,
                 limelight, turret, intake
+        ));
+        autoChooser.addOption("TestCurve", new TestCurve(drivetrain
         ));
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }

@@ -124,4 +124,9 @@ public class WaypointsList {
             ), true
     );
 
+    public static final Waypoints ONE_METER = new Waypoints(List.of(
+        new Pose2d(0,0, new Rotation2d()),
+        new Pose2d(3,0, new Rotation2d())
+    ), false);
+
 }
