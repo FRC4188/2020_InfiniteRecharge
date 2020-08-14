@@ -61,6 +61,8 @@ public class Shooter extends SubsystemBase {
     private void updateShuffleboard() {
         SmartDashboard.putNumber("Left shooter rpm", getLeftVelocity());
         SmartDashboard.putNumber("Right shooter rpm", getRightVelocity());
+        SmartDashboard.putNumber("Left shooter temp", getLeftTemp());
+        SmartDashboard.putNumber("Right shooter temp", getRightTemp());
     }
 
     /**
