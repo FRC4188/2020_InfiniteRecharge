@@ -44,8 +44,7 @@ public class AutoAim extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return (turret.getPosition() >= turret.getMaxPosition()
-                || turret.getPosition() <= turret.getMinPosition());
+        return !limelight.hasTarget();
     }
 
     @Override

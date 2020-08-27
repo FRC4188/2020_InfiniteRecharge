@@ -21,9 +21,9 @@ public class Limelight extends SubsystemBase {
     private static final double SUPER_FAR_FORMULA_RATIO = 80.9;
     private static final double PORT_HEIGHT = 8.1875; // feet
     private static final double TAPE_HEIGHT = 2.5 / 2.0; // between bottom and top, feet
-    private static final double SHOOTER_HEIGHT = 3.0 + (1.0 / 12.0); // feet
+    private static final double SHOOTER_HEIGHT = 3.0 + (0.5 / 12.0); // feet
     private static final double HEIGHT_DIFF = PORT_HEIGHT - SHOOTER_HEIGHT; // feet
-    private static final double CAMERA_ANGLE = 13; // degrees
+    private static final double CAMERA_ANGLE = 11.663; // degrees
     private static final double DIRECT_TO_FLAT_DISTANCE =
             1 / Math.cos(Math.toRadians(CAMERA_ANGLE));
 
@@ -102,6 +102,7 @@ public class Limelight extends SubsystemBase {
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Formula RPM", formulaRpm());
         SmartDashboard.putNumber("Limelight distance reading", getDistance());
+        SmartDashboard.putNumber("Vertical Angle", getVerticalAngle());
     }
 
     /**
@@ -140,7 +141,8 @@ public class Limelight extends SubsystemBase {
      * Returns the vertical angle from the center of the camera to the target.
      */
     public double getVerticalAngle() {
-        return limelightTable.getEntry("ty").getDouble(0.0);
+        double r = limelightTable.getEntry("ty").getDouble(0.0);
+        return r + (0.164*r + 0.102) + CAMERA_ANGLE;
     }
 
     /**
@@ -154,7 +156,7 @@ public class Limelight extends SubsystemBase {
      * Returns horizontal distance in feet from the target.
      */
     public double getDistance() {
-        double dist = HEIGHT_DIFF / (Math.tan(Math.toRadians(getVerticalAngle() + CAMERA_ANGLE)));
+        double dist = HEIGHT_DIFF/(Math.tan(Math.toRadians(getVerticalAngle()))) + 0.2;
         return dist; //* DIRECT_TO_FLAT_DISTANCE;
     }
 
@@ -162,7 +164,7 @@ public class Limelight extends SubsystemBase {
      * Returns rpm to spin shooter to based on vision target formula.
      */
     public double formulaRpm() {
-        if (getDistance() <= 10) {
+        /*if (getDistance() <= 10) {
             return (CLOSE_FORMULA_RATIO * getDistance() - 18190);
         } else if (getDistance() > 10 && getDistance() <= 13) {
             return (MID_FORMULA_RATIO * getDistance() + 17326);
@@ -172,7 +174,10 @@ public class Limelight extends SubsystemBase {
             return (SUPER_FAR_FORMULA_RATIO * getDistance() + 2290);
         } else {
             return 0;
-        }
+        }*/
+        double d = getDistance();
+        double rpm = 8200 + -500*d + 11.0*d*d;
+        return rpm;
     }
 
     /**
