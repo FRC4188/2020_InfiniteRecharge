@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -14,9 +16,14 @@ public class Magazine extends SubsystemBase {
     // device initialization
     private final CANSparkMax magMotor = new CANSparkMax(24, MotorType.kBrushless);
     private final CANEncoder magEncoder = new CANEncoder(magMotor);
+    private final DigitalInput midBeam = new DigitalInput(0);
+    private final DigitalInput topBeam = new DigitalInput(1);
+    // private final DigitalInput botBeam = new DigitalInput(2);
 
     // constants
-    private static final double RAMP_RATE = 0.2; // seconds
+    private static final double RAMP_RATE = 0.05; // seconds
+
+    private boolean manual;
 
     /**
      * Constructs new magazine object and configures devices.
@@ -31,6 +38,7 @@ public class Magazine extends SubsystemBase {
      */
     @Override
     public void periodic() {
+        magMotor.setInverted(true);
         updateShuffleboard();
     }
 
@@ -39,8 +47,11 @@ public class Magazine extends SubsystemBase {
      */
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Magazine velocity", magEncoder.getVelocity());
-        SmartDashboard.putNumber("Magazine Encoder Position", magEncoder.getPosition());
         SmartDashboard.putNumber("M24 temp", magMotor.getMotorTemperature());
+        // SmartDashboard.putBoolean("Bot Beam Breaker", botBeamClear());
+        SmartDashboard.putBoolean("Top Beam Breaker", topBeamClear());
+        SmartDashboard.putBoolean("Mid Beam Breaker", midBeamClear());
+        SmartDashboard.putBoolean("Magazine manual", getManual());
     }
 
     /**
@@ -65,4 +76,24 @@ public class Magazine extends SubsystemBase {
         return magMotor.getMotorTemperature();
     }
 
+    /*public boolean botBeamClear() {
+        return botBeam.get();
+    }*/
+
+    public boolean midBeamClear() {
+        return midBeam.get();
+    }
+
+    public boolean topBeamClear() {
+        return topBeam.get();
+    }
+
+    public void setManual(boolean manual) {
+        this.manual = manual;
+    }
+
+    public boolean getManual() {
+        return manual;
+    }
+    
 }
