@@ -9,7 +9,6 @@ import frc.robot.commands.intake.RaiseIntake;
 import frc.robot.commands.intake.SpinIndexer;
 import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.intake.SpinJustIntake;
-import frc.robot.commands.intake.SpinPolyRoller;
 import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.turret.AutoAim;
@@ -63,9 +62,8 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.RIGHT_TO_BACK_TRENCH),
                     new TurretAngle(turret, 180.0),
-                    new SpinJustIntake(intake, 1.0),
-                    new SpinIndexer(intake, 0.4),
-                    new SpinPolyRoller(intake, 0.4)
+                    new SpinIntake(intake, magazine, 1.0,1.0,1.0)
+
                 ),
 
                 // Drives forward to the front of the trench, spin up to 3550.
@@ -83,16 +81,14 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelRaceGroup(
                     new AutoAim(turret, limelight, -2.0),
                     new SpinShooter(shooter, 3550),
-                    new SpinJustIntake(intake, 1.0),
-                    new SpinIndexer(intake, 1.0),
-                    new SpinPolyRoller(intake, -1.0),
+                    new SpinIntake(intake, magazine, 1.0,1.0,1.0),
                     new RunMagazine(magazine, 0.8).withTimeout(2.5)
                 ),
 
                 // Pickup balls from bar, auto aims and revs up shooter to 3500 rpm.
                 new ParallelRaceGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.FRONT_TRENCH_TO_BAR),
-                    new SpinIntake(intake, 1.0),
+                    new SpinIntake(intake, magazine, 1.0,1.0,1.0),
                     new SpinShooter(shooter, 3550)
                 )
 

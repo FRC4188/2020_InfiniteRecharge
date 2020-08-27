@@ -137,10 +137,10 @@ public class RobotContainer {
         pilot.getYButtonObj().whileHeld(new RunMagazine(magazine, 0.9));
         pilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
 
-        pilot.getBButtonObj().whileHeld(new SpinIntake(intake, 1.0));
-        pilot.getBButtonObj().whenReleased(new SpinIntake(intake, 0));
-        pilot.getAButtonObj().whileHeld(new SpinIntake(intake, -.85));
-        pilot.getAButtonObj().whenReleased(new SpinIntake(intake, 0));
+        pilot.getBButtonObj().whileHeld(new SpinIntake(intake, magazine, 0.7, 1.0, 1.0));
+        pilot.getBButtonObj().whenReleased(new SpinIntake(intake, magazine, 0, 0, 0));
+        pilot.getAButtonObj().whileHeld(new SpinIntake(intake, magazine, -0.7, -1.0, -1.0));
+        pilot.getAButtonObj().whenReleased(new SpinIntake(intake, magazine, 0, 0, 0));
 
         pilot.getBackButtonObj().toggleWhenPressed(
                 new AutoMagazine(magazine, intake, limelight, shooter)

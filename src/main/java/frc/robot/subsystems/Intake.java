@@ -6,7 +6,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 /**
  * Class encapsulating intake function.
  */
@@ -41,6 +40,8 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         updateShuffleboard();
+
+        //ballCount = (int) SmartDashboard.getNumber("Beam Breaker", ballCount);
         if (isRaised) {
             intakeSolenoid.set(false);
         } else {
@@ -61,11 +62,11 @@ public class Intake extends SubsystemBase {
     /**
      * Spins the intake motor a given percent [-1.0, 1.0].
      */
-    public void spin(double percent) {
-        if (intakeSolenoid.get()) intakeMotor.set(percent);
-        else intakeMotor.set(percent / 3);
-        indexerMotor.set(percent);
-        polyRoller.set(percent);
+    public void spin(double intake, double indexer, double poly) {
+        if (intakeSolenoid.get()) intakeMotor.set(intake);
+        else intakeMotor.set(intake / 3);   
+        indexerMotor.set(indexer);
+        polyRoller.set(poly);
     }
 
     public void spinIntake(double percent) {

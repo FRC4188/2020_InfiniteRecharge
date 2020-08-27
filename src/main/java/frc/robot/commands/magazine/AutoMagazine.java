@@ -2,6 +2,7 @@ package frc.robot.commands.magazine;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
 
@@ -13,6 +14,7 @@ public class AutoMagazine extends CommandBase {
     private final Magazine magazine;
     private final Intake intake;
     private final Shooter shooter;
+    private final Limelight limelight;
     private final double TOLERANCE = 250;
     private final double TIMEOUT = 20;
     private double timer;
@@ -25,11 +27,12 @@ public class AutoMagazine extends CommandBase {
      * @param intake - Intake subsystem that feeds into the magazine.
      * @param shooter - Shooter subsystem to use for getting current shooter rpm.
      */
-    public AutoMagazine(Magazine magazine, Intake intake, Shooter shooter) {
+    public AutoMagazine(Magazine magazine, Intake intake, Limelight limelight, Shooter shooter) {
         addRequirements(magazine, intake);
         this.magazine = magazine;
         this.intake = intake;
         this.shooter = shooter;
+        this.limelight = limelight;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class AutoMagazine extends CommandBase {
         }
         else {
             double currentVel = shooter.getLeftVelocity();
-            double targetVel = shooter.getTargetVel();
+            double targetVel = limelight.formulaRpm();
 
             if (Math.abs(currentVel - targetVel) > TOLERANCE) {
                 magazine.set(0);
