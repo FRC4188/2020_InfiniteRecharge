@@ -18,7 +18,7 @@ public class Magazine extends SubsystemBase {
     private final CANEncoder magEncoder = new CANEncoder(magMotor);
     private final DigitalInput midBeam = new DigitalInput(0);
     private final DigitalInput topBeam = new DigitalInput(1);
-    // private final DigitalInput botBeam = new DigitalInput(2);
+    private final DigitalInput botBeam = new DigitalInput(2);
 
     // constants
     private static final double RAMP_RATE = 0.05; // seconds
@@ -48,9 +48,9 @@ public class Magazine extends SubsystemBase {
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Magazine velocity", magEncoder.getVelocity());
         SmartDashboard.putNumber("M24 temp", magMotor.getMotorTemperature());
-        // SmartDashboard.putBoolean("Bot Beam Breaker", botBeamClear());
         SmartDashboard.putBoolean("Top Beam Breaker", topBeamClear());
         SmartDashboard.putBoolean("Mid Beam Breaker", midBeamClear());
+        SmartDashboard.putBoolean("Bottom Beam Breaker", botBeamClear());
         SmartDashboard.putBoolean("Magazine manual", getManual());
     }
 
@@ -76,16 +76,16 @@ public class Magazine extends SubsystemBase {
         return magMotor.getMotorTemperature();
     }
 
-    /*public boolean botBeamClear() {
-        return botBeam.get();
-    }*/
-
     public boolean midBeamClear() {
         return midBeam.get();
     }
 
     public boolean topBeamClear() {
         return topBeam.get();
+    }
+
+    public boolean botBeamClear() {
+        return botBeam.get();
     }
 
     public void setManual(boolean manual) {

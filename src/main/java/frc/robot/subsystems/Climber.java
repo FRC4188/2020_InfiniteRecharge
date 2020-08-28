@@ -32,8 +32,8 @@ public class Climber extends SubsystemBase {
     private static final double kF = 1023 / MAX_VELOCITY;
     private static final double RAMP_RATE = .2; // seconds
     private static final int TIMEOUT = 10; // ms
-    private static final int CRUISE_ACCEL = 15000;
-    private static final int CRUISE_VEL = 15000;
+    //private static final int CRUISE_ACCEL = 15000;
+    //private static final int CRUISE_VEL = 15000;
     private static final double MAX_POSITION = 0;
     private static final double MIN_POSITION = -197500;
 

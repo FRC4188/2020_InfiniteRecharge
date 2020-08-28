@@ -108,7 +108,7 @@ public class RobotContainer {
                 () -> pilot.getX(Hand.kRight),
                 () -> pilot.getBumper(Hand.kLeft)
         ));
-        shooter.setDefaultCommand(new SpinShooter(shooter, 3000));
+        shooter.setDefaultCommand(new SpinShooter(shooter, 0));
         magazine.setDefaultCommand(new LoadOne(magazine));
     }
 
