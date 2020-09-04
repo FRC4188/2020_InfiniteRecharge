@@ -63,10 +63,12 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.RIGHT_TO_BACK_TRENCH),
                     new TurretAngle(turret, 180.0),
-                    new SpinIntake(intake, 1.0)
+                    new SpinJustIntake(intake, 1.0),
+                    new SpinIndexer(intake, 0.4),
+                    new SpinPolyRoller(intake, 0.4)
                 ),
 
-                // Drives forward to the front of the trench.
+                // Drives forward to the front of the trench, spin up to 3550.
                 // Runs magazine and intake at the same time to keep balls from falling out.
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.BACK_TO_FRONT_TRENCH),
@@ -82,13 +84,11 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                     new SpinShooter(shooter, 3500)
                 ),
 
-                new FollowTrajectory(drivetrain, WaypointsList.BAR_TO_SHOOT),
-
                 // Continues to auto aim and spin shooter at 3500 rpm.
                 // Runs magazine and indexer to shoot balls picked up from trench.
                 new ParallelRaceGroup(
                     new AutoAim(turret, limelight, -2.0),
-                    new SpinShooter(shooter, 3500),
+                    new SpinShooter(shooter, 3550),
                     new SpinJustIntake(intake, 1.0),
                     new SpinIndexer(intake, 1.0),
                     new SpinPolyRoller(intake, -1.0),
