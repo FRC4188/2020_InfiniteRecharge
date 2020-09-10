@@ -15,12 +15,16 @@ import frc.robot.commands.groups.MidDriveTowardAuto;
 import frc.robot.commands.groups.PathWeaverTest;
 import frc.robot.commands.groups.TestCurve;
 import frc.robot.commands.groups.RightTrenchAuto;
+//import frc.robot.commands.groups.AutoShoot;
 import frc.robot.commands.hood.ToggleHood;
+import frc.robot.commands.intake.LowerIntake;
+import frc.robot.commands.intake.RaiseIntake;
 import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.intake.SpinJustIntake;
 import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.magazine.RunMagazine;
+import frc.robot.commands.magazine.PIDTesting;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.shooter.SpinShooterFormula;
 import frc.robot.commands.turret.AutoAim;
@@ -108,7 +112,8 @@ public class RobotContainer {
                 () -> pilot.getX(Hand.kRight),
                 () -> pilot.getBumper(Hand.kLeft)
         ));
-        shooter.setDefaultCommand(new SpinShooterFormula(shooter, limelight));
+        //shooter.setDefaultCommand(new SpinShooterFormula(shooter, limelight));
+        shooter.setDefaultCommand(new SpinShooter(shooter, 2000));
     }
 
     /**
@@ -129,22 +134,28 @@ public class RobotContainer {
         pilot.getRtButtonObj().whileActiveContinuous(new SpinWheel(wheelSpinner, 0.7));
         pilot.getRtButtonObj().whenInactive(new SpinWheel(wheelSpinner, 0));
 
-        pilot.getDpadDownButtonObj().whenPressed(new LowerWheel(wheelSpinner));
-        pilot.getDpadUpButtonObj().whenPressed(new RaiseWheel(wheelSpinner));
+        pilot.getDpadDownButtonObj().whenPressed(new PIDTesting(magazine));
+        //pilot.getDpadUpButtonObj().whenPressed(new RaiseWhee
+        //testing intake, no LowerIntake button   
+             
+        pilot.getDpadDownButtonObj().whenPressed(new LowerIntake(intake));
+        pilot.getDpadUpButtonObj().whenPressed(new RaiseIntake(intake));
 
         pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
         pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
         pilot.getYButtonObj().whileHeld(new RunMagazine(magazine, 0.9));
         pilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
 
-        pilot.getBButtonObj().whileHeld(new SpinIntake(intake, magazine, 0.7, 1.0, 1.0));
-        pilot.getBButtonObj().whenReleased(new SpinIntake(intake, magazine, 0, 0, 0));
-        pilot.getAButtonObj().whileHeld(new SpinIntake(intake, magazine, -0.7, -1.0, -1.0));
-        pilot.getAButtonObj().whenReleased(new SpinIntake(intake, magazine, 0, 0, 0));
+        pilot.getBButtonObj().whileHeld(new AutoMagazine(magazine, intake, true, true));
+        pilot.getBButtonObj().whenReleased(new AutoMagazine(magazine, intake, true, false));
+        pilot.getAButtonObj().whileHeld(new AutoMagazine(magazine, intake, false, true));
+        pilot.getAButtonObj().whenReleased(new AutoMagazine(magazine, intake, false, false));
+        
+        pilot.getAButtonObj().whenReleased(new SpinIntake(intake, magazine, 0, 0));
 
-        pilot.getBackButtonObj().toggleWhenPressed(
-                new AutoMagazine(magazine, intake, limelight, shooter)
-        );
+        //pilot.getBackButtonObj().toggleWhenPressed(
+        //        new AutoMagazine(magazine, intake, limelight, shooter)
+        //);
 
         pilot.getStartButtonObj().whenPressed(new KillAll());
         copilot.getStartButtonObj().whenPressed(new KillAll());

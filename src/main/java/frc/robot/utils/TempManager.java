@@ -62,9 +62,9 @@ public class TempManager {
         if (intake.getIndexerTemp() > MAX_TEMP) {
             sb.append("I12: " + intake.getIndexerTemp() + ", ");
         }
-        if (intake.getPolyRollerTemp() > MAX_TEMP) {
+        /*if (intake.getPolyRollerTemp() > MAX_TEMP) {
             sb.append("I13: " + intake.getPolyRollerTemp() + ", ");
-        }
+        }*/
         if (magazine.getTemp() > MAX_TEMP) {
             sb.append("M: " + magazine.getTemp() + ", ");
         }

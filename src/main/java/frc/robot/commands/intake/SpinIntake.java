@@ -10,7 +10,6 @@ public class SpinIntake extends CommandBase {
     private final Magazine magazine;
     private final double percent;
     private final double indexer;
-    private final double poly;
 
     /**
      * Constructs new SpinIntake command to spin intake, indexer, and poly roller motors a given percentage.
@@ -18,12 +17,11 @@ public class SpinIntake extends CommandBase {
      * @param intake - Intake subsystem to use.
      * @param percent - percent output to command motors.
      */
-    public SpinIntake(Intake intake, Magazine magazine, double percent, double indexer, double poly) {
+    public SpinIntake(Intake intake, Magazine magazine, double percent, double indexer) {
         this.percent = percent;
         this.magazine = magazine;
         this.intake = intake;
         this.indexer = indexer;
-        this.poly = poly;
         addRequirements(intake);
     }
 
@@ -33,12 +31,12 @@ public class SpinIntake extends CommandBase {
 
     @Override
     public void execute() {
-        if (!magazine.topBeamClear()) intake.spin(percent, 0.0, 0.0);
+        if (!magazine.topBeamClear()) intake.spin(percent, 0.0);
         else {
             if (!magazine.midBeamClear()) {
-                intake.spin(percent, -0.2, 0.0);
+                intake.spin(percent, -0.2);
             }
-            else intake.spin(percent, indexer, poly);
+            else intake.spin(percent, indexer);
         }
 
         // With Bot Beam
@@ -60,7 +58,7 @@ public class SpinIntake extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        intake.spin(0, 0, 0);
+        intake.spin(0.0, 0.0);
     }
 
     @Override

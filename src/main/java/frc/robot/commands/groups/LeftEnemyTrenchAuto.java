@@ -65,13 +65,13 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
                     new SpinShooter(shooter, 3500),
                     new AutoAim(turret, limelight, 0),
                     new RunMagazine(magazine, 0.8).withTimeout(2.0),
-                    new SpinIntake(intake, magazine, 1.0,1.0,1.0)
+                    new SpinIntake(intake, magazine, 1.0,1.0)
                 ),
 
                 // Pick up two more balls from front of bar and turn turret.
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.SHOOT_TO_BAR),
-                    new SpinIntake(intake, magazine, 1.0,1.0,1.0),
+                    new SpinIntake(intake, magazine, 1.0,1.0),
                     new TurretAngle(turret, 160.0)
                 ),
 
@@ -87,7 +87,7 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
                     new SpinShooter(shooter, 3600),
                     new AutoAim(turret, limelight, 0),
                     new RunMagazine(magazine, 0.8).withTimeout(5.0),
-                    new SpinIntake(intake, magazine, 1.0,1.0,1.0)
+                    new SpinIntake(intake, magazine, 1.0,1.0)
                 )
 
         );
