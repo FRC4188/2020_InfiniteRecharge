@@ -44,7 +44,7 @@ public class AutoAim extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return !limelight.hasTarget();
+        return false;
     }
 
     @Override

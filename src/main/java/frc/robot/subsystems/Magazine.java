@@ -32,8 +32,8 @@ public class Magazine extends SubsystemBase {
     private static final double PULLEY_DIAMETER = 1.39; // Diameter of output pulley.
     private static final double PULLEY_CIRCUMFRENCE = PULLEY_DIAMETER * Math.PI; // Circumfrence of output pulley.
     private static final double TICKS_PER_INCH = TICKS_PER_REV /PULLEY_CIRCUMFRENCE; // Encoder ticks per inch of rotation on the output pulley.
-    private static final double kP = 4e-10;
-    private static final double kI = 1e-6;
+    private static final double kP = 0; //4e-10;
+    private static final double kI = 0; //1e-6;
     private static final double kD = 0;
     private static final double kF = 1.0 / MAX_VELOCITY;
     private static final double kI_ZONE = 0;

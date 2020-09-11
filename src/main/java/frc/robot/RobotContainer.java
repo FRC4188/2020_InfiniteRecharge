@@ -113,7 +113,7 @@ public class RobotContainer {
                 () -> pilot.getBumper(Hand.kLeft)
         ));
         //shooter.setDefaultCommand(new SpinShooterFormula(shooter, limelight));
-        shooter.setDefaultCommand(new SpinShooter(shooter, 2000));
+        shooter.setDefaultCommand(new SpinShooter(shooter, 3000));
     }
 
     /**
@@ -191,9 +191,6 @@ public class RobotContainer {
         buttonBox.getButton5Obj().toggleWhenPressed(new SpinShooter(shooter, 4550));
         buttonBox.getButton6Obj().toggleWhenPressed(new SpinShooter(shooter, 6000));
         buttonBox.getButton7Obj().toggleWhenPressed(new SpinShooter(shooter, 2250));
-        buttonBox.getButton8Obj().whileHeld(new SpinJustIntake(intake, -1.0));
-        buttonBox.getButton8Obj().whenReleased(new SpinJustIntake(intake, 0));
-
     }
 
     /**
