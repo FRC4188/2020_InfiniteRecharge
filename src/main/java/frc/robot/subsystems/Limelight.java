@@ -206,7 +206,10 @@ public class Limelight extends SubsystemBase {
         setCameraMode(CameraMode.CAMERA);
         setPipeline(Pipeline.CLOSE);
     }
+    public boolean getIsAimed() {
+        return getHorizontalAngle() >= -3 && getHorizontalAngle() <= 3;
 
+    }
     /**
      * Returns the pipeline the camera is running.
      */

@@ -5,6 +5,8 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -46,6 +48,7 @@ public class Magazine extends SubsystemBase {
      */
     public Magazine() {
         magMotor.setInverted(true);
+        magMotor.setIdleMode(IdleMode.kBrake);
         setRampRate();
 
         SmartDashboard.putNumber("Mag P", kP);

@@ -46,6 +46,9 @@ public class Climber extends SubsystemBase {
         climberLeftMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 10);
         climberRightMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 10);
         climberLeftMotor.setInverted(true);
+        climberLeftMotor.setNeutralMode(NeutralMode.Brake);
+        climberRightMotor.setNeutralMode(NeutralMode.Brake);
+
 
         // init
         controllerInit();

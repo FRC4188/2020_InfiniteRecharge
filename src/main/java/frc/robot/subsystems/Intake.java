@@ -1,9 +1,11 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,15 +15,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Intake extends SubsystemBase {
 
     // device initialization
-    private WPI_TalonSRX intakeMotor = new WPI_TalonSRX(24);
+    private CANSparkMax intakeMotor = new CANSparkMax(27, MotorType.kBrushless);
+    private CANEncoder intakeEncoder = intakeMotor.getEncoder();
     private CANSparkMax indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
-    //private CANSparkMax polyRoller = new CANSparkMax(13, MotorType.kBrushless);
     private CANEncoder indexerMotorEncoder = indexerMotor.getEncoder();
-    //private CANEncoder polyRollerEncoder = polyRoller.getEncoder();
     private Solenoid intakeSolenoid = new Solenoid(0);
 
     // constants
     private static final double RAMP_RATE = 0.5; // seconds
+    private static final double INTAKE_TIMEOUT = 20;
 
     double intakeSet;
 
@@ -34,7 +36,7 @@ public class Intake extends SubsystemBase {
     public Intake() {
         resetEncoders();
         setRampRate();
-    }
+        }
 
     /**
      * Runs every loop.
@@ -60,6 +62,7 @@ public class Intake extends SubsystemBase {
         //SmartDashboard.putNumber("PolyRoller Position", getPolyRollerPosition());
         SmartDashboard.putBoolean("Intake Raised", isRaised());
         SmartDashboard.putNumber("Intake Motor Set", intakeSet);
+        SmartDashboard.putNumber("Intake Temp", intakeMotor.getMotorTemperature());
     }
 
     /**
@@ -67,7 +70,7 @@ public class Intake extends SubsystemBase {
      */
     public void spin(double intake, double indexer) {
         this.intakeSet = intake;
-        if (intakeSolenoid.get()) intakeMotor.set(intake);
+        if (intakeSolenoid.get()) intakeMotor.set(intake/2);
         else intakeMotor.set(intake / 3);   
         indexerMotor.set(indexer);
     }
@@ -115,7 +118,7 @@ public class Intake extends SubsystemBase {
      * Sets the encoder values to zero for intake, indexer, and poly roller.
      */
     public void resetEncoders() {
-        intakeMotor.setSelectedSensorPosition(0);
+        intakeEncoder.setPosition(0);
         indexerMotorEncoder.setPosition(0);
         //polyRollerEncoder.setPosition(0);
     }
@@ -124,7 +127,7 @@ public class Intake extends SubsystemBase {
      * Configures motor ramp rates.
      */
     public void setRampRate() {
-        intakeMotor.configOpenloopRamp(RAMP_RATE);
+        intakeMotor.setOpenLoopRampRate(RAMP_RATE);
         indexerMotor.setOpenLoopRampRate(RAMP_RATE);
         //polyRoller.setOpenLoopRampRate(RAMP_RATE);
     }
@@ -140,7 +143,7 @@ public class Intake extends SubsystemBase {
      * Returns intake motor position in rotations.
      */
     public double getIntakePosition() {
-        return intakeMotor.getSelectedSensorPosition();
+        return intakeEncoder.getPosition();
     }
 
     /**
@@ -154,7 +157,7 @@ public class Intake extends SubsystemBase {
      * Returns intake motor temperature in Celcius.
      */
     public double getIntakeTemp() {
-        return intakeMotor.getTemperature();
+        return intakeMotor.getMotorTemperature();
     }
 
     /**

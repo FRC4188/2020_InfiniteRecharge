@@ -108,8 +108,8 @@ public class Shooter extends SubsystemBase {
      * Sets shooter motors to brake mode.
      */
     public void setBrake() {
-        leftShooter.setNeutralMode(NeutralMode.Brake);
-        rightShooter.setNeutralMode(NeutralMode.Brake);
+        leftShooter.setNeutralMode(NeutralMode.Coast);
+        rightShooter.setNeutralMode(NeutralMode.Coast);
     }
 
     /**
