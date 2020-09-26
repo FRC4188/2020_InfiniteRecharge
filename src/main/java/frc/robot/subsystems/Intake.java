@@ -69,6 +69,9 @@ public class Intake extends SubsystemBase {
         polyRoller.set(poly);
     }
 
+    /**
+     * spins the intake motor at a given percent [-1.0, 1.0].
+     */
     public void spinIntake(double percent) {
         intakeMotor.set(percent);
     }
