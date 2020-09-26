@@ -65,7 +65,7 @@ public class Intake extends SubsystemBase {
     public void spin(double intake, double indexer, double poly) {
         if (intakeSolenoid.get()) intakeMotor.set(intake);
         else intakeMotor.set(intake / 3);   
-        indexerMotor.set(indexer);
+        indexerMotor.set(-indexer);
         polyRoller.set(poly);
     }
 
