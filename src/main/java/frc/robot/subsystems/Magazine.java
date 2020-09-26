@@ -64,6 +64,7 @@ public class Magazine extends SubsystemBase {
         SmartDashboard.putBoolean("Magazine manual", getManual());
     }
 
+    
     /**
      * Configures gains for Spark closed loop controller.
      */
