@@ -180,8 +180,6 @@ public class RobotContainer {
         buttonBox.getButton7Obj().toggleWhenPressed(new SpinShooter(shooter, 2250));
         buttonBox.getButton8Obj().whileHeld(new SpinJustIntake(intake, -1.0));
         buttonBox.getButton8Obj().whenReleased(new SpinJustIntake(intake, 0));
-        buttonBox.getButton9Obj().whenPressed(new EmergencyPower(pilot, true));
-        buttonBox.getButton9Obj().whenReleased(new EmergencyPower(pilot, false));
 
     }
 
