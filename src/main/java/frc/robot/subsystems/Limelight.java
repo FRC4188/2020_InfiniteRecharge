@@ -31,6 +31,9 @@ public class Limelight extends SubsystemBase {
     private NetworkTable limelightTable = null;
     private Pipeline pipeline = Pipeline.CLOSE;
 
+    private double adjust;
+    private double setRPM;
+
     /**
      * Enum to control LED mode.
      */
@@ -94,6 +97,7 @@ public class Limelight extends SubsystemBase {
     @Override
     public void periodic() {
         updateShuffleboard();
+        adjust = SmartDashboard.getNumber("Turret Aim adjust", -3.0);
     }
 
     /**
@@ -152,6 +156,16 @@ public class Limelight extends SubsystemBase {
         return limelightTable.getEntry("tx").getDouble(0.0);
     }
 
+    public double getSkew() {
+        return limelightTable.getEntry("ts").getDouble(0.0);
+    }
+
+    public double getOffset() {
+        double eqNumor = 29.125 * Math.sin(180 - getSkew());
+        double eqDenom = Math.sqrt(848.265625 + Math.pow(getDistance(), 2) - 58.25 * getDistance() * Math.cos(180-getSkew()));
+        return Math.asin(eqNumor / eqDenom);
+    }
+
     /**
      * Returns horizontal distance in feet from the target.
      */
@@ -164,20 +178,18 @@ public class Limelight extends SubsystemBase {
      * Returns rpm to spin shooter to based on vision target formula.
      */
     public double formulaRpm() {
-        /*if (getDistance() <= 10) {
-            return (CLOSE_FORMULA_RATIO * getDistance() - 18190);
-        } else if (getDistance() > 10 && getDistance() <= 13) {
-            return (MID_FORMULA_RATIO * getDistance() + 17326);
-        } else if (getDistance() > 13 && getDistance() <= 35) {
-            return (FAR_FORMULA_RATIO * getDistance()) + 2320;
-        } else if (getDistance() > 35) {
-            return (SUPER_FAR_FORMULA_RATIO * getDistance() + 2290);
-        } else {
-            return 0;
-        }*/
+        
         double d = getDistance();
-        double rpm = 8200 + -500*d + 11.0*d*d;
+        double rpm = 8200.0 + -500.0*d + 11.0*d*d;
         return rpm;
+
+        /*
+        if (getDistance()>11) {
+            setRPM = Math.pow(4337.8*getDistance(),-0.1315) + 1.43*Math.pow(getDistance(),2);
+        } else {
+            setRPM = 4.6913e7 * Math.pow((getDistance() + 1.365), -3.68815);
+        }
+        return setRPM;*/
     }
 
     /**
@@ -207,7 +219,7 @@ public class Limelight extends SubsystemBase {
         setPipeline(Pipeline.CLOSE);
     }
     public boolean getIsAimed() {
-        return getHorizontalAngle() >= -3 && getHorizontalAngle() <= 3;
+        return (getHorizontalAngle() >= (-1+adjust) && getHorizontalAngle() <= (1+adjust));
 
     }
     /**

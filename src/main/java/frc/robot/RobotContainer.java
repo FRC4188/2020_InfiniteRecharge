@@ -25,6 +25,7 @@ import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.magazine.PIDTesting;
+import frc.robot.commands.shooter.AutoFire;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.shooter.SpinShooterFormula;
 import frc.robot.commands.turret.AutoAim;
@@ -141,14 +142,15 @@ public class RobotContainer {
         pilot.getDpadDownButtonObj().whenPressed(new LowerIntake(intake));
         pilot.getDpadUpButtonObj().whenPressed(new RaiseIntake(intake));
 
+        pilot.getYButtonObj().whileHeld(new AutoFire(/*shooter, */magazine, intake, limelight, turret, true));
+        pilot.getYButtonObj().whenReleased(new AutoFire(/*shooter, */magazine, intake, limelight, turret, false));
         pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
         pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
-        pilot.getYButtonObj().whileHeld(new RunMagazine(magazine, 0.9));
-        pilot.getYButtonObj().whenReleased(new RunMagazine(magazine, 0));
 
         pilot.getBButtonObj().whileHeld(new AutoMagazine(magazine, intake, true, true));
         pilot.getBButtonObj().whenReleased(new AutoMagazine(magazine, intake, true, false));
         pilot.getAButtonObj().whileHeld(new AutoMagazine(magazine, intake, false, true));
+
         pilot.getAButtonObj().whenReleased(new AutoMagazine(magazine, intake, false, false));
         
         pilot.getAButtonObj().whenReleased(new SpinIntake(intake, magazine, 0, 0));

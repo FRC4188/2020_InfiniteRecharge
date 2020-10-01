@@ -23,7 +23,7 @@ public class Shooter extends SubsystemBase {
     private static final double MAX_VELOCITY = 21300.0;
     private static final double kF = 1023 / MAX_VELOCITY;
     private static final double ENCODER_TICKS_PER_REV = 2048;
-    private static final double RAMP_RATE = 0.4; // seconds
+    private static final double RAMP_RATE = 1.0; // seconds
 
     /**
      * Constructs new Shooter object and configures devices.
@@ -43,7 +43,7 @@ public class Shooter extends SubsystemBase {
         controllerInit();
         setRampRate();
 
-        SmartDashboard.putNumber("Set shooter rpm", 0.0);
+        SmartDashboard.putNumber("Set shooter speed", 0.0);
 
     }
 

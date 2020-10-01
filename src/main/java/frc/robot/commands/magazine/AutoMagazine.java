@@ -47,12 +47,12 @@ public class AutoMagazine extends CommandBase {
         if (cont) {
             if (forw) {
                 if (!mid && top) {
-                    intake.spin(-0.5, -0.5);
+                    intake.spin(-1.0, -0.75);
                     magazine.set(0.35);
                 }
                 else if (mid && top) {
                     magazine.set(0.0);
-                    intake.spin(-1.0, -0.5);
+                    intake.spin(-1.0, -0.75);
                 }
                 else if (!top) {
                     magazine.set(0.0);
@@ -60,15 +60,15 @@ public class AutoMagazine extends CommandBase {
                 }
             } else {
                 if (!mid && top) {
-                    intake.spin(0.5, 0.5);
-                    magazine.set(-0.5);
+                    intake.spin(1.0, 1.0);
+                    magazine.set(-0.1);
                 }
                 else if (mid && top) {
                     magazine.set(0.0);
-                    intake.spin(1.0, 1.0);
+                    intake.spin(1.0, 0.75);
                 }
                 else if (!top) {
-                    magazine.set(0.0);
+                    magazine.set(-0.35);
                     intake.spin(1.0,0.0);
                 }
             }
@@ -81,7 +81,7 @@ public class AutoMagazine extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return false;
+        return !cont;
     }
 
     @Override
