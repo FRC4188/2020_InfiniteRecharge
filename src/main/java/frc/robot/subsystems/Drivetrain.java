@@ -72,6 +72,7 @@ public class Drivetrain extends SubsystemBase {
     // state vars
     private boolean leftInverted = true;
     private boolean rightInverted = false;
+    
     private boolean gyroInverted = true; // ccw positive
 
     /**

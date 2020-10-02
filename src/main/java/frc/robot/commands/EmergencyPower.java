@@ -9,13 +9,15 @@ import frc.robot.utils.CspController;
 public class EmergencyPower extends CommandBase {
 
     private final CspController controller;
+    private boolean isEmergency;
 
     /**
      * Constructs new EmergencyPower command to engage the emergency power
      *
      * @param controller - Controller to use.
+     * @param isEmergency - is it an Emergency
      */
-    public FireBrake(CspController controller, boolean isEmergency) {
+    public EmergencyPower(CspController controller, boolean isEmergency) {
         this.controller = controller;
         this.isEmergency = isEmergency;
     }
@@ -26,7 +28,7 @@ public class EmergencyPower extends CommandBase {
 
     @Override
     public void execute() {
-        controller.setEmergencyPower(isEmergency);
+        controller.setEmergencyPower(this.isEmergency);
     }
 
     @Override
