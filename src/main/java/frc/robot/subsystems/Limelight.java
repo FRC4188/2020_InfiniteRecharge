@@ -97,7 +97,7 @@ public class Limelight extends SubsystemBase {
     @Override
     public void periodic() {
         updateShuffleboard();
-        adjust = SmartDashboard.getNumber("Turret Aim adjust", -3.0);
+        adjust = SmartDashboard.getNumber("Turret Aim adjust", -2.0);
     }
 
     /**
@@ -107,6 +107,7 @@ public class Limelight extends SubsystemBase {
         SmartDashboard.putNumber("Formula RPM", formulaRpm());
         SmartDashboard.putNumber("Limelight distance reading", getDistance());
         SmartDashboard.putNumber("Vertical Angle", getVerticalAngle());
+        SmartDashboard.putBoolean("Is Aimed", getIsAimed());
     }
 
     /**
@@ -137,8 +138,8 @@ public class Limelight extends SubsystemBase {
     /**
      * Returns true if the camera sees a target.
      */
-    public boolean hasTarget() {
-        return limelightTable.getEntry("tv").getBoolean(false);
+    public double hasTarget() {
+        return limelightTable.getEntry("tv").getDouble(0.0);
     }
 
     /**
@@ -153,7 +154,8 @@ public class Limelight extends SubsystemBase {
      * Returns the horizontal angle from the center of the camera to the target.
      */
     public double getHorizontalAngle() {
-        return limelightTable.getEntry("tx").getDouble(0.0);
+        adjust = SmartDashboard.getNumber("Turret Aim adjust", -2.0);
+        return limelightTable.getEntry("tx").getDouble(-adjust);
     }
 
     public double getSkew() {
@@ -179,17 +181,18 @@ public class Limelight extends SubsystemBase {
      */
     public double formulaRpm() {
         
+        /*
         double d = getDistance();
         double rpm = 8200.0 + -500.0*d + 11.0*d*d;
-        return rpm;
-
-        /*
-        if (getDistance()>11) {
-            setRPM = Math.pow(4337.8*getDistance(),-0.1315) + 1.43*Math.pow(getDistance(),2);
-        } else {
-            setRPM = 4.6913e7 * Math.pow((getDistance() + 1.365), -3.68815);
+        return rpm;*/
+        
+        setRPM = (Math.pow(8.2716e-8, (getDistance() - 10.0264))) + (0.352395 * Math.pow(getDistance(), 2)) + 3277.18;
+        
+        if (setRPM > 6000) {
+            setRPM = 6000;
         }
-        return setRPM;*/
+
+        return setRPM;
     }
 
     /**
@@ -219,7 +222,7 @@ public class Limelight extends SubsystemBase {
         setPipeline(Pipeline.CLOSE);
     }
     public boolean getIsAimed() {
-        return (getHorizontalAngle() >= (-1+adjust) && getHorizontalAngle() <= (1+adjust));
+        return (getHorizontalAngle() >= (-1.5+adjust-getOffset()) && getHorizontalAngle() <= (1.5+adjust-getOffset()));
 
     }
     /**

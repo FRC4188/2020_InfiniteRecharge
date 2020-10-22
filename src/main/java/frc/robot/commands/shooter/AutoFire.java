@@ -16,7 +16,7 @@ public class AutoFire extends CommandBase {
     private Magazine magazine;
     private Intake intake;
     private Turret turret;
-    //private Shooter shooter;
+    private Shooter shooter;
 
     private boolean top;
     private boolean mid;
@@ -24,9 +24,9 @@ public class AutoFire extends CommandBase {
 
     private double adjust;
     
-    public AutoFire(/*Shooter shooter, */Magazine magazine, Intake intake, Limelight limelight, Turret turret, boolean cont) {
-        addRequirements(/*shooter, */magazine, intake, turret);
-        //this.shooter = shooter;
+    public AutoFire(Shooter shooter, Magazine magazine, Intake intake, Limelight limelight, Turret turret, boolean cont) {
+        addRequirements(shooter, magazine, intake, turret);
+        this.shooter = shooter;
         this.intake = intake;
         this.limelight = limelight;
         this.magazine = magazine;
@@ -41,34 +41,38 @@ public class AutoFire extends CommandBase {
 
     @Override
     public void execute() {
-        //shooter.setVelocity(limelight.formulaRpm());
+        shooter.setVelocity(limelight.formulaRpm());
         aimed = limelight.getIsAimed();
-        //diff = shooter.getLeftVelocity() - limelight.formulaRpm();
+        diff = shooter.getLeftVelocity() - limelight.formulaRpm();
         top = magazine.topBeamClear();
         mid = magazine.midBeamClear();
 
-        adjust = SmartDashboard.getNumber("Turret Aim adjust", -3.0);
-        turret.setTracking(true);
-
         if (cont) {
-            turret.set((-limelight.getHorizontalAngle() + adjust) / 47.0);
-                
+            if(limelight.hasTarget() == 1.0) {
+                if((limelight.getSkew() < 24) || limelight.getSkew() > -24) adjust = SmartDashboard.getNumber("Turret Aim adjust", -3.0) - limelight.getOffset();
+                else adjust = SmartDashboard.getNumber("Turret Aim adjust", -2.0);
+                turret.set((-limelight.getHorizontalAngle() + adjust - limelight.getOffset()) / 47.0);
+                turret.setTracking(true);
+            } else {
+                turret.set(0);
+            }                
             if (!mid && top) {
                     magazine.set(0.35);
                     intake.spin(-0.5,0);
                 }
                 else if (mid && top) {
                     magazine.set(0.35);
-                    intake.spin(-0.5,-0.75);
+                    intake.spin(-0.5,-1.0);
                 }
-                else if (!top && /*(diff < 100 && diff > -100) && */aimed) magazine.set(1.0);
+                else if (!top && (diff < 100 && diff > -100) && aimed) magazine.set(1.0);
                 else {
                     magazine.set(0);
-                    intake.spin(-0.5,0);
+                    intake.spin(-0.,0.0);
                 }
         }else {
             magazine.set(0.0);
             intake.spin(0,0);
+            turret.set(0);
         }
     }
 
@@ -82,7 +86,7 @@ public class AutoFire extends CommandBase {
         if(!interrupted) {
             magazine.set(0);
             intake.spin(0,0);
-            //shooter.set(3000);
+            shooter.set(3000);
         }
 
         turret.setTracking(false);

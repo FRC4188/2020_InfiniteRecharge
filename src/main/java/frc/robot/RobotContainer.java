@@ -114,7 +114,7 @@ public class RobotContainer {
                 () -> pilot.getBumper(Hand.kLeft)
         ));
         //shooter.setDefaultCommand(new SpinShooterFormula(shooter, limelight));
-        shooter.setDefaultCommand(new SpinShooter(shooter, 3000));
+        shooter.setDefaultCommand(new SpinShooter(shooter, 3500));
     }
 
     /**
@@ -142,8 +142,8 @@ public class RobotContainer {
         pilot.getDpadDownButtonObj().whenPressed(new LowerIntake(intake));
         pilot.getDpadUpButtonObj().whenPressed(new RaiseIntake(intake));
 
-        pilot.getYButtonObj().whileHeld(new AutoFire(/*shooter, */magazine, intake, limelight, turret, true));
-        pilot.getYButtonObj().whenReleased(new AutoFire(/*shooter, */magazine, intake, limelight, turret, false));
+        pilot.getYButtonObj().whileHeld(new AutoFire(shooter, magazine, intake, limelight, turret, true));
+        pilot.getYButtonObj().whenReleased(new AutoFire(shooter, magazine, intake, limelight, turret, false));
         pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
         pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
 

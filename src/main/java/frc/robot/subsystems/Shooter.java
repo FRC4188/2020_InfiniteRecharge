@@ -44,7 +44,7 @@ public class Shooter extends SubsystemBase {
         setRampRate();
 
         SmartDashboard.putNumber("Set shooter speed", 0.0);
-
+        SmartDashboard.putNumber("RightShooter Temp", rightShooter.getTemperature());
     }
 
     /**

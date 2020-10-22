@@ -47,12 +47,12 @@ public class AutoMagazine extends CommandBase {
         if (cont) {
             if (forw) {
                 if (!mid && top) {
-                    intake.spin(-1.0, -0.75);
+                    intake.spin(-1.0, -1.0);
                     magazine.set(0.35);
                 }
                 else if (mid && top) {
                     magazine.set(0.0);
-                    intake.spin(-1.0, -0.75);
+                    intake.spin(-1.0, -1.0);
                 }
                 else if (!top) {
                     magazine.set(0.0);
@@ -65,7 +65,7 @@ public class AutoMagazine extends CommandBase {
                 }
                 else if (mid && top) {
                     magazine.set(0.0);
-                    intake.spin(1.0, 0.75);
+                    intake.spin(1.0, 0.5);
                 }
                 else if (!top) {
                     magazine.set(-0.35);

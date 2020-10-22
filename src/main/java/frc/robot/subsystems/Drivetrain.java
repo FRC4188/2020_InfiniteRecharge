@@ -120,6 +120,10 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
         SmartDashboard.putString("Odometry", getPose().toString());
         SmartDashboard.putData("Calibrate Gyro", new InstantCommand(gyro::calibrate));
+        SmartDashboard.putNumber("Drivetrain Right Temerature", rightMotor.getTemperature());
+        SmartDashboard.putNumber("Drivetrain Right Slave Temperature", rightSlave.getTemperature());
+        SmartDashboard.putNumber("Drivetrain Left Temperature", leftMotor.getTemperature());
+        SmartDashboard.putNumber("Drivetrain Left Slave Temperature", leftSlave.getTemperature());
     }
 
     /**

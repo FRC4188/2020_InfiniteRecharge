@@ -37,10 +37,14 @@ public class AutoAim extends CommandBase {
 
     @Override
     public void execute() {
-        if((limelight.getSkew() < 24) || limelight.getSkew() > -24) adjust = SmartDashboard.getNumber("Turret Aim adjust", -3.0) - limelight.getOffset();
-        else adjust = SmartDashboard.getNumber("Turret Aim adjust", -3.0);
-        turret.set((-limelight.getHorizontalAngle() + adjust + offset) / 47.0);
-        turret.setTracking(true);
+        if(limelight.hasTarget() == 1.0) {
+            if((limelight.getSkew() < 24) || limelight.getSkew() > -24) adjust = SmartDashboard.getNumber("Turret Aim adjust", -3.0) - limelight.getOffset();
+            else adjust = SmartDashboard.getNumber("Turret Aim adjust", -3.0);
+            turret.set((-limelight.getHorizontalAngle() + adjust + offset) / 47.0);
+            turret.setTracking(true);
+        } else {
+            turret.set(0);
+        }
     }
 
     @Override

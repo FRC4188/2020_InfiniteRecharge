@@ -64,6 +64,7 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putBoolean("Intake Raised", isRaised());
         SmartDashboard.putNumber("Intake Motor Set", intakeSet);
         SmartDashboard.putNumber("Intake Temp", intakeMotor.getMotorTemperature());
+        SmartDashboard.putNumber("Indexer Temp", indexerMotor.getMotorTemperature());
     }
 
     /**
