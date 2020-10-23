@@ -39,14 +39,14 @@ public class Drivetrain extends SubsystemBase {
     private static final double kV = 2.12; // volt seconds / meter
     private static final double kA = 0.167; // volt seconds squared / meter
     private static final double kP = 3.5;
-    private static final double AUTO_MAX_VEL = 3.5; // meters / second
-    private static final double AUTO_MAX_ACCEL = 2.0; // meters / second squared
+    private static final double AUTO_MAX_VEL = 2.0 /*3.5*/; // meters / second
+    private static final double AUTO_MAX_ACCEL = 0.5/*1.0*/; // meters / second squared
     private static final double AUTO_MAX_CENTRIP = 1.0; // meters / second squared
     private static final double AUTO_MAX_VOLTAGE = 10; // volts
     private static final double ARCADE_MAX_VEL = 3; // meters / second
     private static final double ARCADE_MAX_ROT = 2 * Math.PI; // rads / second
-    private static final double TRACKWIDTH = 0.619; // meters
-    private static final double WHEEL_DIAMETER = 0.1524; // meters
+    private static final double TRACKWIDTH = 0.565; // meters
+    private static final double WHEEL_DIAMETER = /*0.14*/ 0.1524; // meters
     private static final double GEAR_RATIO = (58.0 / 11.0) * (32.0 / 18.0);
     private static final double TICKS_PER_REV = 2048; // encoder units
     private static final double ENCODER_TO_METERS =
@@ -133,6 +133,10 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
         SmartDashboard.putString("Odometry", getPose().toString());
         SmartDashboard.putData("Calibrate Gyro", new InstantCommand(gyro::calibrate));
+        SmartDashboard.putNumber("Drivetrain Right Temerature", rightMotor.getTemperature());
+        SmartDashboard.putNumber("Drivetrain Right Slave Temperature", rightSlave.getTemperature());
+        SmartDashboard.putNumber("Drivetrain Left Temperature", leftMotor.getTemperature());
+        SmartDashboard.putNumber("Drivetrain Left Slave Temperature", leftSlave.getTemperature());
     }
 
     /**

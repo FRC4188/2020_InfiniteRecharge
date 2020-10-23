@@ -24,7 +24,7 @@ public class Shooter extends SubsystemBase {
     private static final double MAX_VELOCITY = 21300.0;
     private static final double kF = 1023 / MAX_VELOCITY;
     private static final double ENCODER_TICKS_PER_REV = 2048;
-    private static final double RAMP_RATE = 0.25; // seconds
+    private static final double RAMP_RATE = 1.0; // seconds
 
     private BrownoutProtection bop = new BrownoutProtection();
 
@@ -46,6 +46,8 @@ public class Shooter extends SubsystemBase {
         setRampRate();
 
         SmartDashboard.putNumber("Set shooter rpm", 0.0);
+        SmartDashboard.putNumber("Set shooter speed", 0.0);
+        SmartDashboard.putNumber("RightShooter Temp", rightShooter.getTemperature());
 
         bop.run();
     }
@@ -68,8 +70,15 @@ public class Shooter extends SubsystemBase {
      * Writes values to Shuffleboard.
      */
     private void updateShuffleboard() {
-        SmartDashboard.putNumber("Left shooter rpm", getLeftVelocity());
-        SmartDashboard.putNumber("Right shooter rpm", getRightVelocity());
+        if (getLeftVelocity() == getRightVelocity()) {
+            SmartDashboard.putBoolean("Shooter motors equal speeds", true);
+            SmartDashboard.putNumber("Shooter RPM", getRightVelocity());
+        } else {
+            SmartDashboard.putBoolean("Shooter motors equal speeds", false);
+            SmartDashboard.putNumber("Left shooter rpm", getLeftVelocity());
+            SmartDashboard.putNumber("Right shooter rpm", getRightVelocity());
+        }
+        
     }
 
     /**
@@ -112,8 +121,8 @@ public class Shooter extends SubsystemBase {
      * Sets shooter motors to brake mode.
      */
     public void setBrake() {
-        leftShooter.setNeutralMode(NeutralMode.Brake);
-        rightShooter.setNeutralMode(NeutralMode.Brake);
+        leftShooter.setNeutralMode(NeutralMode.Coast);
+        rightShooter.setNeutralMode(NeutralMode.Coast);
     }
 
     /**

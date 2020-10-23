@@ -1,8 +1,11 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,12 +17,10 @@ import frc.robot.utils.BrownoutProtection;
 public class Intake extends SubsystemBase {
 
     // device initialization
-    private CANSparkMax intakeMotor = new CANSparkMax(11, MotorType.kBrushless);
+    private CANSparkMax intakeMotor = new CANSparkMax(27, MotorType.kBrushless);
+    private CANEncoder intakeEncoder = intakeMotor.getEncoder();
     private CANSparkMax indexerMotor = new CANSparkMax(12, MotorType.kBrushless);
-    private CANSparkMax polyRoller = new CANSparkMax(13, MotorType.kBrushless);
-    private CANEncoder intakeMotorEncoder = intakeMotor.getEncoder();
     private CANEncoder indexerMotorEncoder = indexerMotor.getEncoder();
-    private CANEncoder polyRollerEncoder = polyRoller.getEncoder();
     private Solenoid intakeSolenoid = new Solenoid(0);
 
     private BrownoutProtection bop = new BrownoutProtection();
@@ -27,6 +28,9 @@ public class Intake extends SubsystemBase {
 
     // constants
     private static final double RAMP_RATE = 0.5; // seconds
+    private static final double INTAKE_TIMEOUT = 20;
+
+    double intakeSet;
 
     // state vars
     private boolean isRaised = true;
@@ -37,6 +41,7 @@ public class Intake extends SubsystemBase {
     public Intake() {
         resetEncoders();
         setRampRate();
+        intakeMotor.setIdleMode(IdleMode.kCoast);
         bop.run();
     }
 
@@ -51,6 +56,8 @@ public class Intake extends SubsystemBase {
     @Override
     public void periodic() {
         updateShuffleboard();
+
+        //ballCount = (int) SmartDashboard.getNumber("Beam Breaker", ballCount);
         if (isRaised) {
             intakeSolenoid.set(false);
         } else {
@@ -65,18 +72,22 @@ public class Intake extends SubsystemBase {
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Intake Position", getIntakePosition());
         SmartDashboard.putNumber("Indexer Position", getIndexerPosition());
-        SmartDashboard.putNumber("PolyRoller Position", getPolyRollerPosition());
+        //SmartDashboard.putNumber("PolyRoller Position", getPolyRollerPosition());
         SmartDashboard.putBoolean("Intake Raised", isRaised());
+        SmartDashboard.putNumber("Intake Motor Set", intakeSet);
+        SmartDashboard.putNumber("Intake Temp", intakeMotor.getMotorTemperature());
+        SmartDashboard.putNumber("Indexer Temp", indexerMotor.getMotorTemperature());
     }
 
     /**
      * Spins the intake motor a given percent [-1.0, 1.0].
      */
-    public void spin(double percent) {
-        if (intakeSolenoid.get()) intakeMotor.set(percent * bop.getIntakePower());
-        else intakeMotor.set((percent / 3) * bop.getIntakePower());
-        indexerMotor.set(percent * bop.getMagazinePower());
-        polyRoller.set(percent * bop.getMagazinePower());
+     
+    public void spin(double percent, double indexer) {
+        this.intakeSet = intake;
+        if (intakeSolenoid.get()) intakeMotor.set((intake/2) * bop.getIntakePower());
+        else intakeMotor.set((intake / 3) * bop.getIntakePower());   
+        indexerMotor.set(indexer * bop.getMagazinePower());
     }
 
     public void spinIntake(double percent) {
@@ -94,7 +105,7 @@ public class Intake extends SubsystemBase {
      * Spin poly rollers a given percent [-1.0, 1.0].
      */
     public void spinPolyRollers(double percent) {
-        polyRoller.set(percent * bop.getMagazinePower());
+        //polyRoller.set(percent);
     }
 
     /**
@@ -122,9 +133,9 @@ public class Intake extends SubsystemBase {
      * Sets the encoder values to zero for intake, indexer, and poly roller.
      */
     public void resetEncoders() {
-        intakeMotorEncoder.setPosition(0);
+        intakeEncoder.setPosition(0);
         indexerMotorEncoder.setPosition(0);
-        polyRollerEncoder.setPosition(0);
+        //polyRollerEncoder.setPosition(0);
     }
 
     /**
@@ -133,7 +144,7 @@ public class Intake extends SubsystemBase {
     public void setRampRate() {
         intakeMotor.setOpenLoopRampRate(RAMP_RATE);
         indexerMotor.setOpenLoopRampRate(RAMP_RATE);
-        polyRoller.setOpenLoopRampRate(RAMP_RATE);
+        //polyRoller.setOpenLoopRampRate(RAMP_RATE);
     }
 
     /**
@@ -147,15 +158,15 @@ public class Intake extends SubsystemBase {
      * Returns intake motor position in rotations.
      */
     public double getIntakePosition() {
-        return intakeMotorEncoder.getPosition();
+        return intakeEncoder.getPosition();
     }
 
     /**
      * Returns polyroller motor position in rotations.
      */
-    public double getPolyRollerPosition() {
+    /*public double getPolyRollerPosition() {
         return polyRollerEncoder.getPosition();
-    }
+    }*/
 
     /**
      * Returns intake motor temperature in Celcius.
@@ -174,8 +185,8 @@ public class Intake extends SubsystemBase {
     /**
      * Returns poly roller motor temperature in Celcius.
      */
-    public double getPolyRollerTemp() {
+    /*public double getPolyRollerTemp() {
         return polyRoller.getMotorTemperature();
-    }
+    }*/
 
 }

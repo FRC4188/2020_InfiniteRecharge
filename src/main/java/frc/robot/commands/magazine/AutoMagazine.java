@@ -13,23 +13,26 @@ public class AutoMagazine extends CommandBase {
 
     private final Magazine magazine;
     private final Intake intake;
-    private final Limelight limelight;
-    private final Shooter shooter;
+    private final double TOLERANCE = 250;
+    private boolean top;
+    private boolean mid;
+    private boolean cont;
+    private boolean forw;
 
     /**
      * Constructs a new AutoMagazine command to feed cells if shooter is at correct rpm.
      *
-     * @param magazine - Magazine subsystem to use for turning motors.
-     * @param limelight - Limelight subsystem to use for determining correct shooter rpm.
-     * @param shooter - Shooter subsystem to use for getting current shooter rpm.
-     * @param intake - Intake subsystem that feeds into the magazine.
+     * @param magazine Magazine subsystem to use for turning motors.
+     * @param intake Intake subsystem that feeds into the magazine.
+     * @param forward Whether the system is taking balls through the regular track or reversed.
+     * @param cont Whether the command is starting or stopping.
      */
-    public AutoMagazine(Magazine magazine, Intake intake, Limelight limelight, Shooter shooter) {
+    public AutoMagazine(Magazine magazine, Intake intake, boolean forward, boolean cont) {
         addRequirements(magazine, intake);
         this.magazine = magazine;
         this.intake = intake;
-        this.limelight = limelight;
-        this.shooter = shooter;
+        this.cont = cont;
+        this.forw = forward;
     }
 
     @Override
@@ -38,32 +41,57 @@ public class AutoMagazine extends CommandBase {
 
     @Override
     public void execute() {
+        top = magazine.topBeamClear();
+        mid = magazine.midBeamClear();
 
-        // get current shooter velocity and target velocity
-        double currentVel = shooter.getLeftVelocity();
-        double targetVel = limelight.formulaRpm();
-
-        // feed shooter only if at correct rpm
-        if (Math.abs(currentVel - targetVel) > 50) {
-            magazine.set(0);
-            intake.spinIndexer(0);
-            intake.spinPolyRollers(0);
-        } else {
-            magazine.set(0.9);
-            intake.spinIndexer(0.9);
-            intake.spinPolyRollers(0.9);
+        if (cont) {
+            if (forw) {
+                if (!mid && top) {
+                    intake.spin(-1.0, -1.0);
+                    magazine.set(0.35);
+                }
+                else if (mid && top) {
+                    magazine.set(0.0);
+                    intake.spin(-1.0, -1.0);
+                }
+                else if (!top) {
+                    magazine.set(0.0);
+                    intake.spin(-1.0,0.0);
+                }
+            } else {
+                if (!mid && top) {
+                    intake.spin(1.0, 1.0);
+                    magazine.set(-0.1);
+                }
+                else if (mid && top) {
+                    magazine.set(0.0);
+                    intake.spin(1.0, 0.5);
+                }
+                else if (!top) {
+                    magazine.set(-0.35);
+                    intake.spin(1.0,0.0);
+                }
+            }
+        }else {
+            magazine.set(0.0);
+            intake.spin(0.0,0.0);
         }
-
     }
+
 
     @Override
     public boolean isFinished() {
-        return false;
+        return !cont;
     }
 
     @Override
     public void end(boolean interrupted) {
-        magazine.set(0);
+
+        // Upon stop intake stops and if the magazine is being controlled automatically it will stop.
+        if (!magazine.getManual()) {
+            magazine.set(0.0);
+        }
+        intake.spin(0.0, 0.0);
     }
 
 }

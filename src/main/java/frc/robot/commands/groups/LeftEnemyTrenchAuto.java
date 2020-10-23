@@ -9,7 +9,9 @@ import frc.robot.commands.intake.RaiseIntake;
 import frc.robot.commands.intake.SpinIndexer;
 import frc.robot.commands.intake.SpinIntake;
 import frc.robot.commands.intake.SpinJustIntake;
-import frc.robot.commands.intake.SpinPolyRoller;
+import frc.robot.commands.shooter.AutoFire;
+import frc.robot.commands.shooter.AutoFireQuantity;
+import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.turret.AutoAim;
@@ -35,66 +37,37 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
             Limelight limelight, Turret turret, Intake intake) {
 
         addCommands(
-
-                // Lowers intake.
-                new LowerIntake(intake),
+                new AutoFireQuantity(shooter, magazine, intake, limelight, 3),
 
                 // Drives into the enemy trench, running intake at the same time.
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.LEFT_TO_ENEMY_TRENCH),
-                    new SpinJustIntake(intake, 1.0),
+                    new AutoMagazine(magazine, intake, true, true),
                     new TurretAngle(turret, 240)
                 ),
 
                 // Drives to a shooting position and revs up shooter to default rpm.
                 // Spins intake slowly to make sure picked up balls don't fall out.
-                new ParallelRaceGroup(
+                new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.ENEMY_TRENCH_TO_SHOOT),
-                    new SpinShooter(shooter, 3500),
-                    new SpinJustIntake(intake, 0.6)
+                    new AutoMagazine(magazine, intake, true, true)
                 ),
 
                 // Auto aims, and revs up shooter to rpm.
                 new ParallelRaceGroup(
-                    new AutoAim(turret, limelight, 0).withTimeout(0.5),
-                    new SpinShooter(shooter, 3500)
-                ),
-
-                // Continues to auto aim and spin shooter to rpm.
-                // Runs magazine and indexer to shoot at the port.
-                new ParallelRaceGroup(
-                    new SpinShooter(shooter, 3500),
-                    new AutoAim(turret, limelight, 0),
-                    new RunMagazine(magazine, 0.8).withTimeout(2.0),
-                    new SpinIndexer(intake, 1.0),
-                    new SpinPolyRoller(intake, -1.0),
-                    new SpinJustIntake(intake, 1.0)
+                    new AutoFireQuantity(shooter, magazine, intake, limelight, 3)
                 ),
 
                 // Pick up two more balls from front of bar and turn turret.
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.SHOOT_TO_BAR),
-                    new SpinIntake(intake, 1.0),
-                    new TurretAngle(turret, 160.0)
+                    new AutoMagazine(magazine, intake, true, true)
                 ),
 
                 // Auto aims, and revs up shooter to rpm.
                 new ParallelRaceGroup(
-                    new AutoAim(turret, limelight, 0).withTimeout(0.5),
-                    new SpinShooter(shooter, 3600)
-                ),
-
-                // Auto aim and spin shooter to rpm.
-                // Runs magazine and indexer to shoot at the port.
-                new ParallelRaceGroup(
-                    new SpinShooter(shooter, 3600),
-                    new AutoAim(turret, limelight, 0),
-                    new RunMagazine(magazine, 0.8).withTimeout(5.0),
-                    new SpinIndexer(intake, 1.0),
-                    new SpinPolyRoller(intake, -1.0),
-                    new SpinJustIntake(intake, 1.0)
+                    new AutoFireQuantity(shooter, magazine, intake, limelight, 2)
                 )
-
         );
     }
 

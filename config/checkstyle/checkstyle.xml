@@ -14,7 +14,7 @@
 
     Modified by Locke Adams
  -->
-
+ 
 <module name = "Checker">
     <property name="charset" value="UTF-8"/>
 

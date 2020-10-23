@@ -21,15 +21,18 @@ public class Limelight extends SubsystemBase {
     private static final double SUPER_FAR_FORMULA_RATIO = 80.9;
     private static final double PORT_HEIGHT = 8.1875; // feet
     private static final double TAPE_HEIGHT = 2.5 / 2.0; // between bottom and top, feet
-    private static final double SHOOTER_HEIGHT = 3.0 + (1.0 / 12.0); // feet
+    private static final double SHOOTER_HEIGHT = 3.0 + (0.5 / 12.0); // feet
     private static final double HEIGHT_DIFF = PORT_HEIGHT - SHOOTER_HEIGHT; // feet
-    private static final double CAMERA_ANGLE = 13; // degrees
+    private static final double CAMERA_ANGLE = 11.663; // degrees
     private static final double DIRECT_TO_FLAT_DISTANCE =
             1 / Math.cos(Math.toRadians(CAMERA_ANGLE));
 
     // state vars
     private NetworkTable limelightTable = null;
     private Pipeline pipeline = Pipeline.CLOSE;
+
+    private double adjust;
+    private double setRPM;
 
     /**
      * Enum to control LED mode.
@@ -94,6 +97,7 @@ public class Limelight extends SubsystemBase {
     @Override
     public void periodic() {
         updateShuffleboard();
+        adjust = SmartDashboard.getNumber("Turret Aim adjust", -2.0);
     }
 
     /**
@@ -102,6 +106,8 @@ public class Limelight extends SubsystemBase {
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Formula RPM", formulaRpm());
         SmartDashboard.putNumber("Limelight distance reading", getDistance());
+        SmartDashboard.putNumber("Vertical Angle", getVerticalAngle());
+        SmartDashboard.putBoolean("Is Aimed", getIsAimed());
     }
 
     /**
@@ -132,29 +138,41 @@ public class Limelight extends SubsystemBase {
     /**
      * Returns true if the camera sees a target.
      */
-    public boolean hasTarget() {
-        return limelightTable.getEntry("tv").getBoolean(false);
+    public double hasTarget() {
+        return limelightTable.getEntry("tv").getDouble(0.0);
     }
 
     /**
      * Returns the vertical angle from the center of the camera to the target.
      */
     public double getVerticalAngle() {
-        return limelightTable.getEntry("ty").getDouble(0.0);
+        double r = limelightTable.getEntry("ty").getDouble(0.0);
+        return r + (0.164*r + 0.102) + CAMERA_ANGLE;
     }
 
     /**
      * Returns the horizontal angle from the center of the camera to the target.
      */
     public double getHorizontalAngle() {
-        return limelightTable.getEntry("tx").getDouble(0.0);
+        adjust = SmartDashboard.getNumber("Turret Aim adjust", -2.0);
+        return limelightTable.getEntry("tx").getDouble(-adjust);
+    }
+
+    public double getSkew() {
+        return limelightTable.getEntry("ts").getDouble(0.0);
+    }
+
+    public double getOffset() {
+        double eqNumor = 29.125 * Math.sin(180 - getSkew());
+        double eqDenom = Math.sqrt(848.265625 + Math.pow(getDistance(), 2) - 58.25 * getDistance() * Math.cos(180-getSkew()));
+        return Math.asin(eqNumor / eqDenom);
     }
 
     /**
      * Returns horizontal distance in feet from the target.
      */
     public double getDistance() {
-        double dist = HEIGHT_DIFF / (Math.tan(Math.toRadians(getVerticalAngle() + CAMERA_ANGLE)));
+        double dist = HEIGHT_DIFF/(Math.tan(Math.toRadians(getVerticalAngle()))) + 0.2;
         return dist; //* DIRECT_TO_FLAT_DISTANCE;
     }
 
@@ -162,17 +180,19 @@ public class Limelight extends SubsystemBase {
      * Returns rpm to spin shooter to based on vision target formula.
      */
     public double formulaRpm() {
-        if (getDistance() <= 10) {
-            return (CLOSE_FORMULA_RATIO * getDistance() - 18190);
-        } else if (getDistance() > 10 && getDistance() <= 13) {
-            return (MID_FORMULA_RATIO * getDistance() + 17326);
-        } else if (getDistance() > 13 && getDistance() <= 35) {
-            return (FAR_FORMULA_RATIO * getDistance()) + 2320;
-        } else if (getDistance() > 35) {
-            return (SUPER_FAR_FORMULA_RATIO * getDistance() + 2290);
-        } else {
-            return 0;
+        
+        /*
+        double d = getDistance();
+        double rpm = 8200.0 + -500.0*d + 11.0*d*d;
+        return rpm;*/
+        
+        setRPM = (Math.pow(8.2716e-8, (getDistance() - 10.0264))) + (0.352395 * Math.pow(getDistance(), 2)) + 3277.18;
+        
+        if (setRPM > 6000) {
+            setRPM = 6000;
         }
+
+        return setRPM;
     }
 
     /**
@@ -201,7 +221,10 @@ public class Limelight extends SubsystemBase {
         setCameraMode(CameraMode.CAMERA);
         setPipeline(Pipeline.CLOSE);
     }
+    public boolean getIsAimed() {
+        return (getHorizontalAngle() >= (-1.5+adjust-getOffset()) && getHorizontalAngle() <= (1.5+adjust-getOffset()));
 
+    }
     /**
      * Returns the pipeline the camera is running.
      */
