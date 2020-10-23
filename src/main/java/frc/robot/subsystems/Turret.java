@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.BrownoutProtection;
 
 /**
  * Class encapsulating turret function.
@@ -32,6 +33,7 @@ public class Turret extends SubsystemBase {
     private static final double MAX_ANG = 370;
     private static final double MIN_ANG = -10;
 
+    private BrownoutProtection bop = new BrownoutProtection();
     private boolean isTracking;
 
     /**
@@ -41,6 +43,12 @@ public class Turret extends SubsystemBase {
         //resetEncoders();
         setRampRate();
         controllerInit();
+        bop.run();
+    }
+
+    public Turret(BrownoutProtection bop) {
+        this();
+        this.bop = bop;
     }
 
     /**
@@ -49,6 +57,8 @@ public class Turret extends SubsystemBase {
     @Override
     public void periodic() {
         updateShuffleboard();
+        bop.run();
+
     }
 
     /**
@@ -64,7 +74,7 @@ public class Turret extends SubsystemBase {
     /**
      * Configures gains for Spark closed loop controller.
      */
-    private void controllerInit() {
+    private void controllerInit() { // TODO: figure out a way to lower the power w/o screwing up the pid loop
         pid.setP(kP);
         pid.setI(kI);
         pid.setD(kD);
@@ -79,7 +89,7 @@ public class Turret extends SubsystemBase {
      * Sets turret motor to given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        turretMotor.set(percent);
+        turretMotor.set(percent * bop.getTurretPower());
     }
 
     /**

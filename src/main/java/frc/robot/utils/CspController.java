@@ -13,7 +13,8 @@ public class CspController extends XboxController {
 
     private static final double DEADBAND = 0.15;
     private static final double TRIGGER_THRESHOLD = 0.6;
-    private boolean EmergencyPower = false;
+    private boolean emergencyPower = false;
+    private BrownoutProtection bop;
 
     /**
      * Class containing button mappings for Logitech F310.
@@ -49,6 +50,12 @@ public class CspController extends XboxController {
      */
     public CspController(int port) {
         super(port);
+        bop = new BrownoutProtection();
+    }
+
+    public CspController(int port, BrownoutProtection bop) {
+        this(port);
+        this.bop = bop;
     }
 
     /**
@@ -69,7 +76,7 @@ public class CspController extends XboxController {
      */
     @Override
     public double getY(Hand hand) {
-        if (!EmergencyPower) {
+        if (!emergencyPower) {
             return -1 * getOutput(super.getY(hand), Scaling.SQUARED);
         } else {
             return -1 * getOutput(super.getY(hand), Scaling.LINEAR);
@@ -88,7 +95,7 @@ public class CspController extends XboxController {
      */
     @Override
     public double getX(Hand hand) {
-        if (!EmergencyPower) {
+        if (!emergencyPower) {
             return getOutput(super.getX(hand), Scaling.SQUARED);
         } else {
             return getOutput(super.getX(hand), Scaling.LINEAR);
@@ -216,9 +223,14 @@ public class CspController extends XboxController {
     }
 
     /**
-     * Sets the EmergencyPower variable
+     * Sets the EmergencyPower variable.
      */
     public void setEmergencyPower(boolean isEmergency) {
-        EmergencyPower = isEmergency;
+        emergencyPower = isEmergency;
+        this.bop.setEmergencyPower(isEmergency);
+    }
+
+    public boolean getEmergencyPower() {
+        return emergencyPower;
     }
 }

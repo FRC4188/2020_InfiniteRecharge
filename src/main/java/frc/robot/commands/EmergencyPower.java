@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.utils.CspController;
 
 /**
- * Sets the emergency power on the robot
+ * Sets the emergency power on the robot.
  */
 public class EmergencyPower extends CommandBase {
 
@@ -12,7 +12,7 @@ public class EmergencyPower extends CommandBase {
     private boolean isEmergency;
 
     /**
-     * Constructs new EmergencyPower command to engage the emergency power
+     * Constructs new EmergencyPower command to engage the emergency power.
      *
      * @param controller - Controller to use.
      * @param isEmergency - is it an Emergency

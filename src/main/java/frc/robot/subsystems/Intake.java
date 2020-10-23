@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.BrownoutProtection;
 
 /**
  * Class encapsulating intake function.
@@ -21,6 +22,9 @@ public class Intake extends SubsystemBase {
     private CANEncoder polyRollerEncoder = polyRoller.getEncoder();
     private Solenoid intakeSolenoid = new Solenoid(0);
 
+    private BrownoutProtection bop = new BrownoutProtection();
+
+
     // constants
     private static final double RAMP_RATE = 0.5; // seconds
 
@@ -33,6 +37,12 @@ public class Intake extends SubsystemBase {
     public Intake() {
         resetEncoders();
         setRampRate();
+        bop.run();
+    }
+
+    public Intake(BrownoutProtection bop) {
+        this();
+        this.bop = bop;
     }
 
     /**
@@ -46,6 +56,7 @@ public class Intake extends SubsystemBase {
         } else {
             intakeSolenoid.set(true);
         }
+        bop.run();
     }
 
     /**
@@ -62,28 +73,28 @@ public class Intake extends SubsystemBase {
      * Spins the intake motor a given percent [-1.0, 1.0].
      */
     public void spin(double percent) {
-        if (intakeSolenoid.get()) intakeMotor.set(percent);
-        else intakeMotor.set(percent / 3);
-        indexerMotor.set(percent);
-        polyRoller.set(percent);
+        if (intakeSolenoid.get()) intakeMotor.set(percent * bop.getIntakePower());
+        else intakeMotor.set((percent / 3) * bop.getIntakePower());
+        indexerMotor.set(percent * bop.getMagazinePower());
+        polyRoller.set(percent * bop.getMagazinePower());
     }
 
     public void spinIntake(double percent) {
-        intakeMotor.set(percent);
+        intakeMotor.set(percent * bop.getIntakePower());
     }
 
     /**
      * Spins the indexer motors a given percent [-1.0, 1.0].
      */
     public void spinIndexer(double percent) {
-        indexerMotor.set(percent);
+        indexerMotor.set(percent * bop.getMagazinePower());
     }
 
     /**
      * Spin poly rollers a given percent [-1.0, 1.0].
      */
     public void spinPolyRollers(double percent) {
-        polyRoller.set(percent);
+        polyRoller.set(percent * bop.getMagazinePower());
     }
 
     /**

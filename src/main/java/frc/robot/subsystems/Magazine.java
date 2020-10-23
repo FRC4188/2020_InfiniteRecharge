@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.BrownoutProtection;
 
 /**
  * Class encapsulating magazine function.
@@ -15,6 +16,9 @@ public class Magazine extends SubsystemBase {
     private final CANSparkMax magMotor = new CANSparkMax(24, MotorType.kBrushless);
     private final CANEncoder magEncoder = new CANEncoder(magMotor);
 
+    // Brownout Protection initialization
+    private BrownoutProtection bop = new BrownoutProtection();
+
     // constants
     private static final double RAMP_RATE = 0.2; // seconds
 
@@ -24,6 +28,12 @@ public class Magazine extends SubsystemBase {
     public Magazine() {
         magMotor.setInverted(true);
         setRampRate();
+        bop.run();
+    }
+
+    public Magazine(BrownoutProtection bop) {
+        this();
+        this.bop = bop;
     }
 
     /**
@@ -32,6 +42,7 @@ public class Magazine extends SubsystemBase {
     @Override
     public void periodic() {
         updateShuffleboard();
+        bop.run();
     }
 
     /**
@@ -47,7 +58,7 @@ public class Magazine extends SubsystemBase {
      * Sets belt motor to a given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        magMotor.set(percent);
+        magMotor.set(percent * bop.getMagazinePower());
     }
 
     /**

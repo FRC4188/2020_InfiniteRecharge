@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.EmergencyPower;
 import frc.robot.commands.climb.FireBrake;
 import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
@@ -31,7 +32,6 @@ import frc.robot.commands.vision.UseAsCamera;
 import frc.robot.commands.wheel.LowerWheel;
 import frc.robot.commands.wheel.RaiseWheel;
 import frc.robot.commands.wheel.SpinWheel;
-import frc.robot.commands.EmergencyPower;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
@@ -46,6 +46,7 @@ import frc.robot.utils.CspController;
 import frc.robot.utils.CspSequentialCommandGroup;
 import frc.robot.utils.KillAll;
 import frc.robot.utils.TempManager;
+import frc.robot.utils.BrownoutProtection;
 
 /**
  * Class containing setup for robot.
@@ -53,15 +54,16 @@ import frc.robot.utils.TempManager;
 public class RobotContainer {
 
     // subsystem initialization
-    private final Drivetrain drivetrain = new Drivetrain();
-    private final Magazine magazine = new Magazine();
-    private final Shooter shooter = new Shooter();
-    private final Turret turret = new Turret();
+    private final BrownoutProtection bop = new BrownoutProtection();
+    private final Drivetrain drivetrain = new Drivetrain(bop);
+    private final Magazine magazine = new Magazine(bop);
+    private final Shooter shooter = new Shooter(bop);
+    private final Turret turret = new Turret(bop);
     private final Climber climber = new Climber();
-    private final Intake intake = new Intake();
+    private final Intake intake = new Intake(bop);
     private final Hood hood = new Hood();
     private final Limelight limelight = new Limelight();
-    private final WheelSpinner wheelSpinner = new WheelSpinner();
+    private final WheelSpinner wheelSpinner = new WheelSpinner(bop);
     private final TempManager tempManager =
             new TempManager(climber, drivetrain, intake, magazine, shooter, turret);
 
@@ -77,14 +79,20 @@ public class RobotContainer {
     // state variables
     private Pose2d initialPose = new Pose2d();
 
+    /**
+     * returns the tempManager and runs the brownoutProtection.
+     */
     public TempManager getTempManager() {
+        bop.run();
+        // as this is run every loop, the brownout protection can
+        // piggyback ride on it
         return tempManager;
     }
 
     /**
      * Initializes robot subsystems, controllers, commands, and chooser.
      */
-    public RobotContainer() {
+    public RobotContainer(BrownoutProtection bop) {
         setDefaultCommands();
         configureButtonBindings();
         putChooser();
@@ -179,10 +187,10 @@ public class RobotContainer {
         buttonBox.getButton5Obj().toggleWhenPressed(new SpinShooter(shooter, 4550));
         buttonBox.getButton6Obj().toggleWhenPressed(new SpinShooter(shooter, 6000));
         buttonBox.getButton7Obj().toggleWhenPressed(new SpinShooter(shooter, 2250));
-        buttonBox.getButton8Obj().whileHeld(new SpinJustIntake(intake, -1.0));
-        buttonBox.getButton8Obj().whenReleased(new SpinJustIntake(intake, 0));
-        buttonBox.getButton9Obj().whenPressed(new EmergencyPower(pilot, true));
-        buttonBox.getButton9Obj().whenReleased(new EmergencyPower(pilot, false));
+        //buttonBox.getButton8Obj().whileHeld(new SpinJustIntake(intake, -1.0));
+        //buttonBox.getButton8Obj().whenReleased(new SpinJustIntake(intake, 0));
+        buttonBox.getButton8Obj().whenPressed(new EmergencyPower(pilot, true));
+        buttonBox.getButton8Obj().whenReleased(new EmergencyPower(pilot, false));
 
     }
 

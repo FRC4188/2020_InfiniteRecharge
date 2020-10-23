@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.BrownoutProtection;
 
 /**
  * Class encapsulating shooter function.
@@ -25,11 +26,12 @@ public class Shooter extends SubsystemBase {
     private static final double ENCODER_TICKS_PER_REV = 2048;
     private static final double RAMP_RATE = 0.25; // seconds
 
+    private BrownoutProtection bop = new BrownoutProtection();
+
     /**
      * Constructs new Shooter object and configures devices.
      */
     public Shooter() {
-
         // inversion
         leftShooter.setInverted(true);
 
@@ -45,6 +47,12 @@ public class Shooter extends SubsystemBase {
 
         SmartDashboard.putNumber("Set shooter rpm", 0.0);
 
+        bop.run();
+    }
+
+    public Shooter(BrownoutProtection bop) {
+        this();
+        this.bop = bop;
     }
 
     /**
@@ -53,6 +61,7 @@ public class Shooter extends SubsystemBase {
     @Override
     public void periodic() {
         updateShuffleboard();
+        bop.run();
     }
 
     /**
@@ -82,8 +91,10 @@ public class Shooter extends SubsystemBase {
      */
     public void set(double percent) {
         double adjust = SmartDashboard.getNumber("Set shooter rpm", 0.0) / MAX_VELOCITY;
-        leftShooter.set(percent + adjust);
-        rightShooter.set(percent + adjust);
+        // The only time that the shooter is not at 100% power is when emergency power is toggled
+        // If emergency power is toggled, then ALL system would be at 0% except for drivetrain
+        leftShooter.set((percent + adjust) * bop.getShooterPower());
+        rightShooter.set((percent + adjust) * bop.getShooterPower());
     }
 
     /**

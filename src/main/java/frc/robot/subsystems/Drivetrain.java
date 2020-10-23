@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstr
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.BrownoutProtection;
 
 /**
  * Class encapsulating drivetrain function.
@@ -67,12 +68,13 @@ public class Drivetrain extends SubsystemBase {
             .setKinematics(kinematics)
             .addConstraint(voltageConstraint)
             .addConstraint(centripAccelConstraint);
+    private BrownoutProtection bop = new BrownoutProtection();
 
 
     // state vars
     private boolean leftInverted = true;
     private boolean rightInverted = false;
-    
+
     private boolean gyroInverted = true; // ccw positive
 
     /**
@@ -99,6 +101,14 @@ public class Drivetrain extends SubsystemBase {
         // initialize odometry
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getGyroAngle()));
 
+        // start up the Brownout Protection
+        bop.run();
+
+    }
+
+    public Drivetrain(BrownoutProtection bop) {
+        this();
+        this.bop = bop;
     }
 
     /**
@@ -108,6 +118,8 @@ public class Drivetrain extends SubsystemBase {
     public void periodic() {
         updateShuffleboard();
         updateOdometry();
+
+        bop.run();
     }
 
     /**
@@ -135,8 +147,8 @@ public class Drivetrain extends SubsystemBase {
      * Controls the left and right sides of the drivetrain directly with voltages.
      */
     public void tankVolts(double leftVolts, double rightVolts) {
-        leftMotor.setVoltage(leftVolts);
-        rightMotor.setVoltage(rightVolts);
+        leftMotor.setVoltage(leftVolts * bop.getDrivetrainPower());
+        rightMotor.setVoltage(rightVolts * bop.getDrivetrainPower());
     }
 
     /**

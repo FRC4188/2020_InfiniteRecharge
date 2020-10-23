@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.utils.BrownoutProtection;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions
@@ -12,16 +13,19 @@ public class Robot extends TimedRobot {
 
     private Command autonomousCommand;
     private RobotContainer robotContainer;
+    private BrownoutProtection bop;
 
     @Override
     public void robotInit() {
-        robotContainer = new RobotContainer();
+        bop = new BrownoutProtection();
+        robotContainer = new RobotContainer(bop);
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         robotContainer.getTempManager().run();
+        bop.run();
     }
 
     @Override
