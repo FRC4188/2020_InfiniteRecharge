@@ -1,5 +1,8 @@
 package frc.robot;
 
+import edu.wpi.cscore.CvSink;
+import edu.wpi.cscore.CvSource;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -19,6 +22,15 @@ public class Robot extends TimedRobot {
     @Override
     public void robotInit() {
         robotContainer = new RobotContainer();
+
+        // Creates UsbCamera and MjpegServer [1] and connects them
+        CameraServer.getInstance().startAutomaticCapture();
+
+        // Creates the CvSink and connects it to the UsbCamera
+        CvSink cvSink = CameraServer.getInstance().getVideo();
+
+        // Creates the CvSource and MjpegServer [2] and connects them
+        CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
     }
 
     @Override

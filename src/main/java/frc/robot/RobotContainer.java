@@ -108,10 +108,10 @@ public class RobotContainer {
      * Sets the default command for each subsystem, if applicable.
      */
     private void setDefaultCommands() {
-        drivetrain.setDefaultCommand(new ManualDrive(drivetrain,
+        drivetrain.setDefaultCommand(new ManualDrive(drivetrain, pilot, copilot/*
                 () -> pilot.getY(Hand.kLeft),
                 () -> pilot.getX(Hand.kRight),
-                () -> pilot.getBumper(Hand.kLeft)
+                () -> pilot.getBumper(Hand.kLeft) */
         ));
         //shooter.setDefaultCommand(new SpinShooterFormula(shooter, limelight));
         shooter.setDefaultCommand(new SpinShooter(shooter, 3500));
@@ -164,7 +164,7 @@ public class RobotContainer {
 
         copilot.getBackButtonObj().toggleWhenPressed(new FireBrake(climber));
 
-        copilot.getYButtonObj().whenPressed(new ZeroTurret(turret));
+        //copilot.getYButtonObj().whenPressed(new ZeroTurret(turret));
 
         copilot.getBButtonObj().toggleWhenPressed(new ToggleHood(hood));
 
