@@ -42,6 +42,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.IntakeCamera;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
@@ -64,6 +65,7 @@ public class RobotContainer {
     private final Shooter shooter = new Shooter();
     private final Turret turret = new Turret();
     private final Climber climber = new Climber();
+    private final IntakeCamera camera = new IntakeCamera();
     private final Intake intake = new Intake();
     private final Hood hood = new Hood();
     private final Limelight limelight = new Limelight();
@@ -108,12 +110,7 @@ public class RobotContainer {
      * Sets the default command for each subsystem, if applicable.
      */
     private void setDefaultCommands() {
-        drivetrain.setDefaultCommand(new ManualDrive(drivetrain, pilot, copilot/*
-                () -> pilot.getY(Hand.kLeft),
-                () -> pilot.getX(Hand.kRight),
-                () -> pilot.getBumper(Hand.kLeft) */
-        ));
-        //shooter.setDefaultCommand(new SpinShooterFormula(shooter, limelight));
+        drivetrain.setDefaultCommand(new ManualDrive(drivetrain, pilot, copilot));
         shooter.setDefaultCommand(new SpinShooter(shooter, 3500));
     }
 
@@ -124,20 +121,7 @@ public class RobotContainer {
 
         pilot.getRbButtonObj().whileHeld(new DriveCenterPort(
                 drivetrain, limelight, () -> pilot.getY(Hand.kLeft)
-        ));
-
-        pilot.getDpadRightButtonObj().whenPressed(new UseAsCamera(limelight));
-        pilot.getDpadLeftButtonObj().whenPressed(new CameraCloseTrack(limelight));
-        pilot.getLbButtonObj().whenPressed(new CameraZoomTrack(limelight));
-
-        pilot.getLtButtonObj().whileActiveContinuous(new SpinWheel(wheelSpinner, -0.7));
-        pilot.getLtButtonObj().whenInactive(new SpinWheel(wheelSpinner, 0));
-        pilot.getRtButtonObj().whileActiveContinuous(new SpinWheel(wheelSpinner, 0.7));
-        pilot.getRtButtonObj().whenInactive(new SpinWheel(wheelSpinner, 0));
-
-        pilot.getDpadDownButtonObj().whenPressed(new PIDTesting(magazine));
-        //pilot.getDpadUpButtonObj().whenPressed(new RaiseWhee
-        //testing intake, no LowerIntake button   
+        )); 
              
         pilot.getDpadDownButtonObj().whenPressed(new LowerIntake(intake));
         pilot.getDpadUpButtonObj().whenPressed(new RaiseIntake(intake));
@@ -150,21 +134,12 @@ public class RobotContainer {
         pilot.getBButtonObj().whileHeld(new AutoMagazine(magazine, intake, true, true));
         pilot.getBButtonObj().whenReleased(new AutoMagazine(magazine, intake, true, false));
         pilot.getAButtonObj().whileHeld(new AutoMagazine(magazine, intake, false, true));
-
         pilot.getAButtonObj().whenReleased(new AutoMagazine(magazine, intake, false, false));
-        
-        pilot.getAButtonObj().whenReleased(new SpinIntake(intake, magazine, 0, 0));
-
-        //pilot.getBackButtonObj().toggleWhenPressed(
-        //        new AutoMagazine(magazine, intake, limelight, shooter)
-        //);
 
         pilot.getStartButtonObj().whenPressed(new KillAll());
         copilot.getStartButtonObj().whenPressed(new KillAll());
 
         copilot.getBackButtonObj().toggleWhenPressed(new FireBrake(climber));
-
-        //copilot.getYButtonObj().whenPressed(new ZeroTurret(turret));
 
         copilot.getBButtonObj().toggleWhenPressed(new ToggleHood(hood));
 
@@ -183,11 +158,8 @@ public class RobotContainer {
         copilot.getLbButtonObj().whileHeld(new ManualClimb(climber, 0.6));
         copilot.getLbButtonObj().whenReleased(new ManualClimb(climber, 0));
 
-        copilot.getDpadUpButtonObj().whileHeld(new SpinJustIntake(intake, -1));
-        copilot.getDpadUpButtonObj().whenReleased(new SpinJustIntake(intake, 0));
-
         buttonBox.getButton1Obj().whenPressed(new TurretAngle(turret, 0));
-        buttonBox.getButton2Obj().toggleWhenPressed(new SpinShooterFormula(shooter, limelight));
+        //Unused button 2
         buttonBox.getButton3Obj().toggleWhenPressed(new SpinShooter(shooter, 3600));
         buttonBox.getButton4Obj().whenPressed(new TurretAngle(turret, 180));
         buttonBox.getButton5Obj().toggleWhenPressed(new SpinShooter(shooter, 4550));

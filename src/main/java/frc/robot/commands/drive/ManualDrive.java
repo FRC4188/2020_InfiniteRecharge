@@ -36,21 +36,14 @@ public class ManualDrive extends CommandBase {
      * Constructs a new ManualDrive command to control drivetrain.
      *
      * @param drivetrain - Drivetrain subsystem to require.
-     * @param xSpeed - Forward speed of robot [-1.0, 1.0].
-     * @param zRotation - Rotation rate of robot [-1.0, 1.0].
-     * @param fineControl - If true, slows driving.
+     * @param pilot - Pilot controller object.
+     * @param copilot - Copilot controller object.
      */
-    public ManualDrive(Drivetrain drivetrain, CspController pilot, CspController copilot/*DoubleSupplier xSpeed, DoubleSupplier zRotation,
-            BooleanSupplier fineControl*/) {
+    public ManualDrive(Drivetrain drivetrain, CspController pilot, CspController copilot) {
         addRequirements(drivetrain);
         this.drivetrain = drivetrain;
         this.pilot = pilot;
         this.copilot = copilot;
-        /*
-        this.xSpeedSupplier = xSpeed;
-        this.zRotationSupplier = zRotation;
-        this.fineControlSupplier = fineControl;
-        */
     }
 
     @Override
@@ -59,14 +52,7 @@ public class ManualDrive extends CommandBase {
 
     @Override
     public void execute() {
-
-        /*
-        // get values from suppliers and limit rate
-        boolean fineControl = fineControlSupplier.getAsBoolean();
-        double xSpeed = speedLimiter.calculate(xSpeedSupplier.getAsDouble());
-        double zRotation = rotLimiter.calculate(zRotationSupplier.getAsDouble());
-        */
-
+        // take controller input
         boolean PfineControl = pilot.getBumper(Hand.kLeft);
         double PxSpeed = pilot.getY(Hand.kLeft);
         double PzRotation = pilot.getX(Hand.kRight);
@@ -74,35 +60,30 @@ public class ManualDrive extends CommandBase {
         double CxSpeed = copilot.getY(Hand.kLeft);
         double CzRotation = copilot.getX(Hand.kRight);
 
-        /*
-        // modify output based on fine control boolean
-        xSpeed = (fineControl) ? xSpeed * SPEED_CONST : xSpeed;
-        zRotation = (fineControl) ? zRotation * ROTATION_CONST : zRotation;
-
-        //command motor output
-        drivetrain.arcade(xSpeed, zRotation);
-        */
-
         if (PxSpeed != 0.0 || PzRotation != 0.0) {
             // modify output based on fine control boolean
             PxSpeed = (PfineControl) ? PxSpeed * SPEED_CONST : PxSpeed;
             PzRotation = (PfineControl) ? PzRotation * ROTATION_CONST : PzRotation;
 
+            // Apply a slew to the motor input.
             PxSpeed = speedLimiter.calculate(PxSpeed);
             PzRotation = rotLimiter.calculate(PzRotation);
 
             // command motor output
             drivetrain.arcade(PxSpeed, -PzRotation);
+
         } else if (CxSpeed != 0.0 || CzRotation != 0.0) {
             // modify output based on fine control boolean
             CxSpeed = (CfineControl) ? CxSpeed * SPEED_CONST : CxSpeed;
             CzRotation = (CfineControl) ? CzRotation * ROTATION_CONST : CzRotation;
 
+            //apply a slew to motor output
             CxSpeed = speedLimiter.calculate(CxSpeed);
             CzRotation = rotLimiter.calculate(CzRotation);
 
             // command motor output
             drivetrain.arcade(CxSpeed, -CzRotation);
+
         } else drivetrain.arcade(0,0);
         
 
