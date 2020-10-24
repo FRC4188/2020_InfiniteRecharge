@@ -60,17 +60,17 @@ public class ManualDrive extends CommandBase {
         double CxSpeed = copilot.getY(Hand.kLeft);
         double CzRotation = copilot.getX(Hand.kRight);
 
+        double SetSpeed;
+        double SetRotation;
+
         if (PxSpeed != 0.0 || PzRotation != 0.0) {
             // modify output based on fine control boolean
             PxSpeed = (PfineControl) ? PxSpeed * SPEED_CONST : PxSpeed;
             PzRotation = (PfineControl) ? PzRotation * ROTATION_CONST : PzRotation;
 
             // Apply a slew to the motor input.
-            PxSpeed = speedLimiter.calculate(PxSpeed);
-            PzRotation = rotLimiter.calculate(PzRotation);
-
-            // command motor output
-            drivetrain.arcade(PxSpeed, -PzRotation);
+            SetSpeed = PxSpeed;
+            SetRotation = PzRotation;
 
         } else if (CxSpeed != 0.0 || CzRotation != 0.0) {
             // modify output based on fine control boolean
@@ -78,15 +78,18 @@ public class ManualDrive extends CommandBase {
             CzRotation = (CfineControl) ? CzRotation * ROTATION_CONST : CzRotation;
 
             //apply a slew to motor output
-            CxSpeed = speedLimiter.calculate(CxSpeed);
-            CzRotation = rotLimiter.calculate(CzRotation);
+            SetSpeed = CxSpeed;
+            SetRotation = CzRotation;
 
-            // command motor output
-            drivetrain.arcade(CxSpeed, -CzRotation);
-
-        } else drivetrain.arcade(0,0);
+        } else {
+            SetSpeed = 0.0;
+            SetRotation = 0.0;
+        }
         
+        SetSpeed = speedLimiter.calculate(SetSpeed);
+        SetRotation = rotLimiter.calculate(SetRotation);
 
+        drivetrain.arcade(SetSpeed, SetRotation);
     }
 
     @Override
