@@ -111,7 +111,7 @@ public class RobotContainer {
      */
     private void setDefaultCommands() {
         drivetrain.setDefaultCommand(new ManualDrive(drivetrain, pilot, copilot));
-        shooter.setDefaultCommand(new SpinShooter(shooter, 3500));
+        shooter.setDefaultCommand(new SpinShooter(shooter, 3500.0));
     }
 
     /**
@@ -139,13 +139,14 @@ public class RobotContainer {
         pilot.getStartButtonObj().whenPressed(new KillAll());
         copilot.getStartButtonObj().whenPressed(new KillAll());
 
-        copilot.getBackButtonObj().toggleWhenPressed(new FireBrake(climber));
+        copilot.getAButtonObj().toggleWhenPressed(new FireBrake(climber));
 
         copilot.getBButtonObj().toggleWhenPressed(new ToggleHood(hood));
 
-        copilot.getAButtonObj().whenPressed(new ToggleIntake(intake));
-
         copilot.getXButtonObj().toggleWhenPressed(new AutoAim(turret, limelight, 0));
+
+        copilot.getRtButtonObj().whileActiveContinuous(new AutoMagazine(magazine, intake, true, true));
+        copilot.getLtButtonObj().whileActiveContinuous(new AutoMagazine(magazine, intake, false, true));
 
         copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, 0.3));
         copilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));

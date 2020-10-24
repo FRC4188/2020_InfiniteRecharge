@@ -25,9 +25,6 @@ public class ManualDrive extends CommandBase {
     private CspController pilot;
     private CspController copilot;
 
-    private static final double SPEED_CONST = 0.2;
-    private static final double ROTATION_CONST = 0.3;
-
     private SlewRateLimiter speedLimiter = new SlewRateLimiter(1.5);
     private SlewRateLimiter rotLimiter = new SlewRateLimiter(1.5);
 
@@ -56,7 +53,6 @@ public class ManualDrive extends CommandBase {
         boolean PfineControl = pilot.getBumper(Hand.kLeft);
         double PxSpeed = pilot.getY(Hand.kLeft);
         double PzRotation = pilot.getX(Hand.kRight);
-        boolean CfineControl = copilot.getYButton();
         double CxSpeed = copilot.getY(Hand.kLeft);
         double CzRotation = copilot.getX(Hand.kRight);
 
@@ -70,16 +66,12 @@ public class ManualDrive extends CommandBase {
 
             // Apply a slew to the motor input.
             SetSpeed = PxSpeed;
-            SetRotation = PzRotation;
+            SetRotation = -PzRotation;
 
         } else if (CxSpeed != 0.0 || CzRotation != 0.0) {
-            // modify output based on fine control boolean
-            CxSpeed = (CfineControl) ? CxSpeed * SPEED_CONST : CxSpeed;
-            CzRotation = (CfineControl) ? CzRotation * ROTATION_CONST : CzRotation;
-
             //apply a slew to motor output
             SetSpeed = CxSpeed;
-            SetRotation = CzRotation;
+            SetRotation = -CzRotation;
 
         } else {
             SetSpeed = 0.0;
