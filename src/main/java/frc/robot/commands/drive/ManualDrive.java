@@ -61,8 +61,8 @@ public class ManualDrive extends CommandBase {
 
         if (PxSpeed != 0.0 || PzRotation != 0.0) {
             // modify output based on fine control boolean
-            PxSpeed = (PfineControl) ? PxSpeed * SPEED_CONST : PxSpeed;
-            PzRotation = (PfineControl) ? PzRotation * ROTATION_CONST : PzRotation;
+            PxSpeed = (PfineControl) ? PxSpeed : PxSpeed;
+            PzRotation = (PfineControl) ? PzRotation : PzRotation;
 
             // Apply a slew to the motor input.
             SetSpeed = PxSpeed;
