@@ -52,31 +52,14 @@ public class ManualDrive extends CommandBase {
         // take controller input
         boolean PfineControl = pilot.getBumper(Hand.kLeft);
         double PxSpeed = pilot.getY(Hand.kLeft);
-        double PzRotation = pilot.getX(Hand.kRight);
-        double CxSpeed = copilot.getY(Hand.kLeft);
-        double CzRotation = copilot.getX(Hand.kRight);
+        double PzRotation = -pilot.getX(Hand.kRight);
 
         double SetSpeed;
         double SetRotation;
 
-        if (PxSpeed != 0.0 || PzRotation != 0.0) {
-            // modify output based on fine control boolean
-            PxSpeed = (PfineControl) ? PxSpeed : PxSpeed;
-            PzRotation = (PfineControl) ? PzRotation : PzRotation;
-
-            // Apply a slew to the motor input.
-            SetSpeed = PxSpeed;
-            SetRotation = -PzRotation;
-
-        } else if (CxSpeed != 0.0 || CzRotation != 0.0) {
-            //apply a slew to motor output
-            SetSpeed = CxSpeed;
-            SetRotation = -CzRotation;
-
-        } else {
-            SetSpeed = 0.0;
-            SetRotation = 0.0;
-        }
+        // modify output based on fine control boolean
+        SetSpeed = (PfineControl) ? PxSpeed : PxSpeed;
+        SetRotation = (PfineControl) ? PzRotation : PzRotation;
         
         SetSpeed = speedLimiter.calculate(SetSpeed);
         SetRotation = rotLimiter.calculate(SetRotation);
