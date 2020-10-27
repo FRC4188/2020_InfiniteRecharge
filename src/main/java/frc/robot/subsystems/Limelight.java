@@ -15,10 +15,6 @@ public class Limelight extends SubsystemBase {
     private static final double CAMERA_WIDTH = 320; // pixels
     private static final double CAMERA_FOV_HOR = Math.toRadians(59.6); // rads
     private static final double CAMERA_FOV_VER = Math.toRadians(49.7); // rads
-    private static final double CLOSE_FORMULA_RATIO = 1952;
-    private static final double MID_FORMULA_RATIO = -903;
-    private static final double FAR_FORMULA_RATIO = 65.4;
-    private static final double SUPER_FAR_FORMULA_RATIO = 80.9;
     private static final double PORT_HEIGHT = 8.1875; // feet
     private static final double TAPE_HEIGHT = 2.5 / 2.0; // between bottom and top, feet
     private static final double SHOOTER_HEIGHT = 3.0 + (0.5 / 12.0); // feet

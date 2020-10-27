@@ -12,6 +12,8 @@ public class WheelSpinner extends SubsystemBase {
     private CANSparkMax wheelSpinnerMotor = new CANSparkMax(26, MotorType.kBrushless);
     private boolean isRaised = true;
 
+    private double reduction = 1;
+
     /**
      * Runs every loop.
      */
@@ -23,7 +25,11 @@ public class WheelSpinner extends SubsystemBase {
      * Sets wheel spinner to a certain percent output.
      */
     public void setPercentage(double percent) {
-        wheelSpinnerMotor.set(percent);
+        wheelSpinnerMotor.set(percent * reduction);
+    }
+
+    public void setReduction(double reduction) {
+        this.reduction = reduction;
     }
 
     /**

@@ -25,6 +25,8 @@ public class Shooter extends SubsystemBase {
     private static final double ENCODER_TICKS_PER_REV = 2048;
     private static final double RAMP_RATE = 1.0; // seconds
 
+    private double reduction = 1;
+
     /**
      * Constructs new Shooter object and configures devices.
      */
@@ -99,7 +101,7 @@ public class Shooter extends SubsystemBase {
     public void setVelocity(double velocity) {
         double adjust = SmartDashboard.getNumber("Set shooter rpm", 0.0)
                 * ENCODER_TICKS_PER_REV / 600;
-        velocity *= (ENCODER_TICKS_PER_REV) / 600;
+        velocity *= ((ENCODER_TICKS_PER_REV) / 600) *reduction;
         leftShooter.set(ControlMode.Velocity, velocity + adjust);
         rightShooter.set(ControlMode.Velocity, velocity + adjust);
     }
@@ -128,6 +130,10 @@ public class Shooter extends SubsystemBase {
         leftShooter.configOpenloopRamp(RAMP_RATE);
         rightShooter.configClosedloopRamp(RAMP_RATE);
         rightShooter.configOpenloopRamp(RAMP_RATE);
+    }
+
+    public void setReduction(double reduction) {
+        this.reduction = reduction;
     }
 
     /**

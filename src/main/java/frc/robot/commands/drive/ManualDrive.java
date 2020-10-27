@@ -6,9 +6,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.utils.CspController;
 
-import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
-
 /**
  * Manually controls drivetrain using arcade model.
  */
@@ -23,8 +20,6 @@ public class ManualDrive extends CommandBase {
     */
 
     private CspController pilot;
-    private CspController copilot;
-
     private SlewRateLimiter speedLimiter = new SlewRateLimiter(1.5);
     private SlewRateLimiter rotLimiter = new SlewRateLimiter(1.5);
 
@@ -36,11 +31,10 @@ public class ManualDrive extends CommandBase {
      * @param pilot - Pilot controller object.
      * @param copilot - Copilot controller object.
      */
-    public ManualDrive(Drivetrain drivetrain, CspController pilot, CspController copilot) {
+    public ManualDrive(Drivetrain drivetrain, CspController pilot) {
         addRequirements(drivetrain);
         this.drivetrain = drivetrain;
         this.pilot = pilot;
-        this.copilot = copilot;
     }
 
     @Override

@@ -74,6 +74,8 @@ public class Drivetrain extends SubsystemBase {
     private boolean rightInverted = false;
     private boolean gyroInverted = true; // ccw positive
 
+    private double reduction = 1;
+
     /**
      * Constructs new Drivetrain object and configures devices.
      */
@@ -165,8 +167,8 @@ public class Drivetrain extends SubsystemBase {
      * @param zRotation - Rotational percent output - ccw positive.
      */
     public void arcade(double xSpeed, double zRotation) {
-        double xSpeedMetersPerSec = xSpeed * ARCADE_MAX_VEL;
-        double zRotRadPerSec = zRotation * ARCADE_MAX_ROT;
+        double xSpeedMetersPerSec = xSpeed * ARCADE_MAX_VEL * reduction;
+        double zRotRadPerSec = zRotation * ARCADE_MAX_ROT * reduction;
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeedMetersPerSec, 0.0, zRotRadPerSec);
         DifferentialDriveWheelSpeeds speeds = kinematics.toWheelSpeeds(chassisSpeeds);
         setSpeeds(speeds);
@@ -246,6 +248,10 @@ public class Drivetrain extends SubsystemBase {
      */
     public void setCooler(boolean output) {
         cooler.set(output);
+    }
+
+    public void setReduction(double reduction) {
+        this.reduction = reduction;
     }
 
     /**

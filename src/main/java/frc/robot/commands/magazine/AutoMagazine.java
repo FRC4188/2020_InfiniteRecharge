@@ -2,9 +2,7 @@ package frc.robot.commands.magazine;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
-import frc.robot.subsystems.Shooter;
 
 /**
  * Runs magazine and indexer motors to feed cells if shooter is at correct rpm.
@@ -13,7 +11,6 @@ public class AutoMagazine extends CommandBase {
 
     private final Magazine magazine;
     private final Intake intake;
-    private final double TOLERANCE = 250;
     private boolean top;
     private boolean mid;
     private boolean cont;

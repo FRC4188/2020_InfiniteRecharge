@@ -43,6 +43,8 @@ public class Magazine extends SubsystemBase {
 
     private boolean manual;
 
+    private double reduction = 1;
+
     /**
      * Constructs new magazine object and configures devices.
      */
@@ -99,7 +101,7 @@ public class Magazine extends SubsystemBase {
      * Sets belt motor to a given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        magMotor.set(percent);
+        magMotor.set(percent * reduction);
     }
 
     /**
@@ -118,6 +120,10 @@ public class Magazine extends SubsystemBase {
     public void setRampRate() {
         magMotor.setClosedLoopRampRate(RAMP_RATE);
         magMotor.setOpenLoopRampRate(RAMP_RATE);
+    }
+
+    public void setReduction(double reduction) {
+        this.reduction = reduction;
     }
 
     /**

@@ -53,6 +53,7 @@ import frc.robot.utils.CspController;
 import frc.robot.utils.CspSequentialCommandGroup;
 import frc.robot.utils.KillAll;
 import frc.robot.utils.TempManager;
+import frc.robot.utils.BrownoutProtection;
 
 /**
  * Class containing setup for robot.
@@ -72,6 +73,7 @@ public class RobotContainer {
     private final WheelSpinner wheelSpinner = new WheelSpinner();
     private final TempManager tempManager =
             new TempManager(climber, drivetrain, intake, magazine, shooter, turret);
+    private final BrownoutProtection bop = new BrownoutProtection(drivetrain, intake, magazine, shooter, turret);
 
     // controller initialization
     private final CspController pilot = new CspController(0);
@@ -87,6 +89,10 @@ public class RobotContainer {
 
     public TempManager getTempManager() {
         return tempManager;
+    }
+
+    public BrownoutProtection getBrownoutProtection() {
+        return bop;
     }
 
     /**

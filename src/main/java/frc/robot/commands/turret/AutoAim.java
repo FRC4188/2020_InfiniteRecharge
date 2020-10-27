@@ -3,7 +3,6 @@ package frc.robot.commands.turret;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Limelight.LedMode;
 import frc.robot.subsystems.Turret;
 
 /**

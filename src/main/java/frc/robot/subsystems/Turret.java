@@ -36,6 +36,8 @@ public class Turret extends SubsystemBase {
 
     private boolean isTracking;
 
+    private double reduction = 1.0;
+
     /**
      * Constructs new Turret object and configures devices.
      */
@@ -82,7 +84,7 @@ public class Turret extends SubsystemBase {
      * Sets turret motor to given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        turretMotor.set(percent);
+        turretMotor.set(percent * reduction);
     }
 
     /**
@@ -99,6 +101,10 @@ public class Turret extends SubsystemBase {
     public void setRampRate() {
         turretMotor.setClosedLoopRampRate(0);
         turretMotor.setOpenLoopRampRate(RAMP_RATE);
+    }
+
+    public void setReduction(double reduction) {
+        this.reduction = reduction;
     }
 
     /**

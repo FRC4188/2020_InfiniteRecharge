@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -26,6 +24,8 @@ public class Intake extends SubsystemBase {
     private static final double INTAKE_TIMEOUT = 20;
 
     double intakeSet;
+
+    double reduction = 1;
 
     // state vars
     private boolean isRaised = true;
@@ -71,10 +71,10 @@ public class Intake extends SubsystemBase {
      * Spins the intake motor a given percent [-1.0, 1.0].
      */
     public void spin(double intake, double indexer) {
-        this.intakeSet = intake;
+        this.intakeSet = intake * reduction;
         if (intakeSolenoid.get()) intakeMotor.set(intake/2);
         else intakeMotor.set(intake / 3);   
-        indexerMotor.set(indexer);
+        indexerMotor.set(indexer * reduction);
     }
 
     public void spinIntake(double percent) {
@@ -132,6 +132,10 @@ public class Intake extends SubsystemBase {
         intakeMotor.setOpenLoopRampRate(RAMP_RATE);
         indexerMotor.setOpenLoopRampRate(RAMP_RATE);
         //polyRoller.setOpenLoopRampRate(RAMP_RATE);
+    }
+
+    public void setReduction(double reduction) {
+        this.reduction = reduction;
     }
 
     /**
