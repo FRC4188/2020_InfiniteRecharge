@@ -116,7 +116,7 @@ public class RobotContainer {
      * Sets the default command for each subsystem, if applicable.
      */
     private void setDefaultCommands() {
-        drivetrain.setDefaultCommand(new ManualDrive(drivetrain, pilot, copilot));
+        drivetrain.setDefaultCommand(new ManualDrive(drivetrain, pilot));
         shooter.setDefaultCommand(new SpinShooter(shooter, 3500.0));
     }
 
