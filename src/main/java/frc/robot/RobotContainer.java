@@ -54,6 +54,7 @@ import frc.robot.utils.CspSequentialCommandGroup;
 import frc.robot.utils.KillAll;
 import frc.robot.utils.TempManager;
 import frc.robot.utils.BrownoutProtection;
+import frc.robot.utils.EmergencyPower;
 
 /**
  * Class containing setup for robot.
@@ -80,6 +81,9 @@ public class RobotContainer {
     private final CspController copilot = new CspController(1);
     private final ButtonBox buttonBox = new ButtonBox(2);
 
+    // EMERGENCY POWER!!!!!!
+    private final EmergencyPower em = new EmergencyPower(pilot, drivetrain, intake, magazine, shooter, turret);
+
     // auto chooser initialization
     private final SendableChooser<CspSequentialCommandGroup> autoChooser =
             new SendableChooser<CspSequentialCommandGroup>();
@@ -93,6 +97,10 @@ public class RobotContainer {
 
     public BrownoutProtection getBrownoutProtection() {
         return bop;
+    }
+
+    public EmergencyPower getEmergencyPower() {
+        return em;
     }
 
     /**

@@ -14,6 +14,8 @@ public class CspController extends XboxController {
     private static final double DEADBAND = 0.15;
     private static final double TRIGGER_THRESHOLD = 0.6;
 
+    private boolean EmergencyPower;
+
     /**
      * Class containing button mappings for Logitech F310.
      */
@@ -55,6 +57,7 @@ public class CspController extends XboxController {
      */
     private double getOutput(double input, Scaling scale) {
         if (Math.abs(input) > DEADBAND) {
+            if (EmergencyPower) return input; // Hope this does not backfire...
             if (scale == Scaling.SQUARED) return Math.signum(input) * Math.pow(input, 2);
             else if (scale == Scaling.CUBED) return Math.pow(input, 3);
             else return input;
@@ -204,6 +207,14 @@ public class CspController extends XboxController {
      */
     public Trigger getRtButtonObj() {
         return new Trigger(() -> super.getTriggerAxis(Hand.kRight) > TRIGGER_THRESHOLD);
+    }
+
+    public boolean getEmergencyPower() {
+        return EmergencyPower;
+    }
+
+    public void setEmergencyPower(boolean EmergencyPower) {
+        this.EmergencyPower = EmergencyPower;
     }
 
 }
