@@ -159,6 +159,8 @@ public class RobotContainer {
 
         copilot.getXButtonObj().toggleWhenPressed(new AutoAim(turret, limelight, 0));
 
+        copilot.getYButtonObj().toggleWhenPressed(new ToggleIntake(intake));
+
         copilot.getRtButtonObj().whileActiveContinuous(new AutoMagazine(magazine, intake, true, true));
         copilot.getLtButtonObj().whileActiveContinuous(new AutoMagazine(magazine, intake, false, true));
 

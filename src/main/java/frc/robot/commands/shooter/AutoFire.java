@@ -41,17 +41,18 @@ public class AutoFire extends CommandBase {
 
     @Override
     public void execute() {
-        shooter.setVelocity(limelight.formulaRpm());
+        double shooterAdj = SmartDashboard.getNumber("Set shooter speed", 0.0);
+        shooter.setVelocity(limelight.formulaRpm() + shooterAdj);
         aimed = limelight.getIsAimed();
-        diff = shooter.getLeftVelocity() - limelight.formulaRpm();
+        diff = shooter.getLeftVelocity() - (limelight.formulaRpm()+shooterAdj);
         top = magazine.topBeamClear();
         mid = magazine.midBeamClear();
 
         if (cont) {
             if(limelight.hasTarget() == 1.0) {
-                if((limelight.getSkew() < 24) || limelight.getSkew() > -24) adjust = SmartDashboard.getNumber("Turret Aim adjust", -3.0) - limelight.getOffset();
-                else adjust = SmartDashboard.getNumber("Turret Aim adjust", -2.0);
-                turret.set((-limelight.getHorizontalAngle() + adjust - limelight.getOffset()) / 47.0);
+                /*if((limelight.getSkew() < 24) || limelight.getSkew() > -24) adjust = SmartDashboard.getNumber("Turret Aim adjust", -3.0) - limelight.getOffset();
+                else */adjust = SmartDashboard.getNumber("Turret Aim adjust", -2.0);
+                turret.set((-limelight.getHorizontalAngle() + adjust + limelight.getOffset()) / 47.0);
                 turret.setTracking(true);
             } else {
                 turret.set(0);
@@ -64,7 +65,7 @@ public class AutoFire extends CommandBase {
                     magazine.set(0.35);
                     intake.spin(-0.5,-1.0);
                 }
-                else if (!top && (diff < 100 && diff > -100) && aimed) magazine.set(1.0);
+                else if (!top && (diff < 25 && diff > -25) && aimed) magazine.set(0.75);
                 else {
                     magazine.set(0);
                     intake.spin(-0.,0.0);

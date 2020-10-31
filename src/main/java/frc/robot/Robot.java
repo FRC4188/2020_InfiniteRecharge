@@ -6,6 +6,8 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.utils.TempManager;
+import frc.robot.utils.EmergencyPower;
 
 
 /**
@@ -21,14 +23,22 @@ public class Robot extends TimedRobot {
     public void robotInit() {
         robotContainer = new RobotContainer();
 
+        // Creates UsbCamera and MjpegServer [1] and connects them
+        CameraServer.getInstance().startAutomaticCapture();
+
+        // Creates the CvSink and connects it to the UsbCamera
+        CvSink cvSink = CameraServer.getInstance().getVideo();
+        
+        // Creates the CvSource and MjpegServer [2] and connects them
+        CvSource outputStream = CameraServer.getInstance().putVideo("Blur", 640, 480);
     }
 
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
         robotContainer.getTempManager().run();
-        robotContainer.getBrownoutProtection().run();
-        robotContainer.getEmergencyPower().run();
+        //robotContainer.getBrownoutProtection().run();
+        //robotContainer.getEmergencyPower().run();
     }
 
     @Override

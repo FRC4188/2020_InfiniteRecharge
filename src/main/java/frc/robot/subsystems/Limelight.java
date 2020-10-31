@@ -22,6 +22,10 @@ public class Limelight extends SubsystemBase {
     private static final double CAMERA_ANGLE = 11.663; // degrees
     private static final double DIRECT_TO_FLAT_DISTANCE =
             1 / Math.cos(Math.toRadians(CAMERA_ANGLE));
+    public static final double PORT_SIDE_LENGTH = 2.5 / (2 * Math.sin(Math.toRadians(60))); //Side length of the port in feet.
+    public static final double THREE_POINT_DEPTH = 2 + (5.25/12.0); //Depth of the 3 point goal inside the 2 point goal in feet.
+    public static final double OFFSET_LIMIT = Math.atan(PORT_SIDE_LENGTH / (THREE_POINT_DEPTH * 2)) + 2; //Limit for the skew against the 3-point goal where any farther would make the ball hit the wall.
+
 
     // state vars
     private NetworkTable limelightTable = null;
@@ -85,6 +89,7 @@ public class Limelight extends SubsystemBase {
      */
     public Limelight() {
         limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
+        SmartDashboard.putNumber("Set shooter speed", 0.0);
     }
 
     /**
@@ -159,9 +164,15 @@ public class Limelight extends SubsystemBase {
     }
 
     public double getOffset() {
-        double eqNumor = 29.125 * Math.sin(180 - getSkew());
-        double eqDenom = Math.sqrt(848.265625 + Math.pow(getDistance(), 2) - 58.25 * getDistance() * Math.cos(180-getSkew()));
-        return Math.asin(eqNumor / eqDenom);
+        double a = THREE_POINT_DEPTH;
+        double b = getDistance();
+        double c = getSkew();
+    
+    
+        double offset =  Math.toDegrees(Math.asin((a * Math.sin(Math.toRadians(180-c))) / Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2) - (2 * a * b * Math.cos(Math.toRadians(180 - c))))));
+        double check = c - offset;
+        if (check <= OFFSET_LIMIT && check >= -OFFSET_LIMIT) return -offset;
+        else return 0.0;
     }
 
     /**
