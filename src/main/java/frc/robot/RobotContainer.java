@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.EmergencyPower;
 import frc.robot.commands.climb.FireBrake;
 import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
@@ -54,7 +55,6 @@ import frc.robot.utils.CspSequentialCommandGroup;
 import frc.robot.utils.KillAll;
 import frc.robot.utils.TempManager;
 import frc.robot.utils.BrownoutProtection;
-import frc.robot.utils.EmergencyPower;
 
 /**
  * Class containing setup for robot.
@@ -82,7 +82,6 @@ public class RobotContainer {
     private final ButtonBox buttonBox = new ButtonBox(2);
 
     // EMERGENCY POWER!!!!!!
-    private final EmergencyPower em = new EmergencyPower(pilot, drivetrain, intake, magazine, shooter, turret);
 
     // auto chooser initialization
     private final SendableChooser<CspSequentialCommandGroup> autoChooser =
@@ -97,10 +96,6 @@ public class RobotContainer {
 
     public BrownoutProtection getBrownoutProtection() {
         return bop;
-    }
-
-    public EmergencyPower getEmergencyPower() {
-        return em;
     }
 
     /**
@@ -150,6 +145,9 @@ public class RobotContainer {
         pilot.getAButtonObj().whileHeld(new AutoMagazine(magazine, intake, false, true));
         pilot.getAButtonObj().whenReleased(new AutoMagazine(magazine, intake, false, false));
 
+        pilot.getBackButtonObj().whenPressed(new EmergencyPower(drivetrain, shooter, turret, magazine, intake, wheelSpinner, true));
+        pilot.getBackButtonObj().whenReleased(new EmergencyPower(drivetrain, shooter, turret, magazine, intake, wheelSpinner, false));
+
         pilot.getStartButtonObj().whenPressed(new KillAll());
         copilot.getStartButtonObj().whenPressed(new KillAll());
 
@@ -174,6 +172,8 @@ public class RobotContainer {
         copilot.getRbButtonObj().whenReleased(new ManualClimb(climber, 0));
         copilot.getLbButtonObj().whileHeld(new ManualClimb(climber, 0.6));
         copilot.getLbButtonObj().whenReleased(new ManualClimb(climber, 0));
+
+        copilot.getBackButtonObj().whenPressed(new ZeroTurret(turret));
 
         buttonBox.getButton1Obj().whenPressed(new TurretAngle(turret, 0));
         //Unused button 2

@@ -160,7 +160,12 @@ public class Limelight extends SubsystemBase {
     }
 
     public double getSkew() {
-        return limelightTable.getEntry("ts").getDouble(0.0);
+        double rawVal =  limelightTable.getEntry("ts").getDouble(0.0);
+
+        rawVal *= -4;
+        rawVal = (rawVal > 180) ? (180-rawVal) : rawVal;
+
+        return rawVal;
     }
 
     public double getOffset() {
@@ -171,7 +176,7 @@ public class Limelight extends SubsystemBase {
     
         double offset =  Math.toDegrees(Math.asin((a * Math.sin(Math.toRadians(180-c))) / Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2) - (2 * a * b * Math.cos(Math.toRadians(180 - c))))));
         double check = c - offset;
-        if (check <= OFFSET_LIMIT && check >= -OFFSET_LIMIT) return -offset;
+        if (check <= OFFSET_LIMIT && check >= -OFFSET_LIMIT) return offset;
         else return 0.0;
     }
 
@@ -186,14 +191,8 @@ public class Limelight extends SubsystemBase {
     /**
      * Returns rpm to spin shooter to based on vision target formula.
      */
-    public double formulaRpm() {
-        
-        /*
-        double d = getDistance();
-        double rpm = 8200.0 + -500.0*d + 11.0*d*d;
-        return rpm;*/
-        
-        setRPM = (Math.pow(8.2716e-8, (getDistance() - 10.0264))) + (0.352395 * Math.pow(getDistance(), 2)) + 3277.18;
+    public double formulaRpm() {        
+        setRPM = (Math.pow(1.28449e-5, (getDistance() - 8.69353))) + (2.97767 * Math.pow((getDistance()+4.28663), 2)) + (-124.827 * (getDistance()-32.6752)) - 9.2825e7;
         
         if (setRPM > 6000) {
             setRPM = 6000;
