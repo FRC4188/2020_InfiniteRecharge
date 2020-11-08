@@ -65,7 +65,7 @@ public class AutoFire extends CommandBase {
                     magazine.set(0.35);
                     intake.spin(-0.5,-1.0);
                 }
-                else if (!top && (diff < 25 && diff > -25) && aimed) magazine.set(0.75);
+                else if (!top && (diff < 35 && diff > -35) && aimed) magazine.set(0.75);
                 else {
                     magazine.set(0);
                     intake.spin(-0.,0.0);

@@ -162,8 +162,8 @@ public class Limelight extends SubsystemBase {
     public double getSkew() {
         double rawVal =  limelightTable.getEntry("ts").getDouble(0.0);
 
-        rawVal *= -4;
-        rawVal = (rawVal > 180) ? (180-rawVal) : rawVal;
+        rawVal *= -2;
+        rawVal = (rawVal > 90) ? (90-rawVal) : rawVal;
 
         return rawVal;
     }
@@ -192,10 +192,13 @@ public class Limelight extends SubsystemBase {
      * Returns rpm to spin shooter to based on vision target formula.
      */
     public double formulaRpm() {        
-        setRPM = (Math.pow(1.28449e-5, (getDistance() - 8.69353))) + (2.97767 * Math.pow((getDistance()+4.28663), 2)) + (-124.827 * (getDistance()-32.6752)) - 9.2825e7;
+        //setRPM = (Math.pow(1.28449e-5, (getDistance() - 8.69353))) + (2.97767 * Math.pow((getDistance()+4.28663), 2)) + (-124.827 * (getDistance()-32.6752)) - 9.2825e7;
+        setRPM = (Math.pow(2.50852, ((0.135494 * getDistance()) + 3.20058)) + (7.7212e15 * Math.pow(getDistance(), -13.0483)) + 3209.97);
         
         if (setRPM > 6000) {
             setRPM = 6000;
+        } else if (setRPM < 0) {
+            setRPM = 0;
         }
 
         return setRPM;
