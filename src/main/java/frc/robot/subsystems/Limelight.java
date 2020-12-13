@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -88,8 +89,10 @@ public class Limelight extends SubsystemBase {
      * Constructor for Limelight.
      */
     public Limelight() {
-        limelightTable = NetworkTableInstance.getDefault().getTable("limelight");
-        SmartDashboard.putNumber("Set shooter speed", 0.0);
+        limelightTable = NetworkTableInstance.getDefault().getTable("limelight-csp");
+        SmartDashboard.putNumber("Set shooter speed", 0.0);        
+        Notifier shuffle = new Notifier(() -> updateShuffleboard());        
+        shuffle.startPeriodic(0.1);
     }
 
     /**
@@ -97,8 +100,6 @@ public class Limelight extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        updateShuffleboard();
-        adjust = SmartDashboard.getNumber("Turret Aim adjust", -2.0);
     }
 
     /**
@@ -231,7 +232,7 @@ public class Limelight extends SubsystemBase {
         setPipeline(Pipeline.CLOSE);
     }
     public boolean getIsAimed() {
-        return (getHorizontalAngle() >= (-1.5+adjust-getOffset()) && getHorizontalAngle() <= (1.5+adjust-getOffset()));
+        return (getHorizontalAngle() >= -1.5 && getHorizontalAngle() <= 1.5);
 
     }
     /**

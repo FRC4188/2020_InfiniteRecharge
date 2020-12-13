@@ -44,14 +44,16 @@ public class Intake extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        updateShuffleboard();
+        //updateShuffleboard();
 
         //ballCount = (int) SmartDashboard.getNumber("Beam Breaker", ballCount);
+        /*
         if (isRaised) {
             intakeSolenoid.set(false);
         } else {
             intakeSolenoid.set(true);
         }
+        */
     }
 
     /**
@@ -99,14 +101,14 @@ public class Intake extends SubsystemBase {
      * Raises intake by firing solenoids.
      */
     public void raise() {
-        isRaised = true;
+        intakeSolenoid.set(false);
     }
 
     /**
      * Lowers intake by firing solenoid.
      */
     public void lower() {
-        isRaised = false;
+        intakeSolenoid.set(true);
     }
 
     /**

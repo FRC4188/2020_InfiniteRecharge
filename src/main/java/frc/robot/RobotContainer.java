@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.EmergencyPower;
 import frc.robot.commands.climb.FireBrake;
 import frc.robot.commands.climb.ManualClimb;
@@ -119,8 +120,12 @@ public class RobotContainer {
      * Sets the default command for each subsystem, if applicable.
      */
     private void setDefaultCommands() {
-        drivetrain.setDefaultCommand(new ManualDrive(drivetrain, pilot));
+        drivetrain.setDefaultCommand(new RunCommand(
+            () -> drivetrain.arcade(pilot.getY(Hand.kLeft), pilot.getX(Hand.kRight), pilot.getBumper(Hand.kLeft)), drivetrain
+         ));
+
         shooter.setDefaultCommand(new SpinShooter(shooter, 3500.0));
+        turret.setDefaultCommand(new RunCommand(() -> turret.set(0.0), turret));
     }
 
     /**
@@ -135,8 +140,7 @@ public class RobotContainer {
         pilot.getDpadDownButtonObj().whenPressed(new LowerIntake(intake));
         pilot.getDpadUpButtonObj().whenPressed(new RaiseIntake(intake));
 
-        pilot.getYButtonObj().whileHeld(new AutoFire(shooter, magazine, intake, limelight, turret, true));
-        pilot.getYButtonObj().whenReleased(new AutoFire(shooter, magazine, intake, limelight, turret, false));
+        pilot.getYButtonObj().whileHeld(new AutoFire(shooter, magazine, intake, limelight, turret));
         pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
         pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
 
@@ -162,18 +166,17 @@ public class RobotContainer {
         copilot.getRtButtonObj().whileActiveContinuous(new AutoMagazine(magazine, intake, true, true));
         copilot.getLtButtonObj().whileActiveContinuous(new AutoMagazine(magazine, intake, false, true));
 
-        copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, 0.3));
+        copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, 0.1));
         copilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));
-        copilot.getDpadRightButtonObj().whileHeld(new ManualTurret(turret, -0.3));
+        copilot.getDpadRightButtonObj().whileHeld(new ManualTurret(turret, -0.1));
         copilot.getDpadRightButtonObj().whenReleased(new ManualTurret(turret, 0));
-
 
         copilot.getRbButtonObj().whileHeld(new ManualClimb(climber, -0.9));
         copilot.getRbButtonObj().whenReleased(new ManualClimb(climber, 0));
         copilot.getLbButtonObj().whileHeld(new ManualClimb(climber, 0.6));
         copilot.getLbButtonObj().whenReleased(new ManualClimb(climber, 0));
 
-        copilot.getBackButtonObj().whenPressed(new ZeroTurret(turret));
+        //copilot.getBackButtonObj().whenPressed(new RunCommand(turret., requirements));
 
         buttonBox.getButton1Obj().whenPressed(new TurretAngle(turret, 0));
         //Unused button 2

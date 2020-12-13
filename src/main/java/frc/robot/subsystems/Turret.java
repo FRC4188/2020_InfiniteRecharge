@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
@@ -7,7 +9,14 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -18,34 +27,37 @@ public class Turret extends SubsystemBase {
     // device initialization
     private final CANSparkMax turretMotor = new CANSparkMax(23, MotorType.kBrushless);
     private final CANEncoder turretEncoder = new CANEncoder(turretMotor);
-    private final CANPIDController pid = new CANPIDController(turretMotor);
+    private final ProfiledPIDController pid = new ProfiledPIDController(0.024, 0.003, 1.0, new Constraints(MAX_VELOCITY, MAX_ACCELERATION));
 
     // constants
-    private static final double MAX_VELOCITY = 11000; // rpm
-    private static final double MAX_ACCELERATION = 22000; // rpm / sec
-    private static final double kP = 4e-5;
-    private static final double kI = 1e-6;
-    private static final double kD = 0;
-    private static final double kF = 1.0 / MAX_VELOCITY;
-    private static final double kI_ZONE = 0;
-    private static final double GEAR_RATIO = 300; // angular velocity will be divided by this amount
+    private static final double MAX_VELOCITY = 1.5; // rpm
+    private static final double MAX_ACCELERATION = 0.75; // rpm / sec
+    private static final double GEAR_RATIO = 40.0 * (120.0 / 16.0); // angular velocity will be divided by this amount
     private static final double ENCODER_TO_DEGREES = 360.0 / GEAR_RATIO; // degrees
     private static final double RAMP_RATE = 0.5; // seconds
-    private static final double MAX_ANG = 370;
-    private static final double MIN_ANG = -10;
-
-    private boolean isTracking;
+    private static final double MAX_ANG = 255;
+    private static final double MIN_ANG = -32;
 
     private double reduction = 1.0;
+
+    private boolean MANUAL = false;
 
     /**
      * Constructs new Turret object and configures devices.
      */
     public Turret() {
-        //resetEncoders();
+        resetEncoders();
         setRampRate();
-        controllerInit();
         turretMotor.setIdleMode(IdleMode.kBrake);
+        Notifier shuffle = new Notifier(() -> updateShuffleboard());        
+        shuffle.startPeriodic(0.1);
+
+        Notifier setPID = new Notifier(() -> updatePID());
+        setPID.startPeriodic(0.5);
+
+        SmartDashboard.putNumber("Turret P", 0.024);
+        SmartDashboard.putNumber("Turret I", 0.003);
+        SmartDashboard.putNumber("Turret D", 1.0);
     }
 
     /**
@@ -53,7 +65,6 @@ public class Turret extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        updateShuffleboard();
     }
 
     /**
@@ -63,36 +74,40 @@ public class Turret extends SubsystemBase {
         SmartDashboard.putNumber("Turret pos (deg)", getPosition());
         SmartDashboard.putNumber("Turret temp", turretMotor.getMotorTemperature());
         SmartDashboard.putNumber("Turret raw vel", turretEncoder.getVelocity());
-        SmartDashboard.putBoolean("Auto Aim", isTracking);
     }
 
-    /**
-     * Configures gains for Spark closed loop controller.
-     */
-    private void controllerInit() {
-        pid.setP(kP);
-        pid.setI(kI);
-        pid.setD(kD);
-        pid.setIZone(kI_ZONE);
-        pid.setFF(kF);
-        pid.setOutputRange(-1.0, 1.0);
-        pid.setSmartMotionMaxVelocity(MAX_VELOCITY, 0);
-        pid.setSmartMotionMaxAccel(MAX_ACCELERATION, 0);
+    private void updatePID() {
+        pid.setPID(
+        SmartDashboard.getNumber("Turret P", 0.0), 
+        SmartDashboard.getNumber("Turret I", 0.0), 
+        SmartDashboard.getNumber("Turret D", 0.0)
+        );
     }
 
     /**
      * Sets turret motor to given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        turretMotor.set(percent * reduction);
+        if (getPosition() < MIN_ANG){
+            if (percent > 0.0) turretMotor.set(percent);
+            else turretMotor.set(0.0);
+        } else if (getPosition() > MAX_ANG) {
+            if (percent < 0.0) turretMotor.set(percent);
+            else turretMotor.set(0.0);
+        } else {
+            turretMotor.set(percent * reduction);
+        }
     }
 
     /**
      * Turns turret to angle in degrees.
      */
     public void setAngle(double angle) {
-        angle /= ENCODER_TO_DEGREES;
-        pid.setReference(angle, ControlType.kSmartMotion);
+        set(pid.calculate(getPosition(), angle));
+    }
+
+    public void trackTarget(double measure) {
+        set(pid.calculate(measure, 0));
     }
 
     /**
@@ -142,15 +157,20 @@ public class Turret extends SubsystemBase {
         return MIN_ANG;
     }
 
-    /**
-     * Sets the isTracking variable (for SmartDashboard purposes).
-     */
-    public void setTracking(boolean track) {
-        isTracking = track;
+    public boolean getManual() {
+        return MANUAL;
+    }
+
+    public void setManual(boolean manual) {
+        MANUAL = manual;
+    }
+
+    public void toggleManual() {
+        MANUAL = !MANUAL;
     }
 
     /**
-     * Returns turret motor temperature in Celcius.
+     * Returns turret motor temperature in Celsius.
      */
     public double getTemp() {
         return turretMotor.getMotorTemperature();

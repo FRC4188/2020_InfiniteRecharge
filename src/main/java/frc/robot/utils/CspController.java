@@ -86,14 +86,14 @@ public class CspController extends XboxController {
      */
     @Override
     public double getX(Hand hand) {
-        return getOutput(super.getX(hand), Scaling.SQUARED);
+        return -getOutput(super.getX(hand), Scaling.SQUARED);
     }
 
     /**
      * Returns the Y value of the joystick for a given hand and scaling.
      */
     public double getX(Hand hand, Scaling scale) {
-        return getOutput(super.getX(hand), scale);
+        return -getOutput(super.getX(hand), scale);
     }
 
 

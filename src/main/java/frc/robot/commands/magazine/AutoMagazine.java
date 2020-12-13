@@ -13,8 +13,8 @@ public class AutoMagazine extends CommandBase {
     private final Intake intake;
     private boolean top;
     private boolean mid;
-    private boolean cont;
     private boolean forw;
+    private boolean cont;
 
     /**
      * Constructs a new AutoMagazine command to feed cells if shooter is at correct rpm.
@@ -22,14 +22,13 @@ public class AutoMagazine extends CommandBase {
      * @param magazine Magazine subsystem to use for turning motors.
      * @param intake Intake subsystem that feeds into the magazine.
      * @param forward Whether the system is taking balls through the regular track or reversed.
-     * @param cont Whether the command is starting or stopping.
      */
     public AutoMagazine(Magazine magazine, Intake intake, boolean forward, boolean cont) {
         addRequirements(magazine, intake);
         this.magazine = magazine;
         this.intake = intake;
-        this.cont = cont;
         this.forw = forward;
+        this.cont = cont;
     }
 
     @Override
@@ -41,7 +40,6 @@ public class AutoMagazine extends CommandBase {
         top = magazine.topBeamClear();
         mid = magazine.midBeamClear();
 
-        if (cont) {
             if (forw) {
                 if (!mid && top) {
                     intake.spin(-1.0, -1.0);
@@ -69,12 +67,7 @@ public class AutoMagazine extends CommandBase {
                     intake.spin(1.0,0.0);
                 }
             }
-        }else {
-            magazine.set(0.0);
-            intake.spin(0.0,0.0);
-        }
     }
-
 
     @Override
     public boolean isFinished() {
@@ -83,7 +76,6 @@ public class AutoMagazine extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-
         // Upon stop intake stops and if the magazine is being controlled automatically it will stop.
         if (!magazine.getManual()) {
             magazine.set(0.0);

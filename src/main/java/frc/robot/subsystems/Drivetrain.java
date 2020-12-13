@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
@@ -37,7 +38,7 @@ public class Drivetrain extends SubsystemBase {
     private static final double kS = 0.233; // volts
     private static final double kV = 2.12; // volt seconds / meter
     private static final double kA = 0.167; // volt seconds squared / meter
-    private static final double kP = 3.5;
+    private static final double kP = 3.0;//3.5;
     private static final double AUTO_MAX_VEL = 2.0 /*3.5*/; // meters / second
     private static final double AUTO_MAX_ACCEL = 0.5/*1.0*/; // meters / second squared
     private static final double AUTO_MAX_CENTRIP = 1.0; // meters / second squared
@@ -68,7 +69,9 @@ public class Drivetrain extends SubsystemBase {
             .addConstraint(voltageConstraint)
             .addConstraint(centripAccelConstraint);
 
-
+    private SlewRateLimiter speedLimiter = new SlewRateLimiter(1.5);
+    private SlewRateLimiter rotLimiter = new SlewRateLimiter(1.5);
+        
     // state vars
     private boolean leftInverted = true;
     private boolean rightInverted = false;
@@ -107,7 +110,7 @@ public class Drivetrain extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        updateShuffleboard();
+        //updateShuffleboard();
         updateOdometry();
     }
 
@@ -166,7 +169,15 @@ public class Drivetrain extends SubsystemBase {
      * @param xSpeed - Forward percent output.
      * @param zRotation - Rotational percent output - ccw positive.
      */
-    public void arcade(double xSpeed, double zRotation) {
+    public void arcade(double xSpeed, double zRotation, boolean fineControl) {
+        // modify output based on fine control boolean
+        xSpeed = (fineControl) ? xSpeed * 0.75 : xSpeed;
+        zRotation = (fineControl) ? zRotation * 0.75 : zRotation;
+                
+                
+        xSpeed = speedLimiter.calculate(xSpeed);
+        zRotation = rotLimiter.calculate(zRotation);
+        
         double xSpeedMetersPerSec = xSpeed * ARCADE_MAX_VEL * reduction;
         double zRotRadPerSec = zRotation * ARCADE_MAX_ROT * reduction;
         ChassisSpeeds chassisSpeeds = new ChassisSpeeds(xSpeedMetersPerSec, 0.0, zRotRadPerSec);

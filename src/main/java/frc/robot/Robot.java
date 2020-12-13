@@ -30,7 +30,7 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        robotContainer.getTempManager().run();
+        //robotContainer.getTempManager().run();
         //robotContainer.getBrownoutProtection().run();
     }
 

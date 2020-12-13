@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -45,8 +47,8 @@ public class Shooter extends SubsystemBase {
         controllerInit();
         setRampRate();
 
-        SmartDashboard.putNumber("Set shooter speed", 0.0);
-        SmartDashboard.putNumber("RightShooter Temp", rightShooter.getTemperature());
+        Notifier shuffle = new Notifier(() -> updateShuffleboard());        
+        shuffle.startPeriodic(0.1);
     }
 
     /**
@@ -54,7 +56,7 @@ public class Shooter extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        updateShuffleboard();
+        //updateShuffleboard();
     }
 
     /**

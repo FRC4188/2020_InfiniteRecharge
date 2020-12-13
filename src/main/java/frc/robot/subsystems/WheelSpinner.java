@@ -18,7 +18,7 @@ public class WheelSpinner extends SubsystemBase {
      * Runs every loop.
      */
     public void periodic() {
-        SmartDashboard.putBoolean("Wheel Spinner Raised", isRaised());
+        //SmartDashboard.putBoolean("Wheel Spinner Raised", isRaised());
     }
 
     /**

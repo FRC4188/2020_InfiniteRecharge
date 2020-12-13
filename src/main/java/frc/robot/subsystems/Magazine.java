@@ -8,6 +8,7 @@ import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -21,8 +22,10 @@ public class Magazine extends SubsystemBase {
     private final CANEncoder magEncoder = new CANEncoder(magMotor);
     private final CANPIDController pid = new CANPIDController(magMotor);
 
-    private final DigitalInput midBeam = new DigitalInput(0);
-    private final DigitalInput topBeam = new DigitalInput(1);
+    private final DigitalInput topBeamA = new DigitalInput(0);
+    private final DigitalInput topBeamB = new DigitalInput(1);
+    private final DigitalInput midBeamA = new DigitalInput(3);
+    private final DigitalInput midBeamB = new DigitalInput(4);
     private final DigitalInput botBeam = new DigitalInput(2);
 
     // Constants
@@ -53,9 +56,8 @@ public class Magazine extends SubsystemBase {
         magMotor.setIdleMode(IdleMode.kBrake);
         setRampRate();
 
-        SmartDashboard.putNumber("Mag P", kP);
-        SmartDashboard.putNumber("Mag I", kI);
-        SmartDashboard.putNumber("Mag D", kD);
+        Notifier shuffle = new Notifier(() -> updateShuffleboard());
+        shuffle.startPeriodic(0.1);
     }
 
     /**
@@ -63,8 +65,8 @@ public class Magazine extends SubsystemBase {
      */
     @Override
     public void periodic() {
-        magMotor.setInverted(true);
-        updateShuffleboard();
+        //magMotor.setInverted(true);
+        //updateShuffleboard();
     }
 
     public void configController() {
@@ -90,9 +92,13 @@ public class Magazine extends SubsystemBase {
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Magazine velocity", magEncoder.getVelocity());
         SmartDashboard.putNumber("M24 temp", magMotor.getMotorTemperature());
-        // SmartDashboard.putBoolean("Bot Beam Breaker", botBeamClear());
-        SmartDashboard.putBoolean("Top Beam Breaker", topBeamClear());
-        SmartDashboard.putBoolean("Mid Beam Breaker", midBeamClear());
+        SmartDashboard.putBoolean("Top", (topBeamA.get() && topBeamB.get()));
+        SmartDashboard.putBoolean("Mid", (midBeamA.get() && midBeamB.get()));
+        SmartDashboard.putBoolean("Chn. 0", topBeamA.get());
+        SmartDashboard.putBoolean("Chn. 1", topBeamB.get());
+        SmartDashboard.putBoolean("Chn. 2", botBeam.get());
+        SmartDashboard.putBoolean("Chn. 3", midBeamA.get());
+        SmartDashboard.putBoolean("Chn. 4", midBeamB.get());
         SmartDashboard.putBoolean("Magazine manual", getManual());
         SmartDashboard.putNumber("Magazine Position", magEncoder.getPosition()/TICKS_PER_INCH);
     }
@@ -133,16 +139,16 @@ public class Magazine extends SubsystemBase {
         return magMotor.getMotorTemperature();
     }
 
-    /*public boolean botBeamClear() {
+    public boolean botBeamClear() {
         return botBeam.get();
-    }*/
+    }
 
     public boolean midBeamClear() {
-        return midBeam.get();
+        return (midBeamA.get() && midBeamB.get());
     }
 
     public boolean topBeamClear() {
-        return topBeam.get();
+        return (topBeamA.get() && topBeamB.get());
     }
 
     public void setManual(boolean manual) {
