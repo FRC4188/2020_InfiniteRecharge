@@ -10,36 +10,23 @@ import frc.robot.commands.EmergencyPower;
 import frc.robot.commands.climb.FireBrake;
 import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
-import frc.robot.commands.drive.ManualDrive;
 import frc.robot.commands.groups.LeftEnemyTrenchAuto;
 import frc.robot.commands.groups.MidDriveAwayAuto;
 import frc.robot.commands.groups.MidDriveTowardAuto;
 import frc.robot.commands.groups.PathWeaverTest;
 import frc.robot.commands.groups.TestCurve;
 import frc.robot.commands.groups.RightTrenchAuto;
-//import frc.robot.commands.groups.AutoShoot;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.intake.RaiseIntake;
-import frc.robot.commands.intake.SpinIntake;
-import frc.robot.commands.intake.SpinJustIntake;
 import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.magazine.RunMagazine;
-import frc.robot.commands.magazine.PIDTesting;
-import frc.robot.commands.shooter.AutoFire;
 import frc.robot.commands.shooter.SpinShooter;
-import frc.robot.commands.shooter.SpinShooterFormula;
+import frc.robot.commands.total.MoveBalls;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.ManualTurret;
 import frc.robot.commands.turret.TurretAngle;
-import frc.robot.commands.turret.ZeroTurret;
-import frc.robot.commands.vision.CameraCloseTrack;
-import frc.robot.commands.vision.CameraZoomTrack;
-import frc.robot.commands.vision.UseAsCamera;
-import frc.robot.commands.wheel.LowerWheel;
-import frc.robot.commands.wheel.RaiseWheel;
-import frc.robot.commands.wheel.SpinWheel;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
@@ -125,9 +112,9 @@ public class RobotContainer {
          ));
 
         shooter.setDefaultCommand(new SpinShooter(shooter, 3500.0));
-        turret.setDefaultCommand(new RunCommand(() -> turret.set(0.0), turret));
+        turret.setDefaultCommand(new MoveBalls(turret, magazine, intake, limelight, shooter,
+        () -> copilot.getX(Hand.kRight), () -> buttonBox.getButton2Obj().get(), () -> pilot.getYButton(), () -> pilot.getBButton(), () -> pilot.getAButton()));
     }
-
     /**
      * Binds commands to buttons on controllers.
      */
@@ -140,12 +127,9 @@ public class RobotContainer {
         pilot.getDpadDownButtonObj().whenPressed(new LowerIntake(intake));
         pilot.getDpadUpButtonObj().whenPressed(new RaiseIntake(intake));
 
-        pilot.getYButtonObj().whileHeld(new AutoFire(shooter, magazine, intake, limelight, turret));
         pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
         pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
 
-        pilot.getBButtonObj().whileHeld(new AutoMagazine(magazine, intake, true, true));
-        pilot.getBButtonObj().whenReleased(new AutoMagazine(magazine, intake, true, false));
         pilot.getAButtonObj().whileHeld(new AutoMagazine(magazine, intake, false, true));
         pilot.getAButtonObj().whenReleased(new AutoMagazine(magazine, intake, false, false));
 
@@ -176,10 +160,7 @@ public class RobotContainer {
         copilot.getLbButtonObj().whileHeld(new ManualClimb(climber, 0.6));
         copilot.getLbButtonObj().whenReleased(new ManualClimb(climber, 0));
 
-        //copilot.getBackButtonObj().whenPressed(new RunCommand(turret., requirements));
-
         buttonBox.getButton1Obj().whenPressed(new TurretAngle(turret, 0));
-        //Unused button 2
         buttonBox.getButton3Obj().toggleWhenPressed(new SpinShooter(shooter, 3600));
         buttonBox.getButton4Obj().whenPressed(new TurretAngle(turret, 180));
         buttonBox.getButton5Obj().toggleWhenPressed(new SpinShooter(shooter, 4550));

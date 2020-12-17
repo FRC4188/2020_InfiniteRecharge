@@ -232,7 +232,7 @@ public class Limelight extends SubsystemBase {
         setPipeline(Pipeline.CLOSE);
     }
     public boolean getIsAimed() {
-        return (getHorizontalAngle() >= -1.5 && getHorizontalAngle() <= 1.5);
+        return (getHorizontalAngle() >= -1.5 && getHorizontalAngle() <= 1.5) && hasTarget() == 1.0;
 
     }
     /**
