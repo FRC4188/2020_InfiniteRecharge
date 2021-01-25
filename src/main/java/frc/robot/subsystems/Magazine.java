@@ -31,7 +31,7 @@ public class Magazine extends SubsystemBase {
     // Constants
     private static final double MAX_VELOCITY = 1400.0; // rpm
     private static final double MAX_ACCELERATION = 2800.0; // rpm/sec
-    private static final double PPR = 42.0; // Encoder resolution.
+    private static final double PPR = 1.0; // Encoder resolution.
     private static final double GEAR_RATIO = 3.0; // Gear ration from motor to output.
     private static final double TICKS_PER_REV = PPR*GEAR_RATIO; // Encoder ticks to output revolution.
     private static final double PULLEY_DIAMETER = 1.39; // Diameter of output pulley.
@@ -110,14 +110,8 @@ public class Magazine extends SubsystemBase {
         magMotor.set(percent * reduction);
     }
 
-    /**
-     * Increases the position of the motor by specified amount.
-     * @param inches Inches to move magazine forward.
-     */
-    public void setIncrease(double inches) {
-        double TickIncrease = inches * TICKS_PER_INCH;
-        double SetPoint = magEncoder.getPosition() + TickIncrease;
-        pid.setReference(SetPoint/10, ControlType.kPosition);
+    public void setPosition(double position) {
+        pid.setReference(position, ControlType.kSmartMotion);
     }
 
     /**
@@ -159,4 +153,11 @@ public class Magazine extends SubsystemBase {
         return manual;
     }
     
+    public double getPosition() {
+        return magEncoder.getPosition() * TICKS_PER_INCH;
+    }
+
+    public double getVelocity() {
+        return magEncoder.getVelocity() * TICKS_PER_INCH / 60;
+    }
 }
