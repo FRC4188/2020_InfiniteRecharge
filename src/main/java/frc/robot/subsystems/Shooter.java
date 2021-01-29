@@ -6,7 +6,9 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -17,6 +19,8 @@ public class Shooter extends SubsystemBase {
     // device initialization
     private WPI_TalonFX leftShooter = new WPI_TalonFX(21);
     private WPI_TalonFX rightShooter = new WPI_TalonFX(22);
+
+    private ProfiledPIDController velPID = new ProfiledPIDController(kP, kI, kD, new Constraints(2000, 9999));
 
     // constants
     private static final double kP = 0.35;
@@ -92,20 +96,17 @@ public class Shooter extends SubsystemBase {
      * Sets shooter motors to a given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        double adjust = SmartDashboard.getNumber("Set shooter rpm", 0.0) / MAX_VELOCITY;
-        leftShooter.set(percent + adjust);
-        rightShooter.set(percent + adjust);
+        leftShooter.set(percent);
+        rightShooter.set(percent);
     }
 
     /**
      * Sets shooter motors to a given velocity in rpm.
      */
     public void setVelocity(double velocity) {
-        double adjust = SmartDashboard.getNumber("Set shooter rpm", 0.0)
-                * ENCODER_TICKS_PER_REV / 600;
         velocity *= ((ENCODER_TICKS_PER_REV) / 600) *reduction;
-        leftShooter.set(ControlMode.Velocity, velocity + adjust);
-        rightShooter.set(ControlMode.Velocity, velocity + adjust);
+        leftShooter.set(ControlMode.PercentOutput, velPID.calculate(leftShooter.getSelectedSensorVelocity(), velocity));
+        rightShooter.set(ControlMode.PercentOutput, velPID.calculate(rightShooter.getSelectedSensorVelocity(), velocity));
     }
 
     /**

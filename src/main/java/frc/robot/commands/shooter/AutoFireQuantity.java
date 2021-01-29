@@ -37,7 +37,7 @@ public class AutoFireQuantity extends CommandBase {
     @Override
     public void execute() {
         top = magazine.topBeamClear();
-        if(!lasttop&&top) quantity -= 0;
+        if(!lasttop&&top) quantity --;
 
         shooter.setVelocity(limelight.formulaRpm());
         aimed = limelight.getIsAimed();

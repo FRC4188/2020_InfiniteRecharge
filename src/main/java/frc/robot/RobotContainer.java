@@ -23,6 +23,7 @@ import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.ManualTurret;
 import frc.robot.commands.turret.TurretAngle;
+import frc.robot.commands.turret.ZeroTurret;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
@@ -158,6 +159,8 @@ public class RobotContainer {
         copilot.getRbButtonObj().whenReleased(new ManualClimb(climber, 0));
         copilot.getLbButtonObj().whileHeld(new ManualClimb(climber, 0.6));
         copilot.getLbButtonObj().whenReleased(new ManualClimb(climber, 0));
+
+        copilot.getBackButtonObj().whenPressed(new ZeroTurret(turret));
 
         buttonBox.getButton1Obj().whenPressed(new TurretAngle(turret, 0));
         buttonBox.getButton3Obj().toggleWhenPressed(new SpinShooter(shooter, 3600));
