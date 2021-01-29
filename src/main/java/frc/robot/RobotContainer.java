@@ -10,20 +10,16 @@ import frc.robot.commands.EmergencyPower;
 import frc.robot.commands.climb.FireBrake;
 import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
-import frc.robot.commands.groups.LeftEnemyTrenchAuto;
-import frc.robot.commands.groups.MidDriveAwayAuto;
-import frc.robot.commands.groups.MidDriveTowardAuto;
-import frc.robot.commands.groups.PathWeaverTest;
-import frc.robot.commands.groups.TestCurve;
-import frc.robot.commands.groups.RightTrenchAuto;
+import frc.robot.commands.groups.TrenchEightBall;
+import frc.robot.commands.groups.TrenchSixBall;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.intake.RaiseIntake;
 import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.magazine.RunMagazine;
+import frc.robot.commands.shooter.AutoFire;
 import frc.robot.commands.shooter.SpinShooter;
-import frc.robot.commands.total.MoveBalls;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.ManualTurret;
 import frc.robot.commands.turret.TurretAngle;
@@ -112,8 +108,6 @@ public class RobotContainer {
          ));
 
         shooter.setDefaultCommand(new SpinShooter(shooter, 3500.0));
-        turret.setDefaultCommand(new MoveBalls(turret, magazine, intake, limelight, shooter,
-        () -> copilot.getX(Hand.kRight), () -> buttonBox.getButton2Obj().get(), () -> pilot.getYButton(), () -> pilot.getBButton(), () -> pilot.getAButton()));
     }
     /**
      * Binds commands to buttons on controllers.
@@ -127,8 +121,13 @@ public class RobotContainer {
         pilot.getDpadDownButtonObj().whenPressed(new LowerIntake(intake));
         pilot.getDpadUpButtonObj().whenPressed(new RaiseIntake(intake));
 
+        pilot.getYButtonObj().whileHeld(new AutoFire(shooter, magazine, intake, limelight, turret));
+
         pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
         pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
+
+        pilot.getBButtonObj().whileHeld(new AutoMagazine(magazine, intake, true, true));
+        pilot.getBButtonObj().whileHeld(new AutoMagazine(magazine, intake, true, false));
 
         pilot.getAButtonObj().whileHeld(new AutoMagazine(magazine, intake, false, true));
         pilot.getAButtonObj().whenReleased(new AutoMagazine(magazine, intake, false, false));
@@ -173,23 +172,12 @@ public class RobotContainer {
      */
     private void putChooser() {
         autoChooser.addOption("Do Nothing", null);
-        autoChooser.addOption("Right Trench", new RightTrenchAuto(drivetrain, magazine, shooter,
-                limelight, turret, intake
-        ));
-        autoChooser.addOption("Left Enemy Trench", new LeftEnemyTrenchAuto(drivetrain, magazine,
-                shooter, limelight, turret, intake
-        ));
-        autoChooser.addOption("Mid Drive Away", new MidDriveAwayAuto(drivetrain, magazine, shooter,
-                limelight, turret
-        ));
-        autoChooser.addOption("Mid Drive Toward", new MidDriveTowardAuto(drivetrain, magazine,
-                shooter, limelight, turret
-        ));
-        autoChooser.addOption("PathWeaver 11-ball", new PathWeaverTest(drivetrain, magazine, shooter,
-                limelight, turret, intake
-        ));
-        autoChooser.addOption("TestCurve", new TestCurve(drivetrain
-        ));
+        
+        autoChooser.addOption("Left Trench 6-Ball", new TrenchSixBall(drivetrain, turret, shooter, magazine, intake, limelight)
+        );
+        autoChooser.addOption("Left Trench 8-Ball", new TrenchEightBall(drivetrain, turret, shooter, magazine, intake, limelight)
+        );
+
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 

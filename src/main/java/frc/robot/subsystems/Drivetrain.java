@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -103,6 +104,8 @@ public class Drivetrain extends SubsystemBase {
         // initialize odometry
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getGyroAngle()));
 
+        Notifier shuffle = new Notifier(() -> updateShuffleboard());
+        shuffle.startPeriodic(0.1);
     }
 
     /**
@@ -118,17 +121,10 @@ public class Drivetrain extends SubsystemBase {
      * Writes values to Shuffleboard.
      */
     private void updateShuffleboard() {
-        SmartDashboard.putNumber("Left Position", getLeftPosition());
-        SmartDashboard.putNumber("Left Velocity", getLeftVelocity());
-        SmartDashboard.putNumber("Right Position", getRightPosition());
-        SmartDashboard.putNumber("Right Velocity", getRightVelocity());
         SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
         SmartDashboard.putString("Odometry", getPose().toString());
         SmartDashboard.putData("Calibrate Gyro", new InstantCommand(gyro::calibrate));
-        SmartDashboard.putNumber("Drivetrain Right Temerature", rightMotor.getTemperature());
-        SmartDashboard.putNumber("Drivetrain Right Slave Temperature", rightSlave.getTemperature());
-        SmartDashboard.putNumber("Drivetrain Left Temperature", leftMotor.getTemperature());
-        SmartDashboard.putNumber("Drivetrain Left Slave Temperature", leftSlave.getTemperature());
+        SmartDashboard.putData("Zero Gyro", new InstantCommand(gyro::reset));
     }
 
     /**

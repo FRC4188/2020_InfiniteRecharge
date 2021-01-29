@@ -124,9 +124,49 @@ public class WaypointsList {
             ), true
     );
 
-    public static final Waypoints ONE_METER = new Waypoints(List.of(
-        new Pose2d(0,0, new Rotation2d()),
-        new Pose2d(3,0, new Rotation2d())
-    ), false);
+    public static final class TrenchSixBall {
+        private static final double[] trenchStart = {2.579, 1.672};
+        private static final double[] trenchEnd = {8, trenchStart[1]};
+        private static final double[] shooting = {2.889, 0.395};
+
+        public static final Waypoints DOWN_TRENCH = new Waypoints(
+            List.of(
+                new Pose2d(),
+                new Pose2d(trenchStart[0], trenchStart[1], new Rotation2d()),
+                new Pose2d(trenchEnd[0], trenchEnd[1], new Rotation2d())
+            ), false);
+
+        public static final Waypoints TO_SHOOT = new Waypoints(
+            List.of(
+                new Pose2d(trenchEnd[0], trenchEnd[1], new Rotation2d()),
+                new Pose2d(shooting[0], shooting[1], new Rotation2d(-1.118, -0.083))
+            ), true);
+    }
+
+    public static final class TrenchEightBall {
+        private static final double[] trenchStart = {0, 0, 0};
+        private static final double[] trenchEnd = {0, trenchStart[1], 0};
+        private static final double[] rendevousStart = {0, 0, 0};
+        private static final double[] rendevousEnd = {0, 0, 0};
+
+        public static final Waypoints DOWN_TRENCH = new Waypoints(
+            List.of(
+                new Pose2d(),
+                new Pose2d(trenchStart[0], trenchStart[1], new Rotation2d()),
+                new Pose2d(trenchEnd[0], trenchEnd[1], new Rotation2d())
+            ), false);
+
+        public static final Waypoints INTO_RENDEVOUS = new Waypoints(
+            List.of(
+                new Pose2d(trenchEnd[0], trenchEnd[0], new Rotation2d()),
+                new Pose2d(rendevousStart[0], rendevousStart[1], new Rotation2d(rendevousStart[2]))
+            ), true);
+
+        public static final Waypoints THROUGH_RENDEVOUS = new Waypoints(
+            List.of(
+                new Pose2d(rendevousStart[0], rendevousStart[1], new Rotation2d(rendevousStart[2] + Math.PI)),
+                new Pose2d(rendevousEnd[0], rendevousEnd[1], new Rotation2d(rendevousEnd[2]))
+            ), false);
+    }
 
 }
