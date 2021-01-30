@@ -124,9 +124,42 @@ public class WaypointsList {
             ), true
     );
 
-    public static final Waypoints ONE_METER = new Waypoints(List.of(
-        new Pose2d(0,0, new Rotation2d()),
-        new Pose2d(3,0, new Rotation2d())
-    ), false);
+    public static final class TrenchSixBall {
+
+        public static final Waypoints DOWN_TRENCH = new Waypoints(
+            List.of(
+                new Pose2d(),
+                new Pose2d(0, 0, new Rotation2d()),
+                new Pose2d(0, 0, new Rotation2d())
+            ), false);
+
+        public static final Waypoints TO_SHOOT = new Waypoints(
+            List.of(
+                new Pose2d(0, 0, new Rotation2d()),
+                new Pose2d(0, 0, new Rotation2d())
+            ), true);
+    }
+
+    public static final class TrenchEightBall {
+
+        public static final Waypoints DOWN_TRENCH = new Waypoints(
+            List.of(
+                new Pose2d(),
+                new Pose2d(0, 0, new Rotation2d()),
+                new Pose2d(0, 0, new Rotation2d())
+            ), false);
+
+        public static final Waypoints INTO_RENDEVOUS = new Waypoints(
+            List.of(
+                new Pose2d(0, 0, new Rotation2d()),
+                new Pose2d(0, 0, new Rotation2d())
+            ), true);
+
+        public static final Waypoints THROUGH_RENDEVOUS = new Waypoints(
+            List.of(
+                new Pose2d(0, 0, new Rotation2d()),
+                new Pose2d(0, 0, new Rotation2d())
+            ), false);
+    }
 
 }

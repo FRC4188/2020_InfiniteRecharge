@@ -11,12 +11,10 @@ import frc.robot.commands.climb.FireBrake;
 import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.ManualDrive;
-import frc.robot.commands.groups.LeftEnemyTrenchAuto;
-import frc.robot.commands.groups.MidDriveAwayAuto;
-import frc.robot.commands.groups.MidDriveTowardAuto;
-import frc.robot.commands.groups.PathWeaverTest;
-import frc.robot.commands.groups.TestCurve;
-import frc.robot.commands.groups.RightTrenchAuto;
+import frc.robot.commands.groups.old.LeftEnemyTrenchAuto;
+import frc.robot.commands.groups.old.MidDriveAwayAuto;
+import frc.robot.commands.groups.old.MidDriveTowardAuto;
+import frc.robot.commands.groups.old.RightTrenchAuto;
 //import frc.robot.commands.groups.AutoShoot;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.LowerIntake;
@@ -26,7 +24,6 @@ import frc.robot.commands.intake.SpinJustIntake;
 import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.magazine.RunMagazine;
-import frc.robot.commands.magazine.PIDTesting;
 import frc.robot.commands.shooter.AutoFire;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.shooter.SpinShooterFormula;
@@ -192,23 +189,7 @@ public class RobotContainer {
      */
     private void putChooser() {
         autoChooser.addOption("Do Nothing", null);
-        autoChooser.addOption("Right Trench", new RightTrenchAuto(drivetrain, magazine, shooter,
-                limelight, turret, intake
-        ));
-        autoChooser.addOption("Left Enemy Trench", new LeftEnemyTrenchAuto(drivetrain, magazine,
-                shooter, limelight, turret, intake
-        ));
-        autoChooser.addOption("Mid Drive Away", new MidDriveAwayAuto(drivetrain, magazine, shooter,
-                limelight, turret
-        ));
-        autoChooser.addOption("Mid Drive Toward", new MidDriveTowardAuto(drivetrain, magazine,
-                shooter, limelight, turret
-        ));
-        autoChooser.addOption("PathWeaver 11-ball", new PathWeaverTest(drivetrain, magazine, shooter,
-                limelight, turret, intake
-        ));
-        autoChooser.addOption("TestCurve", new TestCurve(drivetrain
-        ));
+
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 

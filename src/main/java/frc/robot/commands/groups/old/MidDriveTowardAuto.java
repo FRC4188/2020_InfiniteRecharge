@@ -1,4 +1,4 @@
-package frc.robot.commands.groups;
+package frc.robot.commands.groups.old;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
@@ -16,14 +16,14 @@ import frc.robot.utils.CspSequentialCommandGroup;
 import frc.robot.utils.WaypointsList;
 
 /**
- * Class containing command group to run Mid Drive Away auto.
+ * Class containing command group to run Mid Drive Toward auto.
  */
-public class MidDriveAwayAuto extends CspSequentialCommandGroup {
+public class MidDriveTowardAuto extends CspSequentialCommandGroup {
 
     /**
-     * Constructs MidDriveAwayAuto object and adds commands to group.
+     * Constructs MidDriveTowardAuto object and adds commands to group.
      */
-    public MidDriveAwayAuto(Drivetrain drivetrain, Magazine magazine, Shooter shooter,
+    public MidDriveTowardAuto(Drivetrain drivetrain, Magazine magazine, Shooter shooter,
             Limelight limelight, Turret turret) {
 
         addCommands(
@@ -49,7 +49,7 @@ public class MidDriveAwayAuto extends CspSequentialCommandGroup {
                 ),
 
                 // Drives toward the port to move out of the way for other robots' paths.
-                new FollowTrajectory(drivetrain, WaypointsList.MID_DRIVE_AWAY)
+                new FollowTrajectory(drivetrain, WaypointsList.MID_DRIVE_TOWARD)
 
         );
 
@@ -59,7 +59,7 @@ public class MidDriveAwayAuto extends CspSequentialCommandGroup {
      * Returns initial pose required for this command group.
      */
     public Pose2d getInitialPose() {
-        return WaypointsList.MID_DRIVE_AWAY.getPoses().get(0);
+        return WaypointsList.MID_DRIVE_TOWARD.getPoses().get(0);
     }
 
 }
