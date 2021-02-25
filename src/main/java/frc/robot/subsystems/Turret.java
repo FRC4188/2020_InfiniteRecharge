@@ -27,7 +27,7 @@ public class Turret extends SubsystemBase {
     // device initialization
     private final CANSparkMax turretMotor = new CANSparkMax(23, MotorType.kBrushless);
     private final CANEncoder turretEncoder = new CANEncoder(turretMotor);
-    private final ProfiledPIDController pid = new ProfiledPIDController(0.024, 0.003, 1.0, new Constraints(MAX_VELOCITY, MAX_ACCELERATION));
+    private final ProfiledPIDController pid = new ProfiledPIDController(0.024, 0.003,0.01, new Constraints(MAX_VELOCITY, MAX_ACCELERATION));
 
     // constants
     private static final double MAX_VELOCITY = 1.5; // rpm

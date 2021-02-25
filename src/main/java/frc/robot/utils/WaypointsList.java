@@ -144,28 +144,31 @@ public class WaypointsList {
     }
 
     public static final class TrenchEightBall {
-        private static final double[] trenchStart = {0, 0, 0};
-        private static final double[] trenchEnd = {0, trenchStart[1], 0};
-        private static final double[] rendevousStart = {0, 0, 0};
-        private static final double[] rendevousEnd = {0, 0, 0};
+        public static final Pose2d INITIAL_POSE = new Pose2d(3.664413, 5.663597, new Rotation2d());
 
         public static final Waypoints DOWN_TRENCH = new Waypoints(
             List.of(
-                new Pose2d(),
-                new Pose2d(trenchStart[0], trenchStart[1], new Rotation2d()),
-                new Pose2d(trenchEnd[0], trenchEnd[1], new Rotation2d())
+                INITIAL_POSE,
+                new Pose2d(6.4, 7.17481, new Rotation2d()),
+                new Pose2d(8.0, 7.1839, new Rotation2d())
             ), false);
 
         public static final Waypoints INTO_RENDEVOUS = new Waypoints(
             List.of(
-                new Pose2d(trenchEnd[0], trenchEnd[0], new Rotation2d()),
-                new Pose2d(rendevousStart[0], rendevousStart[1], new Rotation2d(rendevousStart[2]))
+                new Pose2d(7.85735, 6.262254, Rotation2d.fromDegrees(109.990414)),
+                new Pose2d(8.903125, 5.005867, Rotation2d.fromDegrees(-155.662961))
             ), true);
 
         public static final Waypoints THROUGH_RENDEVOUS = new Waypoints(
             List.of(
-                new Pose2d(rendevousStart[0], rendevousStart[1], new Rotation2d(rendevousStart[2] + Math.PI)),
-                new Pose2d(rendevousEnd[0], rendevousEnd[1], new Rotation2d(rendevousEnd[2]))
+                new Pose2d(8.903125, 5.005867, Rotation2d.fromDegrees(-155.662961)),
+                new Pose2d(6.515633, 4.023848, Rotation2d.fromDegrees(-155.662961))
+            ), false);
+        
+        public static final Waypoints TO_SHOOT = new Waypoints(
+            List.of(
+                new Pose2d(6.677321, 4.163156, Rotation2d.fromDegrees(-155.662961)),
+                new Pose2d(5.26001, 4.191111, Rotation2d.fromDegrees(147.24539))
             ), false);
     }
 
