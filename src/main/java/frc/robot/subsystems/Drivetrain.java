@@ -160,6 +160,10 @@ public class Drivetrain extends SubsystemBase {
         tankVolts(leftOutput, rightOutput);
     }
 
+    public void setSpeeds(double left, double right) {
+        setSpeeds(new DifferentialDriveWheelSpeeds(left, right));
+    }
+
     /**
      * Controls the drivetrain using a closed loop arcade model, with inputs [-1, 1].
      * @param xSpeed - Forward percent output.

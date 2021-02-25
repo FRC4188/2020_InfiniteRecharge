@@ -1,7 +1,10 @@
 package frc.robot.commands.groups;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstraint;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.magazine.AutoMagazine;
@@ -29,18 +32,22 @@ public class TrenchEightBall extends CspSequentialCommandGroup {
             new AutoFireQuantity(shooter, magazine, intake, limelight, 3),
             
             new ParallelDeadlineGroup(
-                new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.DOWN_TRENCH), 
+                new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.DOWN_TRENCH),
                 new AutoMagazine(magazine, intake, true, true),
                 new SpinShooter(shooter, 3000)),
             new AutoMagazine(magazine, intake, true, false),
 
             new ParallelDeadlineGroup(
-                new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.INTO_RENDEVOUS), 
+                new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.INTO_RENDEVOUS,
+                new TrajectoryConfig(1.5, 1.0)
+                .addConstraint(new CentripetalAccelerationConstraint(1.0))),
                 new TurretAngle(turret, 0),
                 new SpinShooter(shooter, 3000)),
             
             new ParallelDeadlineGroup(
-                new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.THROUGH_RENDEVOUS),
+                new SequentialCommandGroup(
+                    new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.THROUGH_RENDEVOUS, drivetrain.getTrajectoryConfig().setEndVelocity(0.25)),
+                    new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.TO_SHOOT, drivetrain.getTrajectoryConfig().setStartVelocity(0.25))),
                 new AutoMagazine(magazine, intake, true, true),
                 new SpinShooter(shooter, 4000)),
 
@@ -48,5 +55,10 @@ public class TrenchEightBall extends CspSequentialCommandGroup {
             new AutoFireQuantity(shooter, magazine, intake, limelight, 5),
             new SpinShooter(shooter, 3500)
         );
+    }
+
+    @Override
+    public Pose2d getInitialPose() {
+        return WaypointsList.TrenchEightBall.INITIAL_POSE;
     }
 }

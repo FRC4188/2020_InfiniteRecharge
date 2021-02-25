@@ -10,8 +10,17 @@ import frc.robot.commands.EmergencyPower;
 import frc.robot.commands.climb.FireBrake;
 import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
+<<<<<<< HEAD
 import frc.robot.commands.groups.TrenchEightBall;
 import frc.robot.commands.groups.TrenchSixBall;
+=======
+import frc.robot.commands.drive.ManualDrive;
+import frc.robot.commands.groups.old.LeftEnemyTrenchAuto;
+import frc.robot.commands.groups.old.MidDriveAwayAuto;
+import frc.robot.commands.groups.old.MidDriveTowardAuto;
+import frc.robot.commands.groups.old.RightTrenchAuto;
+//import frc.robot.commands.groups.AutoShoot;
+>>>>>>> c6c325503255b2f26ba74d7047b5d14f90d6cf47
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.intake.RaiseIntake;
@@ -175,11 +184,14 @@ public class RobotContainer {
      */
     private void putChooser() {
         autoChooser.addOption("Do Nothing", null);
+<<<<<<< HEAD
         
         autoChooser.addOption("Left Trench 6-Ball", new TrenchSixBall(drivetrain, turret, shooter, magazine, intake, limelight)
         );
         autoChooser.addOption("Left Trench 8-Ball", new TrenchEightBall(drivetrain, turret, shooter, magazine, intake, limelight)
         );
+=======
+>>>>>>> c6c325503255b2f26ba74d7047b5d14f90d6cf47
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
