@@ -4,29 +4,30 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Turret;
 import frc.robot.subsystems.Intake;
 
 public class AutoFireQuantity extends CommandBase {
 
     private Shooter shooter;
     private Limelight limelight;
-    private boolean aimed; 
-    private double diff;
     private Magazine magazine;
     private Intake intake;
-
-    private boolean top;
-    private boolean lasttop;
-    private boolean mid;
+    private Turret turret;
 
     private int quantity;
+
+    private double THRESHOLD = 250.0;
+
+    private boolean lastTop = true;
     
-    public AutoFireQuantity(Shooter shooter, Magazine magazine, Intake intake, Limelight limelight, int quantity) {
-        addRequirements(shooter, magazine, intake);
+    public AutoFireQuantity(Shooter shooter, Turret turret, Magazine magazine, Intake intake, Limelight limelight, int quantity) {
+        addRequirements(shooter, turret, magazine, intake);
         this.shooter = shooter;
         this.intake = intake;
         this.limelight = limelight;
         this.magazine = magazine;
+        this.turret = turret;
         this.quantity = quantity;
     }
 
@@ -36,33 +37,29 @@ public class AutoFireQuantity extends CommandBase {
 
     @Override
     public void execute() {
-        top = magazine.topBeamClear();
-        if(!lasttop&&top) quantity --;
-
         shooter.setVelocity(limelight.formulaRpm());
-        aimed = limelight.getIsAimed();
-        diff = shooter.getLeftVelocity() - limelight.formulaRpm();
-        mid = magazine.midBeamClear();
-        lasttop=top;
+        boolean aimed = limelight.getIsAimed() && (limelight.hasTarget() == 1.0);
+        double diff = shooter.getLeftVelocity() - (limelight.formulaRpm());
+        boolean ready = aimed && (Math.abs(diff) < THRESHOLD);
+        boolean top = magazine.topBeamClear();
+        boolean entry = magazine.entryBeamClear();
 
-        if (!(quantity==0)) {
-                if (!mid && top) {
-                    magazine.set(0.35);
-                    intake.spin(0,0);
-                }
-                else if (mid && top) {
-                    magazine.set(0.35);
-                    intake.spin(0,0.5);
-                }
-                else if (!top && (diff < 75 && diff > -75) && aimed) magazine.set(1.0);
-                else {
-                    magazine.set(0);
-                    intake.spin(0,0);
-                }
-        }else {
-            magazine.set(0.0);
-            intake.spin(0,0);
-        }
+        if(limelight.hasTarget() == 1.0) {
+            turret.trackTarget(limelight.getHorizontalAngle());
+        } else {
+            turret.set(0);
+        }                
+
+        if (ready) magazine.set(1.0);
+        else if (top) magazine.set(0.25);
+        else magazine.set(0.0);
+
+        if (ready || (top && entry)) intake.spin(-0.5, -1.0);
+        else intake.spin(-0.5, 0.0);
+
+        if (!lastTop && top) quantity--;
+
+        lastTop = top;
     }
 
     @Override
@@ -75,7 +72,7 @@ public class AutoFireQuantity extends CommandBase {
         if(!interrupted) {
             magazine.set(0);
             intake.spin(0,0);
-            shooter.set(3000);
+            shooter.set(3500);
         }
 
     }

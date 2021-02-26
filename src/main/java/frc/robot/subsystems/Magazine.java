@@ -26,7 +26,8 @@ public class Magazine extends SubsystemBase {
     private final DigitalInput topBeamB = new DigitalInput(1);
     private final DigitalInput midBeamA = new DigitalInput(3);
     private final DigitalInput midBeamB = new DigitalInput(4);
-    private final DigitalInput botBeam = new DigitalInput(2);
+    private final DigitalInput entryBeamA = new DigitalInput(2);
+    private final DigitalInput entryBeamB = new DigitalInput(5);
 
     // Constants
     private static final double MAX_VELOCITY = 1400.0; // rpm
@@ -96,9 +97,10 @@ public class Magazine extends SubsystemBase {
         SmartDashboard.putBoolean("Mid", (midBeamA.get() && midBeamB.get()));
         SmartDashboard.putBoolean("Chn. 0", topBeamA.get());
         SmartDashboard.putBoolean("Chn. 1", topBeamB.get());
-        SmartDashboard.putBoolean("Chn. 2", botBeam.get());
+        SmartDashboard.putBoolean("Chn. 2", entryBeamA.get());
         SmartDashboard.putBoolean("Chn. 3", midBeamA.get());
         SmartDashboard.putBoolean("Chn. 4", midBeamB.get());
+        SmartDashboard.putBoolean("Chn. 5", entryBeamB.get());
         SmartDashboard.putBoolean("Magazine manual", getManual());
         SmartDashboard.putNumber("Magazine Position", magEncoder.getPosition()/TICKS_PER_INCH);
     }
@@ -133,8 +135,8 @@ public class Magazine extends SubsystemBase {
         return magMotor.getMotorTemperature();
     }
 
-    public boolean botBeamClear() {
-        return botBeam.get();
+    public boolean entryBeamClear() {
+        return entryBeamA.get() && entryBeamB.get();
     }
 
     public boolean midBeamClear() {

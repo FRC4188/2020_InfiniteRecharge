@@ -11,8 +11,6 @@ public class AutoMagazine extends CommandBase {
 
     private final Magazine magazine;
     private final Intake intake;
-    private boolean top;
-    private boolean mid;
     private boolean forw;
     private boolean cont;
 
@@ -37,9 +35,11 @@ public class AutoMagazine extends CommandBase {
 
     @Override
     public void execute() {
-        top = magazine.topBeamClear();
-        mid = magazine.midBeamClear();
+        boolean top = magazine.topBeamClear();
+        boolean mid = magazine.midBeamClear();
+        boolean entry = magazine.entryBeamClear();
 
+        /*
             if (forw) {
                 if (!mid && top) {
                     intake.spin(-1.0, -1.0);
@@ -67,6 +67,21 @@ public class AutoMagazine extends CommandBase {
                     intake.spin(1.0,0.0);
                 }
             }
+            */
+        
+        if (forw) {
+            if (top) {
+                if(!entry) magazine.set(0.35);
+                else if (!mid) magazine.set(0.175);
+                else magazine.set(0.0);
+            } else magazine.set(0.0);
+
+            if (top && entry) intake.spin(-1.0, -1.0);
+            else intake.spin(-1.0, 0.0);
+        } else {
+            intake.spin(1.0, 1.0);
+            magazine.set(-0.5);
+        }
     }
 
     @Override
@@ -77,9 +92,7 @@ public class AutoMagazine extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         // Upon stop intake stops and if the magazine is being controlled automatically it will stop.
-        if (!magazine.getManual()) {
-            magazine.set(0.0);
-        }
+        magazine.set(0.0);
         intake.spin(0.0, 0.0);
     }
 

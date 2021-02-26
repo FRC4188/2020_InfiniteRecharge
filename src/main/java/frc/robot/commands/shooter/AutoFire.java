@@ -1,7 +1,5 @@
 package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
@@ -12,23 +10,21 @@ import frc.robot.subsystems.Intake;
 public class AutoFire extends CommandBase {
 
     private Limelight limelight;
-    private boolean aimed; 
-    private double diff;
     private Magazine magazine;
     private Intake intake;
     private Turret turret;
     private Shooter shooter;
+    private boolean cont;
+    private double THRESHOLD = 250.0;
 
-    private boolean top;
-    private boolean mid;
-
-    public AutoFire(Shooter shooter, Magazine magazine, Intake intake, Limelight limelight, Turret turret) {
+    public AutoFire(Shooter shooter, Magazine magazine, Intake intake, Limelight limelight, Turret turret, boolean cont) {
         addRequirements(shooter, magazine, intake, turret);
         this.shooter = shooter;
         this.intake = intake;
         this.limelight = limelight;
         this.magazine = magazine;
         this.turret = turret;
+        this.cont = cont;
     }
 
     @Override
@@ -38,35 +34,29 @@ public class AutoFire extends CommandBase {
     @Override
     public void execute() {
         shooter.setVelocity(limelight.formulaRpm());
-        aimed = limelight.getIsAimed() && (limelight.hasTarget() == 1.0);
-        diff = shooter.getLeftVelocity() - (limelight.formulaRpm());
-        top = magazine.topBeamClear();
-        mid = magazine.midBeamClear();
+        boolean aimed = limelight.getIsAimed() && (limelight.hasTarget() == 1.0);
+        double diff = shooter.getLeftVelocity() - (limelight.formulaRpm());
+        boolean ready = aimed && (Math.abs(diff) < THRESHOLD);
+        boolean top = magazine.topBeamClear();
+        boolean entry = magazine.entryBeamClear();
 
-            if(limelight.hasTarget() == 1.0) {
-                turret.trackTarget(limelight.getHorizontalAngle());
-            } else {
-                turret.set(0);
-            }                
-            if (!mid && top) {
-                    magazine.set(0.35);
-                    intake.spin(-0.5,0);
-                }
-            else if (mid && top) {
-                magazine.set(0.35);
-                intake.spin(-0.5,-1.0);
-            }
-            else if (!top && (diff < 50 && diff > -50) && aimed) magazine.set(0.75);
-            else {
-                magazine.set(0);
-                intake.spin(-0.,0.0);
-            }
+        if(limelight.hasTarget() == 1.0) {
+            turret.trackTarget(limelight.getHorizontalAngle());
+        } else {
+            turret.set(0);
+        }                
 
+        if (ready) magazine.set(1.0);
+        else if (top) magazine.set(0.25);
+        else magazine.set(0.0);
+
+        if (ready || (top && entry)) intake.spin(-0.5, -1.0);
+        else intake.spin(-0.5, 0.0);
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return !cont;
     }
 
     @Override

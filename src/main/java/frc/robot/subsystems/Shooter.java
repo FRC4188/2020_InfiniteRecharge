@@ -6,9 +6,7 @@ import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -19,8 +17,6 @@ public class Shooter extends SubsystemBase {
     // device initialization
     private WPI_TalonFX leftShooter = new WPI_TalonFX(21);
     private WPI_TalonFX rightShooter = new WPI_TalonFX(22);
-
-    private ProfiledPIDController velPID = new ProfiledPIDController(kP, kI, kD, new Constraints(2000, 9999));
 
     // constants
     private static final double kP = 0.35;
@@ -105,8 +101,8 @@ public class Shooter extends SubsystemBase {
      */
     public void setVelocity(double velocity) {
         velocity *= ((ENCODER_TICKS_PER_REV) / 600) *reduction;
-        leftShooter.set(ControlMode.PercentOutput, velPID.calculate(leftShooter.getSelectedSensorVelocity(), velocity));
-        rightShooter.set(ControlMode.PercentOutput, velPID.calculate(rightShooter.getSelectedSensorVelocity(), velocity));
+        leftShooter.set(ControlMode.Velocity, velocity);
+        rightShooter.set(ControlMode.Velocity, velocity);
     }
 
     /**

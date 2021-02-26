@@ -29,7 +29,7 @@ public class TrenchEightBall extends CspSequentialCommandGroup {
                 new SpinShooter(shooter, 4000),
                 new LowerIntake(intake)),
 
-            new AutoFireQuantity(shooter, magazine, intake, limelight, 3),
+            new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3),
             
             new ParallelDeadlineGroup(
                 new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.DOWN_TRENCH),
@@ -52,7 +52,7 @@ public class TrenchEightBall extends CspSequentialCommandGroup {
                 new SpinShooter(shooter, 4000)),
 
             new AutoMagazine(magazine, intake, true, false),
-            new AutoFireQuantity(shooter, magazine, intake, limelight, 5),
+            new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 5),
             new SpinShooter(shooter, 3500)
         );
     }

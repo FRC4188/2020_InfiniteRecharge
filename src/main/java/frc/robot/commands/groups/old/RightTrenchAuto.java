@@ -44,7 +44,7 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
                 ),
 
                 // Auto aims toward the port and revs up shooter to 6000 rpm.
-                new AutoFireQuantity(shooter, magazine, intake, limelight, 3),
+                new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3),
 
                 // Drives backward into the right-side trench, running intake at the same time.
                 new ParallelDeadlineGroup(
@@ -64,7 +64,7 @@ public class RightTrenchAuto extends CspSequentialCommandGroup {
 
                 // Continues to auto aim and spin shooter at 3500 rpm.
                 // Runs magazine and indexer to shoot balls picked up from trench.
-                new AutoFireQuantity(shooter, magazine, intake, limelight, 3),
+                new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3),
 
                 // Pickup balls from bar, auto aims and revs up shooter to 3500 rpm.
                 new ParallelRaceGroup(

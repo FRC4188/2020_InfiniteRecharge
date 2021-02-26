@@ -10,17 +10,10 @@ import frc.robot.commands.EmergencyPower;
 import frc.robot.commands.climb.FireBrake;
 import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
-<<<<<<< HEAD
+import frc.robot.commands.groups.EightBall;
 import frc.robot.commands.groups.TrenchEightBall;
 import frc.robot.commands.groups.TrenchSixBall;
-=======
-import frc.robot.commands.drive.ManualDrive;
-import frc.robot.commands.groups.old.LeftEnemyTrenchAuto;
-import frc.robot.commands.groups.old.MidDriveAwayAuto;
-import frc.robot.commands.groups.old.MidDriveTowardAuto;
-import frc.robot.commands.groups.old.RightTrenchAuto;
-//import frc.robot.commands.groups.AutoShoot;
->>>>>>> c6c325503255b2f26ba74d7047b5d14f90d6cf47
+import frc.robot.commands.groups.WheelEightBall;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.intake.RaiseIntake;
@@ -131,13 +124,14 @@ public class RobotContainer {
         pilot.getDpadDownButtonObj().whenPressed(new LowerIntake(intake));
         pilot.getDpadUpButtonObj().whenPressed(new RaiseIntake(intake));
 
-        pilot.getYButtonObj().whileHeld(new AutoFire(shooter, magazine, intake, limelight, turret));
+        pilot.getYButtonObj().whenPressed(new AutoFire(shooter, magazine, intake, limelight, turret, true));
+        pilot.getYButtonObj().whenReleased(new AutoFire(shooter, magazine, intake, limelight, turret, false));
 
         pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
         pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
 
-        pilot.getBButtonObj().whileHeld(new AutoMagazine(magazine, intake, true, true));
-        pilot.getBButtonObj().whileHeld(new AutoMagazine(magazine, intake, true, false));
+        pilot.getBButtonObj().whenPressed(new AutoMagazine(magazine, intake, true, true));
+        pilot.getBButtonObj().whenReleased(new AutoMagazine(magazine, intake, true, false));
 
         pilot.getAButtonObj().whileHeld(new AutoMagazine(magazine, intake, false, true));
         pilot.getAButtonObj().whenReleased(new AutoMagazine(magazine, intake, false, false));
@@ -184,14 +178,14 @@ public class RobotContainer {
      */
     private void putChooser() {
         autoChooser.addOption("Do Nothing", null);
-<<<<<<< HEAD
         
         autoChooser.addOption("Left Trench 6-Ball", new TrenchSixBall(drivetrain, turret, shooter, magazine, intake, limelight)
         );
-        autoChooser.addOption("Left Trench 8-Ball", new TrenchEightBall(drivetrain, turret, shooter, magazine, intake, limelight)
+        autoChooser.addOption("Left Trench 8-Ball (A)", new TrenchEightBall(drivetrain, turret, shooter, magazine, intake, limelight)
         );
-=======
->>>>>>> c6c325503255b2f26ba74d7047b5d14f90d6cf47
+        autoChooser.addOption("Left Trench 8-Ball (B)", new EightBall(drivetrain, shooter, turret, magazine, intake, limelight)
+        );
+        autoChooser.addOption("Wheel 8-Ball", new WheelEightBall(drivetrain, shooter, turret, limelight, intake, magazine));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }

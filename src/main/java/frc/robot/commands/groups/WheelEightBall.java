@@ -7,7 +7,6 @@ package frc.robot.commands.groups;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstraint;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.FollowTrajectory;
@@ -15,7 +14,6 @@ import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.shooter.AutoFireQuantity;
 import frc.robot.commands.shooter.SpinShooter;
-import frc.robot.commands.turret.TurretAngle;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
@@ -28,47 +26,53 @@ import frc.robot.utils.WaypointsList;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class EightBall extends CspSequentialCommandGroup {
-  /** Creates a new TestAuto. */
-  public EightBall(Drivetrain drivetrain, Shooter shooter, Turret turret, Magazine magazine, Intake intake, Limelight limelight) {
+public class WheelEightBall extends CspSequentialCommandGroup {
+  /** Creates a new WheelEightBall. */
+  public WheelEightBall(Drivetrain drivetrain, Shooter shooter, Turret turret, Limelight limelight, Intake intake, Magazine magazine) {
     addCommands(
-      new ParallelDeadlineGroup(
-        new TurretAngle(turret, 180.0), 
-        new SpinShooter(shooter, 3500.0),
-        new LowerIntake(intake)
-        ),
-
-      new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3),
+      new LowerIntake(intake),
 
       new ParallelDeadlineGroup(
-        new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.DOWN_TRENCH),
-        new TurretAngle(turret, 0.0),
-        new SpinShooter(shooter, 3500.0),
+        new FollowTrajectory(drivetrain, WaypointsList.WheelEightBall.TO_WHEEL),
         new AutoMagazine(magazine, intake, true, true)
       ),
 
-      new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.INTO_RENDEVOUS,
+      new FollowTrajectory(drivetrain, WaypointsList.WheelEightBall.TURN,
       new TrajectoryConfig(1.5, 1.0)
       .addConstraint(new CentripetalAccelerationConstraint(1.0))),
 
-      new ParallelDeadlineGroup(
-        new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.THROUGH_RENDEVOUS, drivetrain.getTrajectoryConfig().setEndVelocity(0.25)),
-        new AutoMagazine(magazine, intake, true, true)
-      ),
+      new AutoMagazine(magazine, intake, true, false),
 
       new ParallelDeadlineGroup(
-        new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.TO_SHOOT, drivetrain.getTrajectoryConfig().setStartVelocity(0.25)),
-        new AutoMagazine(magazine, intake, true, false)
+      new FollowTrajectory(drivetrain, WaypointsList.WheelEightBall.TO_FIRST_SHOT),
+      new SpinShooter(shooter, 4000.0)
       ),
 
       new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 5),
 
-      new SpinShooter(shooter, 3500.0)
+      new ParallelDeadlineGroup(
+        new FollowTrajectory(drivetrain, WaypointsList.WheelEightBall.TURN_IN,
+        drivetrain.getTrajectoryConfig().setEndVelocity(0.25)),
+        new SpinShooter(shooter, 3500.0)
+      ),
+
+      new ParallelDeadlineGroup(
+        new FollowTrajectory(drivetrain, WaypointsList.WheelEightBall.THROUGH_TO_SHOOT,
+        drivetrain.getTrajectoryConfig().setStartVelocity(0.25)),
+        new AutoMagazine(magazine, intake, true, true),
+        new SpinShooter(shooter, 3500)
+      ),
+
+      new AutoMagazine(magazine, intake, true, false),
+
+      new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3),
+
+      new SpinShooter(shooter, 2000.0)
     );
   }
 
   @Override
   public Pose2d getInitialPose() {
-    return WaypointsList.TrenchEightBall.INITIAL_POSE;
+    return WaypointsList.WheelEightBall.INIT_POSE;
   }
 }

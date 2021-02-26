@@ -1,6 +1,5 @@
 package frc.robot.commands.groups;
 
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.intake.LowerIntake;
@@ -26,14 +25,10 @@ public class TrenchSixBall extends CspSequentialCommandGroup {
                 new SpinShooter(shooter, 4000),
                 new LowerIntake(intake)),
 
-            new AutoFireQuantity(shooter, magazine, intake, limelight, 3),
+            new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3),
             
             new ParallelDeadlineGroup(
-<<<<<<< HEAD
-                new FollowTrajectory(drivetrain, WaypointsList.TrenchSixBall.DOWN_TRENCH), 
-=======
                 new FollowTrajectory(drivetrain, WaypointsList.TrenchSixBall.DOWN_TRENCH),
->>>>>>> c6c325503255b2f26ba74d7047b5d14f90d6cf47
                 new AutoMagazine(magazine, intake, true, true),
                 new SpinShooter(shooter, 3000)),
             new AutoMagazine(magazine, intake, true, false),
@@ -41,14 +36,10 @@ public class TrenchSixBall extends CspSequentialCommandGroup {
             new ParallelDeadlineGroup(
                 new FollowTrajectory(drivetrain, WaypointsList.TrenchSixBall.TO_SHOOT), 
                 new TurretAngle(turret, 180),
-<<<<<<< HEAD
-                new SpinShooter(shooter, 4000))
-=======
                 new SpinShooter(shooter, 3000)),
             
-            new AutoFireQuantity(shooter, magazine, intake, limelight, 5),
+            new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 5),
             new SpinShooter(shooter, 3500)
->>>>>>> c6c325503255b2f26ba74d7047b5d14f90d6cf47
         );
     }
 }

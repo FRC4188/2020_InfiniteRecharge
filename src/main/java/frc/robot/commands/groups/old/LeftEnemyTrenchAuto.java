@@ -37,7 +37,7 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
             Limelight limelight, Turret turret, Intake intake) {
 
         addCommands(
-                new AutoFireQuantity(shooter, magazine, intake, limelight, 3),
+                new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3),
 
                 // Drives into the enemy trench, running intake at the same time.
                 new ParallelDeadlineGroup(
@@ -55,7 +55,7 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
 
                 // Auto aims, and revs up shooter to rpm.
                 new ParallelRaceGroup(
-                    new AutoFireQuantity(shooter, magazine, intake, limelight, 3)
+                    new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3)
                 ),
 
                 // Pick up two more balls from front of bar and turn turret.
@@ -66,7 +66,7 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
 
                 // Auto aims, and revs up shooter to rpm.
                 new ParallelRaceGroup(
-                    new AutoFireQuantity(shooter, magazine, intake, limelight, 2)
+                    new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 2)
                 )
         );
     }
