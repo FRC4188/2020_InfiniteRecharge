@@ -1,19 +1,26 @@
 package frc.robot;
 
+import java.io.IOException;
+
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import frc.robot.commands.EmergencyPower;
 import frc.robot.commands.climb.FireBrake;
 import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
-import frc.robot.commands.groups.EightBall;
-import frc.robot.commands.groups.TrenchEightBall;
-import frc.robot.commands.groups.TrenchSixBall;
-import frc.robot.commands.groups.WheelEightBall;
+import frc.robot.commands.drive.FollowTrajectory;
+import frc.robot.commands.auto.EightBall;
+import frc.robot.commands.skillschallenges.SkillsBounce;
+import frc.robot.commands.skillschallenges.SkillsBarrel;
+import frc.robot.commands.skillschallenges.SkillsSlolam;
+import frc.robot.commands.auto.TrenchEightBall;
+import frc.robot.commands.auto.TrenchSixBall;
+import frc.robot.commands.auto.WheelEightBall;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.intake.RaiseIntake;
@@ -41,7 +48,9 @@ import frc.robot.utils.CspController;
 import frc.robot.utils.CspSequentialCommandGroup;
 import frc.robot.utils.KillAll;
 import frc.robot.utils.TempManager;
+import frc.robot.utils.Waypoints;
 import frc.robot.utils.BrownoutProtection;
+import frc.robot.utils.WaypointsList;
 
 /**
  * Class containing setup for robot.
@@ -59,8 +68,7 @@ public class RobotContainer {
     private final Hood hood = new Hood();
     private final Limelight limelight = new Limelight();
     private final WheelSpinner wheelSpinner = new WheelSpinner();
-    private final TempManager tempManager =
-            new TempManager(climber, drivetrain, intake, magazine, shooter, turret);
+    private final TempManager tempManager = new TempManager(climber, drivetrain, intake, magazine, shooter, turret);
     private final BrownoutProtection bop = new BrownoutProtection(drivetrain, intake, magazine, shooter, turret);
 
     // controller initialization
@@ -71,8 +79,7 @@ public class RobotContainer {
     // EMERGENCY POWER!!!!!!
 
     // auto chooser initialization
-    private final SendableChooser<CspSequentialCommandGroup> autoChooser =
-            new SendableChooser<CspSequentialCommandGroup>();
+    private final SendableChooser<CspSequentialCommandGroup> autoChooser = new SendableChooser<CspSequentialCommandGroup>();
 
     // state variables
     private Pose2d initialPose = new Pose2d();
@@ -87,8 +94,10 @@ public class RobotContainer {
 
     /**
      * Initializes robot subsystems, controllers, commands, and chooser.
+     * 
+     * @throws IOException
      */
-    public RobotContainer() {
+    public RobotContainer() throws IOException {
         setDefaultCommands();
         configureButtonBindings();
         putChooser();
@@ -107,20 +116,19 @@ public class RobotContainer {
      */
     private void setDefaultCommands() {
         drivetrain.setDefaultCommand(new RunCommand(
-            () -> drivetrain.arcade(pilot.getY(Hand.kLeft), pilot.getX(Hand.kRight), pilot.getBumper(Hand.kLeft)), drivetrain
-         ));
+                () -> drivetrain.arcade(pilot.getY(Hand.kLeft), pilot.getX(Hand.kRight), pilot.getBumper(Hand.kLeft)),
+                drivetrain));
 
-        shooter.setDefaultCommand(new SpinShooter(shooter, 3500.0));
+        shooter.setDefaultCommand(new SpinShooter(shooter, 4000.0));
     }
+
     /**
      * Binds commands to buttons on controllers.
      */
     private void configureButtonBindings() {
 
-        pilot.getRbButtonObj().whileHeld(new DriveCenterPort(
-                drivetrain, limelight, () -> pilot.getY(Hand.kLeft)
-        )); 
-             
+        pilot.getRbButtonObj().whileHeld(new DriveCenterPort(drivetrain, limelight, () -> pilot.getY(Hand.kLeft)));
+
         pilot.getDpadDownButtonObj().whenPressed(new LowerIntake(intake));
         pilot.getDpadUpButtonObj().whenPressed(new RaiseIntake(intake));
 
@@ -136,10 +144,13 @@ public class RobotContainer {
         pilot.getAButtonObj().whileHeld(new AutoMagazine(magazine, intake, false, true));
         pilot.getAButtonObj().whenReleased(new AutoMagazine(magazine, intake, false, false));
 
-        pilot.getBackButtonObj().whenPressed(new EmergencyPower(drivetrain, shooter, turret, magazine, intake, wheelSpinner, true));
-        pilot.getBackButtonObj().whenReleased(new EmergencyPower(drivetrain, shooter, turret, magazine, intake, wheelSpinner, false));
+        pilot.getBackButtonObj()
+                .whenPressed(new EmergencyPower(drivetrain, shooter, turret, magazine, intake, wheelSpinner, true));
+        pilot.getBackButtonObj()
+                .whenReleased(new EmergencyPower(drivetrain, shooter, turret, magazine, intake, wheelSpinner, false));
 
         pilot.getStartButtonObj().whenPressed(new KillAll());
+
         copilot.getStartButtonObj().whenPressed(new KillAll());
 
         copilot.getAButtonObj().toggleWhenPressed(new FireBrake(climber));
@@ -175,8 +186,10 @@ public class RobotContainer {
 
     /**
      * Configures and places auto chooser on dashboard.
+     * 
+     * @throws IOException
      */
-    private void putChooser() {
+    private void putChooser() throws IOException {
         autoChooser.addOption("Do Nothing", null);
         
         autoChooser.addOption("Left Trench 6-Ball", new TrenchSixBall(drivetrain, turret, shooter, magazine, intake, limelight)
@@ -185,7 +198,12 @@ public class RobotContainer {
         );
         autoChooser.addOption("Left Trench 8-Ball (B)", new EightBall(drivetrain, shooter, turret, magazine, intake, limelight)
         );
-        autoChooser.addOption("Wheel 8-Ball", new WheelEightBall(drivetrain, shooter, turret, limelight, intake, magazine));
+        autoChooser.addOption("Wheel 8-Ball", new WheelEightBall(drivetrain, shooter, turret, limelight, intake, magazine)
+        );
+
+        autoChooser.addOption("Skills Obstacle" , new SkillsBarrel(drivetrain));
+        autoChooser.addOption("Skills Bounce", new SkillsBounce(drivetrain));
+        autoChooser.addOption("Skills Slolam", new SkillsSlolam(drivetrain));
 
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }

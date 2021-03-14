@@ -40,10 +40,10 @@ public class Drivetrain extends SubsystemBase {
     private static final double kV = 2.12; // volt seconds / meter
     private static final double kA = 0.167; // volt seconds squared / meter
     private static final double kP = 3.0;//3.5;
-    private static final double AUTO_MAX_VEL = 2.0 /*3.5*/; // meters / second
-    private static final double AUTO_MAX_ACCEL = 0.5/*1.0*/; // meters / second squared
-    private static final double AUTO_MAX_CENTRIP = 1.0; // meters / second squared
-    private static final double AUTO_MAX_VOLTAGE = 10; // volts
+    private static final double AUTO_MAX_VEL = 8; // meters / second
+    private static final double AUTO_MAX_ACCEL = 3.5; // meters / second squared
+    private static final double AUTO_MAX_CENTRIP = 1.5; // meters / second squared
+    private static final double AUTO_MAX_VOLTAGE = 12; // volts
     private static final double ARCADE_MAX_VEL = 3; // meters / second
     private static final double ARCADE_MAX_ROT = 2 * Math.PI; // rads / second
     private static final double TRACKWIDTH = 0.565; // meters
@@ -70,8 +70,8 @@ public class Drivetrain extends SubsystemBase {
             .addConstraint(voltageConstraint)
             .addConstraint(centripAccelConstraint);
 
-    private SlewRateLimiter speedLimiter = new SlewRateLimiter(1.5);
-    private SlewRateLimiter rotLimiter = new SlewRateLimiter(1.5);
+    private SlewRateLimiter speedLimiter = new SlewRateLimiter(1.0);
+    private SlewRateLimiter rotLimiter = new SlewRateLimiter(1.0);
         
     // state vars
     private boolean leftInverted = true;
@@ -125,6 +125,8 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putString("Odometry", getPose().toString());
         SmartDashboard.putData("Calibrate Gyro", new InstantCommand(gyro::calibrate));
         SmartDashboard.putData("Zero Gyro", new InstantCommand(gyro::reset));
+        SmartDashboard.putNumber("Left Velocity ", getLeftVelocity());
+        SmartDashboard.putNumber("Right Velocity", getRightVelocity());
     }
 
     /**

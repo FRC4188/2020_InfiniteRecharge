@@ -1,5 +1,6 @@
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
@@ -15,7 +16,7 @@ public class AutoFire extends CommandBase {
     private Turret turret;
     private Shooter shooter;
     private boolean cont;
-    private double THRESHOLD = 250.0;
+    private double THRESHOLD = 270.0;
 
     public AutoFire(Shooter shooter, Magazine magazine, Intake intake, Limelight limelight, Turret turret, boolean cont) {
         addRequirements(shooter, magazine, intake, turret);
@@ -34,7 +35,7 @@ public class AutoFire extends CommandBase {
     @Override
     public void execute() {
         shooter.setVelocity(limelight.formulaRpm());
-        boolean aimed = limelight.getIsAimed() && (limelight.hasTarget() == 1.0);
+        boolean aimed = (limelight.getIsAimed() && (limelight.hasTarget() == 1.0));
         double diff = shooter.getLeftVelocity() - (limelight.formulaRpm());
         boolean ready = aimed && (Math.abs(diff) < THRESHOLD);
         boolean top = magazine.topBeamClear();
@@ -47,11 +48,11 @@ public class AutoFire extends CommandBase {
         }                
 
         if (ready) magazine.set(1.0);
-        else if (top) magazine.set(0.25);
+        else if (!top) magazine.set(0.25);
         else magazine.set(0.0);
 
-        if (ready || (top && entry)) intake.spin(-0.5, -1.0);
-        else intake.spin(-0.5, 0.0);
+        if (ready || (top && entry)) intake.spin(-0.5, 1.0);
+        else intake.spin(-0.5, -1.0);
     }
 
     @Override

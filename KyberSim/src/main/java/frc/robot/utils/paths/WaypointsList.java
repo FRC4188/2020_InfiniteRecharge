@@ -108,19 +108,22 @@ public class WaypointsList {
             ), false);
     }
     public static class SkillsObstacle {
-        public static final Pose2d INIT_POSE = new Pose2d(2.337903, 3.364778, new Rotation2d());
+        public static final Pose2d INIT_POSE = new Pose2d(1.126210, 2.3, new Rotation2d());
 
         public static final Waypoints FIRSTMOVE = new Waypoints(
             List.of(
                 INIT_POSE,
-                new Pose2d(7.112865, 2.432402, Rotation2d.fromDegrees(-134.497499)),
-                new Pose2d(5.972767, 3.008819, new Rotation2d(92.329409)),
-                new Pose2d(9.755392, 4.239473, new Rotation2d()),
-                new Pose2d(11.621359, 5.93159, Rotation2d.fromDegrees(78.670582)),
-                new Pose2d(10.641402, 6.245096, Rotation2d.fromDegrees(173.01177)),
-                new Pose2d(9.820385, 4.936268, Rotation2d.fromDegrees(-75.599982)),
-                new Pose2d(13.015739, 2.176989, Rotation2d.fromDegrees(-1.905863)),
-                new Pose2d(13.604529, 3.283844, Rotation2d.fromDegrees(136.905903))
+                new Pose2d(2.999564, 2.3, new Rotation2d()),
+                new Pose2d(5, 1, Rotation2d.fromDegrees(-169.6133844)),
+                new Pose2d(2.858936, 1.9, Rotation2d.fromDegrees(12.07)),
+                new Pose2d(5.441378, 2.25, Rotation2d.fromDegrees(12.1)),
+                new Pose2d(7, 2.7, Rotation2d.fromDegrees(103)),
+                new Pose2d(6.446506, 3.6, Rotation2d.fromDegrees(172.900789)),
+                new Pose2d(5.261222, 3.6, Rotation2d.fromDegrees(-72.888431)),
+                new Pose2d(7.412093, 0.978, Rotation2d.fromDegrees(-4.421744)),
+                new Pose2d(8.4, 1.7, Rotation2d.fromDegrees(89.284147)),
+                new Pose2d(7.367684, 2.2789, Rotation2d.fromDegrees(176.213568)),
+                new Pose2d(2.0, 2.7, Rotation2d.fromDegrees(175))
             ), false);
 
     }

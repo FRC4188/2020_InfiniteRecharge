@@ -1,4 +1,4 @@
-package frc.robot.commands.groups;
+package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import frc.robot.commands.drive.FollowTrajectory;

@@ -21,12 +21,12 @@ public class AutoFireQuantity extends CommandBase {
 
     private boolean lastTop = true;
     
-    public AutoFireQuantity(Shooter shooter, Turret turret, Magazine magazine, Intake intake, Limelight limelight, int quantity) {
-        addRequirements(shooter, turret, magazine, intake);
+    public AutoFireQuantity(Shooter shooter, Turret turret, Magazine magazine2, Intake intake, Limelight limelight, int quantity) {
+        addRequirements(shooter, turret, magazine2, intake);
         this.shooter = shooter;
         this.intake = intake;
         this.limelight = limelight;
-        this.magazine = magazine;
+        this.magazine = magazine2;
         this.turret = turret;
         this.quantity = quantity;
     }

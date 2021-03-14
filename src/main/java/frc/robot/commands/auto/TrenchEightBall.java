@@ -1,4 +1,4 @@
-package frc.robot.commands.groups;
+package frc.robot.commands.auto;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;

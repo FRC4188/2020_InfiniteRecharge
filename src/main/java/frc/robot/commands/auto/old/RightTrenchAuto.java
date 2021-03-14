@@ -1,4 +1,4 @@
-package frc.robot.commands.groups.old;
+package frc.robot.commands.auto.old;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
