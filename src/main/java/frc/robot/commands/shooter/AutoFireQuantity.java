@@ -1,5 +1,6 @@
 package frc.robot.commands.shooter;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
@@ -38,13 +39,13 @@ public class AutoFireQuantity extends CommandBase {
     @Override
     public void execute() {
         shooter.setVelocity(limelight.formulaRpm());
-        boolean aimed = limelight.getIsAimed() && (limelight.hasTarget() == 1.0);
+        boolean aimed = limelight.getIsAimed() && (limelight.hasTarget());
         double diff = shooter.getLeftVelocity() - (limelight.formulaRpm());
-        boolean ready = aimed && (Math.abs(diff) < THRESHOLD);
+        boolean ready = (aimed && (Math.abs(diff) < THRESHOLD));
         boolean top = magazine.topBeamClear();
         boolean entry = magazine.entryBeamClear();
 
-        if(limelight.hasTarget() == 1.0) {
+        if(limelight.hasTarget()) {
             turret.trackTarget(limelight.getHorizontalAngle());
         } else {
             turret.set(0);

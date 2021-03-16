@@ -140,8 +140,8 @@ public class Limelight extends SubsystemBase {
     /**
      * Returns true if the camera sees a target.
      */
-    public double hasTarget() {
-        return limelightTable.getEntry("tv").getDouble(0.0);
+    public boolean hasTarget() {
+        return limelightTable.getEntry("tv").getDouble(0.0) == 1.0;
     }
 
     /**
@@ -232,7 +232,7 @@ public class Limelight extends SubsystemBase {
         setPipeline(Pipeline.CLOSE);
     }
     public boolean getIsAimed() {
-        return (getHorizontalAngle() >= -1.5 && getHorizontalAngle() <= 1.5) && hasTarget() == 1.0;
+        return (getHorizontalAngle() >= -1.5 && getHorizontalAngle() <= 1.5) && hasTarget();
 
     }
     /**

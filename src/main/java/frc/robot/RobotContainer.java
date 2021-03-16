@@ -18,6 +18,11 @@ import frc.robot.commands.auto.EightBall;
 import frc.robot.commands.skillschallenges.SkillsBounce;
 import frc.robot.commands.skillschallenges.SkillsBarrel;
 import frc.robot.commands.skillschallenges.SkillsSlolam;
+import frc.robot.commands.skillschallenges.skillsaccuracy.BlueRoutine;
+import frc.robot.commands.skillschallenges.skillsaccuracy.GreenRoutine;
+import frc.robot.commands.skillschallenges.skillsaccuracy.RedRoutine;
+import frc.robot.commands.skillschallenges.skillsaccuracy.ReintroRoutine;
+import frc.robot.commands.skillschallenges.skillsaccuracy.YellowRoutine;
 import frc.robot.commands.auto.TrenchEightBall;
 import frc.robot.commands.auto.TrenchSixBall;
 import frc.robot.commands.auto.WheelEightBall;
@@ -151,6 +156,13 @@ public class RobotContainer {
 
         pilot.getStartButtonObj().whenPressed(new KillAll());
 
+        //skills challenges bindings
+        /*copilot.getXButtonObj().whenPressed(new BlueRoutine(drivetrain, intake, magazine, limelight, shooter, turret));
+        copilot.getYButtonObj().whenPressed(new YellowRoutine(drivetrain, intake, magazine, limelight, shooter, turret));
+        copilot.getBButtonObj().whenPressed(new RedRoutine(drivetrain, intake, magazine, limelight, shooter, turret));
+        copilot.getAButtonObj().whenPressed(new GreenRoutine(intake, magazine, shooter, hood));
+        copilot.getRbButtonObj().whenPressed(new ReintroRoutine(drivetrain, intake, magazine));*/
+
         copilot.getStartButtonObj().whenPressed(new KillAll());
 
         copilot.getAButtonObj().toggleWhenPressed(new FireBrake(climber));
@@ -204,7 +216,7 @@ public class RobotContainer {
         autoChooser.addOption("Skills Obstacle" , new SkillsBarrel(drivetrain));
         autoChooser.addOption("Skills Bounce", new SkillsBounce(drivetrain));
         autoChooser.addOption("Skills Slolam", new SkillsSlolam(drivetrain));
-
+        
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
 

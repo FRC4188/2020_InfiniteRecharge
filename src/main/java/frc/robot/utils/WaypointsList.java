@@ -287,12 +287,11 @@ public class WaypointsList {
     }
 
     public static final class SkillsAccuracy {
-        public static final Pose2d INIT_POSE = new Pose2d(); //point in green zone
-
-        public static final Waypoints TO_REINTRO = new Waypoints(List.of(new Pose2d()), true);
-        public static final Waypoints TO_YELLOW = new Waypoints(List.of(new Pose2d()), true);
-        public static final Waypoints TO_BLUE= new Waypoints(List.of(new Pose2d()), true);
-        public static final Waypoints TO_RED = new Waypoints(List.of(new Pose2d()), true);
+        public static final Pose2d INIT_POSE = new Pose2d(0, 0, new Rotation2d()); //point in green zone against the wall
+        public static final Pose2d TO_REINTRO = new Pose2d(-6.83, 0.0, new Rotation2d());
+        public static final Pose2d TO_YELLOW = new Pose2d(-2.63, 0, new Rotation2d());
+        public static final Pose2d TO_BLUE = new Pose2d(-3.96, 0.27, new Rotation2d());
+        public static final Pose2d TO_RED = new Pose2d(-5.39, 0.45, new Rotation2d());
 
     }
 }

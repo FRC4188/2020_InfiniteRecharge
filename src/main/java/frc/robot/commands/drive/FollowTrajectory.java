@@ -23,7 +23,7 @@ public class FollowTrajectory extends RamseteCommand {
         drivetrain::setSpeeds, drivetrain);
   }
 
-  public FollowTrajectory(Drivetrain drivetrain, frc.robot.utils.Waypoints waypoints) {
+  public FollowTrajectory(Drivetrain drivetrain, Waypoints waypoints) {
     this(drivetrain, TrajectoryGenerator.generateTrajectory(waypoints.getPoses(),
         drivetrain.getTrajectoryConfig().setReversed(waypoints.isReversed())));
   }

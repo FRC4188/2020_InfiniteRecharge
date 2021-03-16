@@ -21,8 +21,8 @@ public class Waypoints {
         this.poses = poses;
         this.isReversed = isReversed;
     }
-
-    /**
+    
+	/**
      * Returns the list of Pose2d objects associated with the object.
      */
     public List<Pose2d> getPoses() {

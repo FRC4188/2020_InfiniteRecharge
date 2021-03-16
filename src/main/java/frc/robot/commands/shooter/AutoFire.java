@@ -35,13 +35,14 @@ public class AutoFire extends CommandBase {
     @Override
     public void execute() {
         shooter.setVelocity(limelight.formulaRpm());
-        boolean aimed = (limelight.getIsAimed() && (limelight.hasTarget() == 1.0));
+        boolean seen = limelight.hasTarget();
+        boolean aimed = (limelight.getIsAimed() && seen);
         double diff = shooter.getLeftVelocity() - (limelight.formulaRpm());
-        boolean ready = aimed && (Math.abs(diff) < THRESHOLD);
+        boolean ready = (aimed && (Math.abs(diff) < THRESHOLD)) ? true : SmartDashboard.getBoolean("Set Ready", false);
         boolean top = magazine.topBeamClear();
         boolean entry = magazine.entryBeamClear();
 
-        if(limelight.hasTarget() == 1.0) {
+        if(seen) {
             turret.trackTarget(limelight.getHorizontalAngle());
         } else {
             turret.set(0);
