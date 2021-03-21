@@ -32,7 +32,7 @@ public class RedRoutine extends SequentialCommandGroup {
     new FollowTrajectory(drivetrain, new Waypoints(List.of(drivetrain.getPose(), WaypointsList.SkillsAccuracy.TO_RED), false), 
     new TrajectoryConfig(3.0, 1.0).addConstraint(new CentripetalAccelerationConstraint(1.0))),
 
-    new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3)
+    new SkillsAutoFireQ(shooter, magazine, intake, limelight, turret, 3)
     );
   }
 }

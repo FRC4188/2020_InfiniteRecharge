@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstraint;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.FollowTrajectory;
-import frc.robot.commands.shooter.AutoFireQuantity;
 import frc.robot.utils.Waypoints;
 import frc.robot.utils.WaypointsList;
 import frc.robot.subsystems.Intake;
@@ -32,7 +31,7 @@ public class YellowRoutine extends SequentialCommandGroup {
     new FollowTrajectory(drivetrain, new Waypoints(List.of(drivetrain.getPose(), WaypointsList.SkillsAccuracy.TO_YELLOW), false), 
     new TrajectoryConfig(3.0, 1.0).addConstraint(new CentripetalAccelerationConstraint(1.0))),
 
-    new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3)
+    new SkillsAutoFireQ(shooter, magazine, intake, limelight, turret, 3)
     );
   
   }

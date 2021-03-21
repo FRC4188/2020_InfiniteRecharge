@@ -34,6 +34,7 @@ public class Shooter extends SubsystemBase {
      */
     public Shooter() {
 
+        SmartDashboard.putNumber("Set Shooter Velocity", 0.0); 
         // inversion
         leftShooter.setInverted(true);
 

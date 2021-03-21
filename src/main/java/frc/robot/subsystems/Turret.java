@@ -27,11 +27,11 @@ public class Turret extends SubsystemBase {
     // device initialization
     private final CANSparkMax turretMotor = new CANSparkMax(23, MotorType.kBrushless);
     private final CANEncoder turretEncoder = new CANEncoder(turretMotor);
-    private final ProfiledPIDController pid = new ProfiledPIDController(0.024, 0.003,0.01, new Constraints(MAX_VELOCITY, MAX_ACCELERATION));
+    private final ProfiledPIDController pid = new ProfiledPIDController(0.021, 0.0, 4.0, new Constraints(MAX_VELOCITY, MAX_ACCELERATION)); //at > 12.3 V
 
     // constants
     private static final double MAX_VELOCITY = 1.5; // rpm
-    private static final double MAX_ACCELERATION = 0.75; // rpm / sec
+    private static final double MAX_ACCELERATION = 0.75; // rpm / s ec
     private static final double GEAR_RATIO = 40.0 * (120.0 / 16.0); // angular velocity will be divided by this amount
     private static final double ENCODER_TO_DEGREES = 360.0 / GEAR_RATIO; // degrees
     private static final double RAMP_RATE = 0.5; // seconds
@@ -52,12 +52,7 @@ public class Turret extends SubsystemBase {
         Notifier shuffle = new Notifier(() -> updateShuffleboard());        
         shuffle.startPeriodic(0.1);
 
-        Notifier setPID = new Notifier(() -> updatePID());
-        setPID.startPeriodic(0.5);
-
-        SmartDashboard.putNumber("Turret P", 0.024);
-        SmartDashboard.putNumber("Turret I", 0.003);
-        SmartDashboard.putNumber("Turret D", 1.0);
+        SmartDashboard.putNumber("Set Turret Angle", 0.0);
     }
 
     /**
@@ -76,12 +71,12 @@ public class Turret extends SubsystemBase {
         SmartDashboard.putNumber("Turret raw vel", turretEncoder.getVelocity());
     }
 
-    private void updatePID() {
-        pid.setPID(
-        SmartDashboard.getNumber("Turret P", 0.0), 
-        SmartDashboard.getNumber("Turret I", 0.0), 
-        SmartDashboard.getNumber("Turret D", 0.0)
-        );
+    public void updatePID() {
+        //pid.setPID(
+        //SmartDashboard.getNumber("Turret P", 0.0), 
+        //SmartDashboard.getNumber("Turret I", 0.0), 
+        //SmartDashboard.getNumber("Turret D", 0.0)
+        //);
     }
 
     /**
@@ -97,6 +92,10 @@ public class Turret extends SubsystemBase {
         } else {
             turretMotor.set(percent * reduction);
         }
+    }
+
+    public void track(double measurement) {
+        set(pid.calculate(measurement, 0.0));
     }
 
     /**

@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.LinearFilter;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,10 +31,14 @@ public class Limelight extends SubsystemBase {
 
     // state vars
     private NetworkTable limelightTable = null;
+    private NetworkTable searchTable = null;
     private Pipeline pipeline = Pipeline.CLOSE;
 
     private double adjust;
     private double setRPM;
+
+    boolean centerXZero;
+    boolean close;
 
     /**
      * Enum to control LED mode.
@@ -89,7 +94,8 @@ public class Limelight extends SubsystemBase {
      * Constructor for Limelight.
      */
     public Limelight() {
-        limelightTable = NetworkTableInstance.getDefault().getTable("limelight-csp");
+        limelightTable = NetworkTableInstance.getDefault().getTable("limelight-kyber");
+        searchTable = limelightTable.getSubTable("searchTable");
         SmartDashboard.putNumber("Set shooter speed", 0.0);        
         Notifier shuffle = new Notifier(() -> updateShuffleboard());        
         shuffle.startPeriodic(0.1);
@@ -106,10 +112,9 @@ public class Limelight extends SubsystemBase {
      * Writes values to Shuffleboard.
      */
     public void updateShuffleboard() {
-        SmartDashboard.putNumber("Formula RPM", formulaRpm());
-        SmartDashboard.putNumber("Limelight distance reading", getDistance());
-        SmartDashboard.putNumber("Vertical Angle", getVerticalAngle());
-        SmartDashboard.putBoolean("Is Aimed", getIsAimed());
+        SmartDashboard.putNumber("Path Selection", getPath());
+        SmartDashboard.putBoolean("centerXZero", centerXZero);
+        SmartDashboard.putBoolean("close", close);
     }
 
     /**
@@ -149,7 +154,7 @@ public class Limelight extends SubsystemBase {
      */
     public double getVerticalAngle() {
         double r = limelightTable.getEntry("ty").getDouble(0.0);
-        return r + (0.164*r + 0.102) + CAMERA_ANGLE;
+        return r + (0.164 * r + 0.102) + CAMERA_ANGLE;
     }
 
     /**
@@ -242,4 +247,29 @@ public class Limelight extends SubsystemBase {
         return pipeline;
     }
 
+    public int getPath() {
+        Number[] centerX = searchTable.getEntry("centerX").getNumberArray(new Number[0]);
+        Number[] centerY = searchTable.getEntry("centerY").getNumberArray(new Number[0]);
+        Number[] areas = searchTable.getEntry("area").getNumberArray(new Number[0]);
+        double yVal = limelightTable.getEntry("tx").getDouble(0.0);
+
+        centerXZero = false;
+        close = true;
+
+        int path = -1;
+
+        for (Number xVal : centerX) {
+            if (Math.abs(xVal.doubleValue()) < 5.0) centerXZero = true;
+        }
+        if (yVal < -8.0) close = false;
+        
+        for (Number area )
+        
+        if (!centerXZero && close) path = 0; //true, true - ARED
+        else if (centerXZero && close) path = 1;//true, false - ABLUE
+        else if (!centerXZero && close) path = 2;//false, true - BRED
+        else if (centerXZero && !close) path = 3;//false, false - BBLUE
+
+        return path;
+    }
 }

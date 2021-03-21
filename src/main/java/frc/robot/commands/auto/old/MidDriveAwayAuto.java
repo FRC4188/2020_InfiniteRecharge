@@ -36,7 +36,7 @@ public class MidDriveAwayAuto extends CspSequentialCommandGroup {
 
                 // Auto aims toward the port and revs up shooter to 6000 rpm.
                 new ParallelRaceGroup(
-                    new AutoAim(turret, limelight, -1.5).withTimeout(0.15),
+                    //new AutoAim(turret, limelight, -1.5).withTimeout(0.15),
                     new SpinShooter(shooter, 6000)
                 ),
 
@@ -44,7 +44,7 @@ public class MidDriveAwayAuto extends CspSequentialCommandGroup {
                 // Runs magazine to shoot pre-loaded balls.
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 6000),
-                    new AutoAim(turret, limelight, -1.5),
+                    //new AutoAim(turret, limelight, -1.5),
                     new RunMagazine(magazine, 0.8).withTimeout(1.5)
                 ),
 

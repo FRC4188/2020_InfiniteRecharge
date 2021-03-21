@@ -18,11 +18,11 @@ public class SkillsBarrel extends CspSequentialCommandGroup {
   /** Creates a new SkillsChallenge. */
   public SkillsBarrel(Drivetrain drivetrain) {
     addCommands(
-      new FollowTrajectory(drivetrain, WaypointsList.SkillsBarrel.FIRST_PATH, new TrajectoryConfig(8, 2.5)
-      .addConstraint(new CentripetalAccelerationConstraint(3.5)))
+      new FollowTrajectory(drivetrain, WaypointsList.SkillsBarrel.FIRST_PATH, new TrajectoryConfig(5.0, 2.0)
+      .addConstraint(new CentripetalAccelerationConstraint(2.0)))
     );
   }
-
+//8 2.5 3.5
   @Override
   public Pose2d getInitialPose() {
     return WaypointsList.SkillsBarrel.INIT_POSE;

@@ -18,14 +18,14 @@ public class SkillsBounce extends CspSequentialCommandGroup {
   /** Creates a new SkillsChallenge. */
   public SkillsBounce(Drivetrain drivetrain) {
     addCommands(
-      new FollowTrajectory(drivetrain, WaypointsList.SkillsBounce.TO_A3, drivetrain.getTrajectoryConfig()
+      new FollowTrajectory(drivetrain, WaypointsList.SkillsBounce.TO_A3, new TrajectoryConfig(3.0, 1.0)
       .addConstraint(new CentripetalAccelerationConstraint(1.0))),
-      new FollowTrajectory(drivetrain, WaypointsList.SkillsBounce.TO_A6, drivetrain.getTrajectoryConfig()
-      .addConstraint(new CentripetalAccelerationConstraint(1.0))),
-      new FollowTrajectory(drivetrain, WaypointsList.SkillsBounce.TO_A9, drivetrain.getTrajectoryConfig()
+      new FollowTrajectory(drivetrain, WaypointsList.SkillsBounce.TO_A6, new TrajectoryConfig(3.0, 1.0)
+      .addConstraint(new CentripetalAccelerationConstraint(1.0)))
+      /*new FollowTrajectory(drivetrain, WaypointsList.SkillsBounce.TO_A9, drivetrain.getTrajectoryConfig()
       .addConstraint(new CentripetalAccelerationConstraint(1.0))),
       new FollowTrajectory(drivetrain, WaypointsList.SkillsBounce.TO_FINISH, drivetrain.getTrajectoryConfig()
-      .addConstraint(new CentripetalAccelerationConstraint(1.0)))
+      .addConstraint(new CentripetalAccelerationConstraint(1.0)))*/
     );
   }
 

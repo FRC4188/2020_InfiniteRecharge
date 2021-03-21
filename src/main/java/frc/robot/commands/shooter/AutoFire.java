@@ -38,7 +38,7 @@ public class AutoFire extends CommandBase {
         boolean seen = limelight.hasTarget();
         boolean aimed = (limelight.getIsAimed() && seen);
         double diff = shooter.getLeftVelocity() - (limelight.formulaRpm());
-        boolean ready = (aimed && (Math.abs(diff) < THRESHOLD)) ? true : SmartDashboard.getBoolean("Set Ready", false);
+        boolean ready = (aimed && (Math.abs(diff) < THRESHOLD));
         boolean top = magazine.topBeamClear();
         boolean entry = magazine.entryBeamClear();
 

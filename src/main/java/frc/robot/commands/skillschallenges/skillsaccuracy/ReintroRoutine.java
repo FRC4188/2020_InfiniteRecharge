@@ -31,7 +31,8 @@ public class ReintroRoutine extends SequentialCommandGroup {
     new TrajectoryConfig(3.0, 1.0).addConstraint(new CentripetalAccelerationConstraint(1.0))),
 
     new LowerIntake(intake),
-    new AutoMagazine(magazine, intake, true, true).withTimeout(8)
+    new AutoMagazine(magazine, intake, true, true).withTimeout(8),
+    new AutoMagazine(magazine, intake, true, false)
     );
   }
 }

@@ -14,7 +14,7 @@ import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.hood.LowerHood;
 import frc.robot.commands.hood.RaiseHood;
 import frc.robot.commands.intake.RaiseIntake;
-import frc.robot.commands.skillschallenges.skillsaccuracy.GreenAutoFireQuantity;
+import frc.robot.commands.skillschallenges.skillsaccuracy.SkillsAutoFireQ;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
@@ -30,16 +30,14 @@ import frc.robot.utils.WaypointsList;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class GreenRoutine extends SequentialCommandGroup {
   /** Creates a new ToBlueRoutine.*/
-  public GreenRoutine(Intake intake, Magazine magazine, Shooter shooter, Hood hood) {
+  public GreenRoutine(Intake intake, Magazine magazine, Shooter shooter, Hood hood, Limelight limelight, Turret turret) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new ParallelDeadlineGroup(
-        new RaiseIntake(intake),
-        new RaiseHood(hood)
-        ),
-    new GreenAutoFireQuantity(shooter, magazine, intake, 3),
-    new LowerHood(hood)
+      new RaiseIntake(intake),
+      new RaiseHood(hood),
+      new SkillsAutoFireQ(shooter, magazine, intake, limelight, turret, 3),
+      new LowerHood(hood)
     );
   }
 }
