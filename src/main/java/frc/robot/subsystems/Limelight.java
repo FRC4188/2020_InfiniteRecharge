@@ -1,9 +1,13 @@
 package frc.robot.subsystems;
 
+import java.net.NetPermission;
+import java.util.ArrayList;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.LinearFilter;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.PIDBase.Tolerance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -36,9 +40,6 @@ public class Limelight extends SubsystemBase {
 
     private double adjust;
     private double setRPM;
-
-    boolean centerXZero;
-    boolean close;
 
     /**
      * Enum to control LED mode.
@@ -95,7 +96,7 @@ public class Limelight extends SubsystemBase {
      */
     public Limelight() {
         limelightTable = NetworkTableInstance.getDefault().getTable("limelight-kyber");
-        searchTable = limelightTable.getSubTable("searchTable");
+        searchTable = NetworkTableInstance.getDefault().getTable("myContoursReport");
         SmartDashboard.putNumber("Set shooter speed", 0.0);        
         Notifier shuffle = new Notifier(() -> updateShuffleboard());        
         shuffle.startPeriodic(0.1);
@@ -113,8 +114,7 @@ public class Limelight extends SubsystemBase {
      */
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Path Selection", getPath());
-        SmartDashboard.putBoolean("centerXZero", centerXZero);
-        SmartDashboard.putBoolean("close", close);
+
     }
 
     /**
@@ -247,29 +247,24 @@ public class Limelight extends SubsystemBase {
         return pipeline;
     }
 
-    public int getPath() {
-        Number[] centerX = searchTable.getEntry("centerX").getNumberArray(new Number[0]);
-        Number[] centerY = searchTable.getEntry("centerY").getNumberArray(new Number[0]);
-        Number[] areas = searchTable.getEntry("area").getNumberArray(new Number[0]);
-        double yVal = limelightTable.getEntry("tx").getDouble(0.0);
+    public double[] getAreas() {
+        double[] areasArray = searchTable.getEntry("area").getDoubleArray(new double[0]);
+        return areasArray;
+    }
 
-        centerXZero = false;
-        close = true;
+    public int getPath() {
+        double xVal = limelightTable.getEntry("tx").getDouble(0.0);
+        double yVal = limelightTable.getEntry("ty").getDouble(0.0);
 
         int path = -1;
+        double TOLERANCE = 5;
 
-        for (Number xVal : centerX) {
-            if (Math.abs(xVal.doubleValue()) < 5.0) centerXZero = true;
-        }
-        if (yVal < -8.0) close = false;
-        
-        for (Number area )
-        
-        if (!centerXZero && close) path = 0; //true, true - ARED
-        else if (centerXZero && close) path = 1;//true, false - ABLUE
-        else if (!centerXZero && close) path = 2;//false, true - BRED
-        else if (centerXZero && !close) path = 3;//false, false - BBLUE
+        if (Math.abs(xVal - 2.0) < TOLERANCE && Math.abs(yVal + 17.3) < TOLERANCE) path = 0; //ARED
+        else if (Math.abs(xVal + 23.5) < TOLERANCE && Math.abs(yVal + 15.0) < TOLERANCE) path = 1; //BRED
+        else if (Math.abs(xVal - 20.0) < TOLERANCE && Math.abs(yVal + 7.3) < TOLERANCE) path = 2; //ABLUE
+        else if (Math.abs(xVal - 10.5) < TOLERANCE && Math.abs(yVal + 6.07) < TOLERANCE) path = 3; //BBLUE
 
         return path;
     }
 }
+

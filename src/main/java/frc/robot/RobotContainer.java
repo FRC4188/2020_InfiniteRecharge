@@ -16,6 +16,7 @@ import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.auto.EightBall;
 import frc.robot.commands.skillschallenges.SkillsBounce;
+import frc.robot.commands.skillschallenges.GalacticSearch;
 import frc.robot.commands.skillschallenges.SkillsBarrel;
 import frc.robot.commands.skillschallenges.SkillsSlolam;
 import frc.robot.commands.skillschallenges.skillsaccuracy.BlueRoutine;
@@ -245,6 +246,7 @@ public class RobotContainer {
         autoChooser.addOption("Skills Barrel" , new SkillsBarrel(drivetrain));
         autoChooser.addOption("Skills Bounce", new SkillsBounce(drivetrain));
         autoChooser.addOption("Skills Slolam", new SkillsSlolam(drivetrain));
+        autoChooser.addOption("Galatic Search", new GalacticSearch(drivetrain, intake, limelight));
         
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }

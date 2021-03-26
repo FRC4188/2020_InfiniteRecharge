@@ -291,24 +291,31 @@ public class WaypointsList {
     }
 
     public static final class GalacticSearch {
-        public static final Pose2d INIT_POSE = new Pose2d(0.65, 2.4, new Rotation2d());
+        public static final Pose2d INIT_POSE = new Pose2d(0.0, 0, new Rotation2d());
 
         public static final Waypoints REDA = new Waypoints(
             List.of(
                 INIT_POSE,
-                new Pose2d(2.02, 2.4, new Rotation2d()),
-                new Pose2d(3.48, 1.71, Rotation2d.fromDegrees(-24.78)),
-                new Pose2d(4.44, 3.37, Rotation2d.fromDegrees(72)),
-                new Pose2d(8.44, 3.82, new Rotation2d())
+                new Pose2d(1.31, 0.15, new Rotation2d()),
+                new Pose2d(2.94, -0.65, Rotation2d.fromDegrees(22.67)),
+                new Pose2d(3.4, 1.57, Rotation2d.fromDegrees(0)),
+                new Pose2d(9.5, -1.3, new Rotation2d()),
+                new Pose2d(10.05, -1.3, new Rotation2d())
             ), false);
 
         public static final Waypoints BLUEA = new Waypoints(
             List.of(
                 INIT_POSE,
-                new Pose2d(4.25, 1.11, Rotation2d.fromDegrees(-37.48)),
-                new Pose2d(5.28, 3, Rotation2d.fromDegrees(67.76)),
-                new Pose2d(6.46, 2.4, Rotation2d.fromDegrees(-26.47)),
-                new Pose2d(8.46, 2.26, new Rotation2d())
+                new Pose2d(3.04, -1.4, new Rotation2d()),
+                new Pose2d(3.69, -1.4, Rotation2d.fromDegrees(0)),
+                new Pose2d(4.74, 0.58, Rotation2d.fromDegrees(27.78)),
+                new Pose2d(6.36, -0.05, Rotation2d.fromDegrees(-54.11)),
+                new Pose2d(8.10, -1.3, new Rotation2d()),
+                new Pose2d(8.5, -1.3, new Rotation2d())
+                /*new Pose2d(4.25, 1.11, Rotation2d.fromDegrees(-37.48)),
+                new Pose2d(5.28, 3.9, Rotation2d.fromDegrees(67.76)),
+                new Pose2d(6.9, 2.4, Rotation2d.fromDegrees(-26.47)),
+                new Pose2d(8.46, 2.26, new Rotation2d())*/
             ), false);
         public static final Waypoints REDB = new Waypoints(
             List.of(
