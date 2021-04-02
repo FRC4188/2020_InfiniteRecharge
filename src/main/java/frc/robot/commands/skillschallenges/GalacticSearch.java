@@ -34,11 +34,11 @@ public class GalacticSearch extends CspSequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     if (limelight.getPath() == 0) {
-      trajectory = new FollowTrajectory(drivetrain, WaypointsList.GalacticSearch.REDA, new TrajectoryConfig(5.0, 2.25)
-      .addConstraint(new CentripetalAccelerationConstraint(1.3)));
+      trajectory = new FollowTrajectory(drivetrain, WaypointsList.GalacticSearch.REDA, new TrajectoryConfig(5.0, 4.0)
+      .addConstraint(new CentripetalAccelerationConstraint(1.85)));
     } else if (limelight.getPath() == 1) {
-      trajectory = new FollowTrajectory(drivetrain, WaypointsList.GalacticSearch.REDB, new TrajectoryConfig(5.0, 2.25)
-      .addConstraint(new CentripetalAccelerationConstraint(1.25)));
+      trajectory = new FollowTrajectory(drivetrain, WaypointsList.GalacticSearch.REDB, new TrajectoryConfig(5.0, 3.8)
+      .addConstraint(new CentripetalAccelerationConstraint(1.9)));
     } else if (limelight.getPath() == 2) {
       trajectory = new FollowTrajectory(drivetrain, WaypointsList.GalacticSearch.BLUEA, new TrajectoryConfig(5.0, 2.75)
       .addConstraint(new CentripetalAccelerationConstraint(1.25)));
@@ -49,9 +49,9 @@ public class GalacticSearch extends CspSequentialCommandGroup {
 
     addCommands(
       new ParallelDeadlineGroup(
-        trajectory, 
+        trajectory,   
         new LowerIntake(intake),
-        new SpinJustIntake(intake, -1.0)
+        new SpinJustIntake(intake, -0.7)
     ));
   }
 

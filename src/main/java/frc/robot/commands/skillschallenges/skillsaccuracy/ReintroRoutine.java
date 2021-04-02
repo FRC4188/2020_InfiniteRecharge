@@ -35,4 +35,9 @@ public class ReintroRoutine extends SequentialCommandGroup {
     new AutoMagazine(magazine, intake, true, false)
     );
   }
+
+  @Override
+  public boolean isFinished() {
+    return true;
+  }
 }

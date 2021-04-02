@@ -296,11 +296,13 @@ public class WaypointsList {
         public static final Waypoints REDA = new Waypoints(
             List.of(
                 INIT_POSE,
-                new Pose2d(1.31, 0.15, new Rotation2d()),
-                new Pose2d(2.94, -0.45, Rotation2d.fromDegrees(22.67)),
-                new Pose2d(3.4, 1.57, new Rotation2d()),
-                new Pose2d(9.5, 1.4, new Rotation2d()),
-                new Pose2d(10.05, 1.4, new Rotation2d())
+                new Pose2d(1.31, 0.0, new Rotation2d()),
+                new Pose2d(2.85, -0.46, Rotation2d.fromDegrees(-14.09)),
+                new Pose2d(3.99, 1.0, Rotation2d.fromDegrees(66.04)),
+                //new Pose2d(3.2, 1.62, new Rotation2d()), //last ball point
+                new Pose2d(6.0, 1.65, new Rotation2d()),
+                new Pose2d(7.2, 1.65, new Rotation2d()),
+                new Pose2d(10.05, 1.65, new Rotation2d())
             ), false);
 
         public static final Waypoints BLUEA = new Waypoints(
@@ -320,15 +322,16 @@ public class WaypointsList {
         public static final Waypoints REDB = new Waypoints(
             List.of(
                 INIT_POSE,
-                new Pose2d(1.37, 0.77, new Rotation2d()),
+                new Pose2d(1.23, 0.55, Rotation2d.fromDegrees(22.23)),
+                new Pose2d(2.7, -0.25, Rotation2d.fromDegrees(-30.0)),
+                new Pose2d(4.60, 0.55, Rotation2d.fromDegrees(54.1)),
+                new Pose2d(6.43, 1.65, new Rotation2d()),
+                new Pose2d(9.5, 1.65, new Rotation2d())
+                /*new Pose2d(1.37, 0.77, new Rotation2d()),
                 new Pose2d(2.89, -0.55, Rotation2d.fromDegrees(7.90)),
                 new Pose2d(4.41, 0.60, Rotation2d.fromDegrees(26.94)),
                 new Pose2d(8.08, 1.67, new Rotation2d()),
-                new Pose2d(9.5, 1.67, new Rotation2d())
-                /*new Pose2d(2.04, 2.91, Rotation2d.fromDegrees(21.39)),
-                new Pose2d(3.53, 1.79, Rotation2d.fromDegrees(-33.46)),
-                new Pose2d(5.04, 2.75, Rotation2d.fromDegrees(48.71)),
-                new Pose2d(8.47, 3.56, new Rotation2d())*/
+                new Pose2d(9.5, 1.67, new Rotation2d())*/
             ), false);
 
         public static final Waypoints BLUEB = new Waypoints(

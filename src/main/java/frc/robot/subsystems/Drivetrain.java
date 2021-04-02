@@ -127,6 +127,7 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putData("Zero Gyro", new InstantCommand(gyro::reset));
         SmartDashboard.putNumber("Left Velocity ", getLeftVelocity());
         SmartDashboard.putNumber("Right Velocity", getRightVelocity());
+        SmartDashboard.putNumber("Average Velocity", (getRightVelocity() + getLeftVelocity()) / 2);
     }
 
     /**
