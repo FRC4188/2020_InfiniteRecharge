@@ -5,6 +5,7 @@
 package frc.robot.commands.skillschallenges.skillsaccuracy;
 
 import edu.wpi.first.wpilibj.LinearFilter;
+import edu.wpi.first.wpilibj.MedianFilter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
@@ -19,10 +20,9 @@ public class SkillsAutoFire extends CommandBase {
   private Intake intake;
   private Limelight limelight;
   private Turret turret;
-  private Hood hood;
+
 
   private boolean cont;
-  private double lastVelocity;
   private double setVelocity;
 
   /** Creates a new GreenAutoFireQuantity. */
@@ -51,7 +51,7 @@ public class SkillsAutoFire extends CommandBase {
     boolean topIsClear = magazine.topBeamClear();
     boolean entryIsClear = magazine.entryBeamClear();
 
-    LinearFilter filter = LinearFilter.highPass(1, 3);
+    MedianFilter filter = new MedianFilter(3);
 
     double filteredDistance = filter.calculate(limelight.getDistance());
 

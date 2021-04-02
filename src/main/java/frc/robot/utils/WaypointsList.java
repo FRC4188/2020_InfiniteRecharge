@@ -297,10 +297,10 @@ public class WaypointsList {
             List.of(
                 INIT_POSE,
                 new Pose2d(1.31, 0.15, new Rotation2d()),
-                new Pose2d(2.94, -0.65, Rotation2d.fromDegrees(22.67)),
-                new Pose2d(3.4, 1.57, Rotation2d.fromDegrees(0)),
-                new Pose2d(9.5, -1.3, new Rotation2d()),
-                new Pose2d(10.05, -1.3, new Rotation2d())
+                new Pose2d(2.94, -0.45, Rotation2d.fromDegrees(22.67)),
+                new Pose2d(3.4, 1.57, new Rotation2d()),
+                new Pose2d(9.5, 1.4, new Rotation2d()),
+                new Pose2d(10.05, 1.4, new Rotation2d())
             ), false);
 
         public static final Waypoints BLUEA = new Waypoints(
@@ -320,19 +320,30 @@ public class WaypointsList {
         public static final Waypoints REDB = new Waypoints(
             List.of(
                 INIT_POSE,
-                new Pose2d(2.04, 2.91, Rotation2d.fromDegrees(21.39)),
+                new Pose2d(1.37, 0.77, new Rotation2d()),
+                new Pose2d(2.89, -0.55, Rotation2d.fromDegrees(7.90)),
+                new Pose2d(4.41, 0.60, Rotation2d.fromDegrees(26.94)),
+                new Pose2d(8.08, 1.67, new Rotation2d()),
+                new Pose2d(9.5, 1.67, new Rotation2d())
+                /*new Pose2d(2.04, 2.91, Rotation2d.fromDegrees(21.39)),
                 new Pose2d(3.53, 1.79, Rotation2d.fromDegrees(-33.46)),
                 new Pose2d(5.04, 2.75, Rotation2d.fromDegrees(48.71)),
-                new Pose2d(8.47, 3.56, new Rotation2d())
+                new Pose2d(8.47, 3.56, new Rotation2d())*/
             ), false);
 
         public static final Waypoints BLUEB = new Waypoints(
             List.of(
                 INIT_POSE,
-                new Pose2d(4.20, 1.16, Rotation2d.fromDegrees(43.84)),
+                new Pose2d(2.73, -1.57, new Rotation2d()),
+                new Pose2d(3.91, -0.6, Rotation2d.fromDegrees(59.69)),
+                new Pose2d(5.51, 0.5, new Rotation2d()),
+                new Pose2d(6.8, -0.30, Rotation2d.fromDegrees(-69.6)),
+                new Pose2d(8.39, -1.51, new Rotation2d()),
+                new Pose2d(9.89, -1.51, new Rotation2d())
+                /*new Pose2d(4.20, 1.16, Rotation2d.fromDegrees(43.84)),
                 new Pose2d(5.81, 2.71, Rotation2d.fromDegrees(47.22)),
                 new Pose2d(7.21, 1.83, Rotation2d.fromDegrees(-44.47)),
-                new Pose2d(8.36, 1.01, Rotation2d.fromDegrees(-31.76))
+                new Pose2d(8.36, 1.01, Rotation2d.fromDegrees(-31.76))*/
             ), false);   
     }
 

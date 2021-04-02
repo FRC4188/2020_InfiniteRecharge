@@ -247,11 +247,6 @@ public class Limelight extends SubsystemBase {
         return pipeline;
     }
 
-    public double[] getAreas() {
-        double[] areasArray = searchTable.getEntry("area").getDoubleArray(new double[0]);
-        return areasArray;
-    }
-
     public int getPath() {
         double xVal = limelightTable.getEntry("tx").getDouble(0.0);
         double yVal = limelightTable.getEntry("ty").getDouble(0.0);
@@ -260,9 +255,9 @@ public class Limelight extends SubsystemBase {
         double TOLERANCE = 5;
 
         if (Math.abs(xVal - 2.0) < TOLERANCE && Math.abs(yVal + 17.3) < TOLERANCE) path = 0; //ARED
-        else if (Math.abs(xVal + 23.5) < TOLERANCE && Math.abs(yVal + 15.0) < TOLERANCE) path = 1; //BRED
+        else if (Math.abs(xVal - 13.5) < 0.75 && Math.abs(yVal + 8.9) < 0.75) path = 1; //BRED note: 2nd furthest ball
         else if (Math.abs(xVal - 20.0) < TOLERANCE && Math.abs(yVal + 7.3) < TOLERANCE) path = 2; //ABLUE
-        else if (Math.abs(xVal - 10.5) < TOLERANCE && Math.abs(yVal + 6.07) < TOLERANCE) path = 3; //BBLUE
+        else if (Math.abs(xVal - 10.2) < 0.75 && Math.abs(yVal + 6.8) < 0.75) path = 3; //BBLUE
 
         return path;
     }
