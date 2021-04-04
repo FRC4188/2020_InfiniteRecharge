@@ -27,17 +27,8 @@ public class ReintroRoutine extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    new FollowTrajectory(drivetrain, new Waypoints(List.of(drivetrain.getPose(), WaypointsList.SkillsAccuracy.TO_REINTRO), true), 
-      new TrajectoryConfig(3.0, 1.0).addConstraint(new CentripetalAccelerationConstraint(1.0))),
-
-    new LowerIntake(intake),
-    new AutoMagazine(magazine, intake, true, true).withTimeout(8),
-    new AutoMagazine(magazine, intake, true, false)
+    new FollowTrajectory(drivetrain, new Waypoints(List.of(drivetrain.getPose(), WaypointsList.SkillsPowerPort.TO_REINTRO), true), 
+      new TrajectoryConfig(4.0, 1.5).addConstraint(new CentripetalAccelerationConstraint(1.0)))
     );
-  }
-
-  @Override
-  public boolean isFinished() {
-    return true;
   }
 }

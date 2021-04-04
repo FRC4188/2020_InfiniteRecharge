@@ -19,12 +19,10 @@ import frc.robot.commands.skillschallenges.SkillsBounce;
 import frc.robot.commands.skillschallenges.GalacticSearch;
 import frc.robot.commands.skillschallenges.SkillsBarrel;
 import frc.robot.commands.skillschallenges.SkillsSlolam;
-import frc.robot.commands.skillschallenges.skillsaccuracy.BlueRoutine;
-import frc.robot.commands.skillschallenges.skillsaccuracy.GreenRoutine;
-import frc.robot.commands.skillschallenges.skillsaccuracy.RedRoutine;
+import frc.robot.commands.skillschallenges.skillsaccuracy.AutoVelocities;
 import frc.robot.commands.skillschallenges.skillsaccuracy.ReintroRoutine;
+import frc.robot.commands.skillschallenges.skillsaccuracy.ShootingRoutine;
 import frc.robot.commands.skillschallenges.skillsaccuracy.SkillsAutoFire;
-import frc.robot.commands.skillschallenges.skillsaccuracy.YellowRoutine;
 import frc.robot.commands.auto.TrenchEightBall;
 import frc.robot.commands.auto.TrenchSixBall;
 import frc.robot.commands.auto.WheelEightBall;
@@ -39,12 +37,12 @@ import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.ManualTurret;
 import frc.robot.commands.turret.TurretAngle;
+import frc.robot.commands.turret.TurretToAngle;
 import frc.robot.commands.turret.ZeroTurret;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.IntakeCamera;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
@@ -70,7 +68,7 @@ public class RobotContainer {
     private final Shooter shooter = new Shooter();
     private final Turret turret = new Turret();
     private final Climber climber = new Climber();
-    private final IntakeCamera camera = new IntakeCamera();
+    //private final IntakeCamera camera = new IntakeCamera();
     private final Intake intake = new Intake();
     private final Hood hood = new Hood();
     private final Limelight limelight = new Limelight();
@@ -127,7 +125,8 @@ public class RobotContainer {
                 drivetrain));
 
         turret.setDefaultCommand(new RunCommand(() -> turret.set(0.0), turret));
-        //shooter.setDefaultCommand(new RunCommand(() -> shooter.setVelocity(3000), shooter));
+        //shooter.setDefaultCommand(new RunCommand(() -> shooter.setVelocity(2000), shooter));
+        //magazine.setDefaultCommand(new RunCommand(() -> magazine.setVelocity(5000), magazine));
     }
 
     /**
@@ -140,30 +139,44 @@ public class RobotContainer {
         pilot.getDpadDownButtonObj().whenPressed(new LowerIntake(intake));
         pilot.getDpadUpButtonObj().whenPressed(new RaiseIntake(intake));
 
-        /*pilot.getYButtonObj().whileHeld(new RunCommand(() -> magazine.set(1.0), magazine));
-        pilot.getYButtonObj().whenReleased(new RunCommand(() -> magazine.set(0.0), magazine));
+        pilot.getLtButtonObj().whileActiveContinuous(new AutoVelocities(shooter, limelight, turret, hood, true));
+        pilot.getLtButtonObj().whenInactive(new AutoVelocities(shooter, limelight, turret, hood, false));
+
+        //pilot.getYButtonObj().whileHeld(new RunMagazine(magazine, 1.0));
+        pilot.getYButtonObj().whileHeld(new SkillsAutoFire(shooter, magazine, intake, limelight, turret, hood, true));
+        pilot.getYButtonObj().whenReleased(new SkillsAutoFire(shooter, magazine, intake, limelight, turret, hood, false));
+
+        pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -1.0));
+
+        pilot.getBButtonObj().whileHeld(new RunCommand(() -> intake.spin(-1.0, -0.75), intake));
+        pilot.getBButtonObj().whenReleased(new RunCommand(() -> intake.spin(0.0, 0.0), intake));
+
+        pilot.getAButtonObj().whileHeld(new RunCommand(() -> intake.spin(0.0, 0.75), intake));
+        pilot.getAButtonObj().whenReleased(new RunCommand(() -> intake.spin(0.0, 0.0), intake));
+
 
         //skills challenges
-        //pilot.getYButtonObj().whenPressed(new SkillsAutoFire(shooter, magazine, intake, limelight, turret, true));
-        //pilot.getYButtonObj().whenReleased(new SkillsAutoFire(shooter, magazine, intake, limelight, turret, false));
+        //pilot.getYButtonObj().whileHeld(new SkillsAutoFire(shooter, magazine, intake, limelight, turret, hood, true));
+        //pilot.getYButtonObj().whenReleased(new SkillsAutoFire(shooter, magazine, intake, limelight, turret, hood, false));
+
+        //pilot.getRbButtonObj().whenPressed(new ReintroRoutine(drivetrain, intake, magazine));
+
+        //pilot.getLbButtonObj().whenPressed(new ShootingRoutine(drivetrain));
 
         //pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
         //pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
 
-        pilot.getXButtonObj().whileHeld(new SkillsAutoFire(shooter, magazine, intake, limelight, turret, true));
-        pilot.getXButtonObj().whenReleased(new SkillsAutoFire(shooter, magazine, intake, limelight, turret, false));
+        //pilot.getBButtonObj().whenPressed(new AutoMagazine(magazine, intake, true, true));
+        //pilot.getBButtonObj().whenReleased(new AutoMagazine(magazine, intake, true, false));
 
-        pilot.getBButtonObj().whenPressed(new AutoMagazine(magazine, intake, true, true));
-        pilot.getBButtonObj().whenReleased(new AutoMagazine(magazine, intake, true, false));
+        //pilot.getAButtonObj().whileHeld(new AutoMagazine(magazine, intake, false, true));
+        //pilot.getAButtonObj().whenReleased(new AutoMagazine(magazine, intake, false, false));
 
-        pilot.getAButtonObj().whileHeld(new AutoMagazine(magazine, intake, false, true));
-        pilot.getAButtonObj().whenReleased(new AutoMagazine(magazine, intake, false, false));
-
-        pilot.getBackButtonObj()
+        /*pilot.getBackButtonObj()
                 .whenPressed(new EmergencyPower(drivetrain, shooter, turret, magazine, intake, wheelSpinner, true));
         pilot.getBackButtonObj()
                 .whenReleased(new EmergencyPower(drivetrain, shooter, turret, magazine, intake, wheelSpinner, false));
-
+*/
         pilot.getStartButtonObj().whenPressed(new KillAll());
 
         //skills challenges bindings
@@ -190,13 +203,13 @@ public class RobotContainer {
         copilot.getLtButtonObj().whileActiveContinuous(new AutoMagazine(magazine, intake, false, true));
         copilot.getLtButtonObj().whenInactive(new AutoMagazine(magazine, intake, false, false));*/
 
-        /*copilot.getRtButtonObj().whenActive(new RunCommand(() -> intake.spin(-1.0, -0.75), intake));
+        copilot.getRtButtonObj().whenActive(new RunCommand(() -> intake.spin(-1.0, -0.75), intake));
         copilot.getRtButtonObj().whenInactive(new RunCommand(() -> intake.spin(0.0, 0.0), intake));
 
         copilot.getLtButtonObj().whenActive(new RunCommand(() -> intake.spin(1.0, 0.75), intake));
-        copilot.getLtButtonObj().whenInactive(new RunCommand(() -> intake.spin(0.0, 0.0), intake));*/
+        copilot.getLtButtonObj().whenInactive(new RunCommand(() -> intake.spin(0.0, 0.0), intake));
 
-        /*copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, 0.2));
+        copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, 0.2));
         copilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));
         copilot.getDpadRightButtonObj().whileHeld(new ManualTurret(turret, -0.2));
         copilot.getDpadRightButtonObj().whenReleased(new ManualTurret(turret, 0));
@@ -212,7 +225,7 @@ public class RobotContainer {
         copilot.getLbButtonObj().whileHeld(new RunCommand(() -> intake.spin(1.0, 0.75), intake));
         copilot.getLbButtonObj().whenReleased(new RunCommand(() -> intake.spin(0.0, 0.0), intake));
 
-        copilot.getBackButtonObj().whenPressed(new ZeroTurret(turret));
+        copilot.getBackButtonObj().whenPressed(new ZeroTurret(turret));*/
 
         buttonBox.getButton1Obj().whenPressed(new TurretAngle(turret, 0));
         buttonBox.getButton3Obj().whenPressed(new TurretAngle(turret, 180));
@@ -222,8 +235,11 @@ public class RobotContainer {
         buttonBox.getButton6Obj().toggleWhenPressed(new SpinShooter(shooter, 3100));
         buttonBox.getButton7Obj().toggleWhenPressed(new SpinShooter(shooter, 3300));
 
-        SmartDashboard.putData("Set T Angle", new InstantCommand(() -> turret.setAngle(SmartDashboard.getNumber("Set Turret Angle", 0.0)), turret));*/
-
+        SmartDashboard.putData("Set T Angle", new InstantCommand(() -> turret.setAngle(SmartDashboard.getNumber("Set Turret Angle", 0.0)), turret));
+        SmartDashboard.putData("Set S Velocity", new InstantCommand(() -> shooter.setVelocity(SmartDashboard.getNumber("Set Shooter Velocity", 0.0)), shooter));
+        SmartDashboard.putData("Set M Voltage", new InstantCommand(() -> magazine.set(SmartDashboard.getNumber("Set Magazine Voltage", 0.0)), magazine));
+        SmartDashboard.putData("Set M Velocity", new InstantCommand(() -> magazine.setVelocity(SmartDashboard.getNumber("Set Magazine Velocity", 0.0)), magazine));
+        SmartDashboard.putData("Set M PIDs", new InstantCommand(() -> magazine.setPIDs(SmartDashboard.getNumber("Set Magazine P", 0.0), SmartDashboard.getNumber("Set Magazine D", 0.0)), magazine));
     }
 
     /**
@@ -246,7 +262,7 @@ public class RobotContainer {
         autoChooser.addOption("Skills Barrel" , new SkillsBarrel(drivetrain));
         autoChooser.addOption("Skills Bounce", new SkillsBounce(drivetrain));
         autoChooser.addOption("Skills Slolam", new SkillsSlolam(drivetrain));
-        autoChooser.addOption("Galatic Search", new GalacticSearch(drivetrain, intake, limelight));
+        //autoChooser.addOption("Galatic Search", new GalacticSearch(drivetrain, intake, limelight));
         
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }

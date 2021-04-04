@@ -49,7 +49,7 @@ public class Shooter extends SubsystemBase {
         setRampRate();
 
         Notifier shuffle = new Notifier(() -> updateShuffleboard());        
-        shuffle.startPeriodic(0.1);
+        shuffle.startPeriodic(0.25);
     }
 
     /**
@@ -64,15 +64,7 @@ public class Shooter extends SubsystemBase {
      * Writes values to Shuffleboard.
      */
     private void updateShuffleboard() {
-        if (getLeftVelocity() == getRightVelocity()) {
-            SmartDashboard.putBoolean("Shooter motors equal speeds", true);
             SmartDashboard.putNumber("Shooter RPM", getRightVelocity());
-        } else {
-            SmartDashboard.putBoolean("Shooter motors equal speeds", false);
-            SmartDashboard.putNumber("Left shooter rpm", getLeftVelocity());
-            SmartDashboard.putNumber("Right shooter rpm", getRightVelocity());
-        }
-        
     }
 
     /**

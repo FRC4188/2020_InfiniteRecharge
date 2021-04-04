@@ -96,10 +96,9 @@ public class Limelight extends SubsystemBase {
      */
     public Limelight() {
         limelightTable = NetworkTableInstance.getDefault().getTable("limelight-kyber");
-        searchTable = NetworkTableInstance.getDefault().getTable("myContoursReport");
         SmartDashboard.putNumber("Set shooter speed", 0.0);        
         Notifier shuffle = new Notifier(() -> updateShuffleboard());        
-        shuffle.startPeriodic(0.1);
+        shuffle.startPeriodic(0.4);
     }
 
     /**
@@ -113,8 +112,8 @@ public class Limelight extends SubsystemBase {
      * Writes values to Shuffleboard.
      */
     public void updateShuffleboard() {
-        SmartDashboard.putNumber("Path Selection", getPath());
-
+        //SmartDashboard.putNumber("Path Selection", getPath());
+        SmartDashboard.putNumber("Limelight Distance", getDistance());
     }
 
     /**
