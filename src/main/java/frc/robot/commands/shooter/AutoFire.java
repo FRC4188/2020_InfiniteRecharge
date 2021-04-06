@@ -18,6 +18,10 @@ public class AutoFire extends CommandBase {
     private boolean cont;
     private double THRESHOLD = 270.0;
 
+    private int midCounter = 0;
+    private int topCounter = 0;
+    private boolean ballInMagazine;
+
     public AutoFire(Shooter shooter, Magazine magazine, Intake intake, Limelight limelight, Turret turret, boolean cont) {
         addRequirements(shooter, magazine, intake, turret);
         this.shooter = shooter;
@@ -38,8 +42,9 @@ public class AutoFire extends CommandBase {
         boolean seen = limelight.hasTarget();
         boolean aimed = (limelight.getIsAimed() && seen);
         double diff = shooter.getLeftVelocity() - (limelight.formulaRpm());
-        boolean ready = (aimed && (Math.abs(diff) < THRESHOLD)) ? true : SmartDashboard.getBoolean("Set Ready", false);
+        boolean ready = (aimed && (Math.abs(diff) < THRESHOLD));
         boolean top = magazine.topBeamClear();
+        boolean mid = magazine.midBeamClear();
         boolean entry = magazine.entryBeamClear();
 
         if(seen) {
@@ -54,6 +59,20 @@ public class AutoFire extends CommandBase {
 
         if (ready || (top && entry)) intake.spin(-0.5, 1.0);
         else intake.spin(-0.5, -1.0);
+
+        if (!mid) midCounter++;
+        if (!top) topCounter++;
+      
+        if ((topCounter + 1) == midCounter) ballInMagazine = true;
+        else ballInMagazine = false;
+    
+        if ((topCounter == midCounter) && !ballInMagazine) {      //ball has been shot
+          magazine.set(0.75);
+          intake.spin(-1.0, -1.0);
+        } else {
+          magazine.set(0.0);
+          intake.spin(0.0, 0.0);
+        }
     }
 
     @Override
