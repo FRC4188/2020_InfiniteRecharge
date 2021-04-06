@@ -22,9 +22,9 @@ public class SkillsBounce extends CspSequentialCommandGroup {
       .addConstraint(new CentripetalAccelerationConstraint(1.0))),
       new FollowTrajectory(drivetrain, WaypointsList.SkillsBounce.TO_A6, new TrajectoryConfig(3.0, 1.0)
       .addConstraint(new CentripetalAccelerationConstraint(1.0)))
-      /*new FollowTrajectory(drivetrain, WaypointsList.SkillsBounce.TO_A9, drivetrain.getTrajectoryConfig()
+      /*new FollowTrajectory(drivetrain, WaypointsList.SkillsBounce.TO_A9, new TrajectoryCongif(3.0, 1.0)
       .addConstraint(new CentripetalAccelerationConstraint(1.0))),
-      new FollowTrajectory(drivetrain, WaypointsList.SkillsBounce.TO_FINISH, drivetrain.getTrajectoryConfig()
+      new FollowTrajectory(drivetrain, WaypointsList.SkillsBounce.TO_FINISH, new TrajectoryCongif(3.0, 1.0)
       .addConstraint(new CentripetalAccelerationConstraint(1.0)))*/
     );
   }

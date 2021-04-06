@@ -18,7 +18,7 @@ public class SkillsSlolam extends CspSequentialCommandGroup {
   /** Creates a new SkillsChallenge. */
   public SkillsSlolam(Drivetrain drivetrain) {
     addCommands(
-      new FollowTrajectory(drivetrain, WaypointsList.Slolam.PATH, new TrajectoryConfig(5, 2.0)
+      new FollowTrajectory(drivetrain, WaypointsList.Slolam.PATH, new TrajectoryConfig(4.0, 2.0)
       .addConstraint(new CentripetalAccelerationConstraint(1.5)))
 
     );
