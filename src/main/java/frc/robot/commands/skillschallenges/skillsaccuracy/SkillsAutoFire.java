@@ -55,12 +55,33 @@ public class SkillsAutoFire extends CommandBase {
     boolean topIsClear = magazine.topBeamClear();
     boolean entryIsClear = magazine.entryBeamClear();
 
-    shooter.setVelocity(3000);
-    setVelocity = 3000;
+    //comment out for powerport
+    filter = new MedianFilter(3);
+    double filteredDistance = filter.calculate(limelight.getDistance());
+
+    boolean inGreen = (filteredDistance < 6.7 || filteredDistance > 24.0);
+    boolean inYellow = (filteredDistance > 8 && filteredDistance < 9.5);
+    boolean inBlue = (filteredDistance > 11.8 && filteredDistance < 12.9);
+    boolean inRed = (filteredDistance > 15.1 && filteredDistance < 16.5);
 
     if (hasTarget) {
-      turret.track(limelight.getHorizontalAngle() - 0.2);
+      //comment out for powerport
+      if (inRed) turret.track(limelight.getHorizontalAngle() - 1.0);
+      else if (inYellow) turret.track(limelight.getHorizontalAngle() - 0.5);
+      else turret.track(limelight.getHorizontalAngle());
     } else turret.set(0);    
+
+    //comment out for powerport
+    if (inGreen) {
+      hood.raise();
+      shooter.setVelocity(2000);
+    } else if (inYellow) {
+      shooter.setVelocity(2950);
+    } else if (inBlue) {
+      shooter.setVelocity(3100);
+    } else if (inRed) {
+      shooter.setVelocity(3350);
+    }
 
     if (isReady) magazine.set(1.0);
     else magazine.set(0.0);
@@ -75,8 +96,9 @@ public class SkillsAutoFire extends CommandBase {
     if(!interrupted) {
       magazine.set(0);
       intake.spin(0, 0);
-      shooter.setVelocity(3000);
+      shooter.setVelocity(2000);
       turret.set(0.0);
+      hood.lower(); //comment out for power port
     }
   }
 

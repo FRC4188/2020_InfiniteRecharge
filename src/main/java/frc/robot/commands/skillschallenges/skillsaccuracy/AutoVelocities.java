@@ -49,10 +49,9 @@ public class AutoVelocities extends CommandBase {
     boolean inRed = (filteredDistance > 15.1 && filteredDistance < 16.5);
 
     if (hasTarget) {
-      turret.track(limelight.getHorizontalAngle());
       if (inRed) turret.track(limelight.getHorizontalAngle() - 1.0);
       else if (inYellow) turret.track(limelight.getHorizontalAngle() - 0.5);
-      //else if (inBlue) turret.track(limelight.getHorizontalAngle() - 0.3);
+      else turret.track(limelight.getHorizontalAngle());
     } else turret.set(0);    
 
     if (inGreen) {
