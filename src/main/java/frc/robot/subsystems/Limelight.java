@@ -99,7 +99,7 @@ public class Limelight extends SubsystemBase {
         searchTable = NetworkTableInstance.getDefault().getTable("myContoursReport");
         SmartDashboard.putNumber("Set shooter speed", 0.0);        
         Notifier shuffle = new Notifier(() -> updateShuffleboard());        
-        shuffle.startPeriodic(0.1);
+        //shuffle.startPeriodic(0.1);
     }
 
     /**

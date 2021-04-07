@@ -26,8 +26,8 @@ public class Robot extends TimedRobot {
             e.printStackTrace();
         }
 
-        IntakeCamera intcam = new IntakeCamera();
-        intcam.start();
+        //IntakeCamera intcam = new IntakeCamera();
+        //intcam.start();
     }
 
     @Override

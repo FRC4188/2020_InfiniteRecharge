@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstr
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.WaypointsList;
 
 /**
  * Class encapsulating drivetrain function.
@@ -103,9 +104,10 @@ public class Drivetrain extends SubsystemBase {
 
         // initialize odometry
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getGyroAngle()));
+        odometry.resetPosition(WaypointsList.SkillsBarrel.INIT_POSE, new Rotation2d());
 
         Notifier shuffle = new Notifier(() -> updateShuffleboard());
-        shuffle.startPeriodic(0.1);
+        //shuffle.startPeriodic(0.1);
     }
 
     /**

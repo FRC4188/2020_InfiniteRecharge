@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.utils.CubicWaypoints;
 import frc.robot.utils.Waypoints;
 
 public class FollowTrajectory extends RamseteCommand {
@@ -31,6 +32,18 @@ public class FollowTrajectory extends RamseteCommand {
   public FollowTrajectory(Drivetrain drivetrain, Waypoints waypoints, TrajectoryConfig config) {
     this(drivetrain,
         TrajectoryGenerator.generateTrajectory(waypoints.getPoses(), config.setReversed(waypoints.isReversed())));
+  }
+
+  public FollowTrajectory(Drivetrain drivetrain, CubicWaypoints waypoints) {
+    this(drivetrain,
+    TrajectoryGenerator.generateTrajectory(waypoints.getStart(), waypoints.getPoses(), waypoints.getStart(),
+    drivetrain.getTrajectoryConfig().setReversed(waypoints.isReversed())));
+  }
+
+  public FollowTrajectory(Drivetrain drivetrain, CubicWaypoints waypoints, TrajectoryConfig config) {
+    this(drivetrain,
+    TrajectoryGenerator.generateTrajectory(waypoints.getStart(), waypoints.getPoses(), waypoints.getStart(),
+    config.setReversed(waypoints.isReversed())));
   }
 
   public FollowTrajectory(Drivetrain drivetrain, String directory) throws IOException {

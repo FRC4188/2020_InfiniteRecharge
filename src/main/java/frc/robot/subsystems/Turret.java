@@ -50,7 +50,7 @@ public class Turret extends SubsystemBase {
         setRampRate();
         turretMotor.setIdleMode(IdleMode.kBrake);
         Notifier shuffle = new Notifier(() -> updateShuffleboard());        
-        shuffle.startPeriodic(0.1);
+        //shuffle.startPeriodic(0.1);
 
         SmartDashboard.putNumber("Set Turret Angle", 0.0);
     }

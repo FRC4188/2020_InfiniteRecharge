@@ -16,7 +16,6 @@ import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.auto.EightBall;
 import frc.robot.commands.skillschallenges.SkillsBounce;
-import frc.robot.commands.skillschallenges.GalacticSearch;
 import frc.robot.commands.skillschallenges.SkillsBarrel;
 import frc.robot.commands.skillschallenges.SkillsSlolam;
 import frc.robot.commands.skillschallenges.skillsaccuracy.BlueRoutine;
@@ -70,7 +69,7 @@ public class RobotContainer {
     private final Shooter shooter = new Shooter();
     private final Turret turret = new Turret();
     private final Climber climber = new Climber();
-    private final IntakeCamera camera = new IntakeCamera();
+    //private final IntakeCamera camera = new IntakeCamera();
     private final Intake intake = new Intake();
     private final Hood hood = new Hood();
     private final Limelight limelight = new Limelight();
@@ -246,7 +245,6 @@ public class RobotContainer {
         autoChooser.addOption("Skills Barrel" , new SkillsBarrel(drivetrain));
         autoChooser.addOption("Skills Bounce", new SkillsBounce(drivetrain));
         autoChooser.addOption("Skills Slolam", new SkillsSlolam(drivetrain));
-        autoChooser.addOption("Galatic Search", new GalacticSearch(drivetrain, intake, limelight));
         
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }

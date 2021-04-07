@@ -58,7 +58,7 @@ public class Magazine extends SubsystemBase {
         setRampRate();
 
         Notifier shuffle = new Notifier(() -> updateShuffleboard());
-        shuffle.startPeriodic(0.1);
+        //shuffle.startPeriodic(0.1);
     }
 
     /**

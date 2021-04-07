@@ -2,6 +2,8 @@ package frc.robot.utils;
 
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+
 import java.util.List;
 
 /**
@@ -225,8 +227,23 @@ public class WaypointsList {
                 new Pose2d(8.6, 1.566251, Rotation2d.fromDegrees(85.318856)),
                 new Pose2d(7.673829, 2.3, Rotation2d.fromDegrees(170.871806)),
                 new Pose2d(4.0, 2.3, new Rotation2d(Math.PI)),
-                new Pose2d(1.3, 2.3, new Rotation2d(Math.PI))
+                new Pose2d(1.4, 2.3, new Rotation2d(Math.PI))
             ), false);
+
+        public static final CubicWaypoints CUBIC_PATH = new CubicWaypoints(
+            INIT_POSE, 
+            List.of(
+                new Translation2d(3.97, 1.94),
+                new Translation2d(4.61, 0.68),
+                new Translation2d(3.2, 1.07),
+                new Translation2d(4.12, 2.29),
+                new Translation2d(6.1, 1.82),
+                new Translation2d(7.19, 3.58),
+                new Translation2d(5.35, 2.75),
+                new Translation2d(7.75, 0.85),
+                new Translation2d(8.64, 1.21),
+                new Translation2d(6.55, 2.05)
+            ), new Pose2d(1.0, 2.0, new Rotation2d(Math.PI)), false);
     }
     public static class SkillsBounce {
         public static final Pose2d INIT_POSE = new Pose2d(1.239757, 2.528515, new Rotation2d());
