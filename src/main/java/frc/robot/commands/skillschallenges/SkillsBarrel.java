@@ -19,8 +19,8 @@ public class SkillsBarrel extends CspSequentialCommandGroup {
   public SkillsBarrel(Drivetrain drivetrain) {
     addCommands(
       new FollowTrajectory(drivetrain, WaypointsList.SkillsBarrel.FIRST_PATH, new TrajectoryConfig(.0, 2.0)
-      .addConstraint(new CentripetalAccelerationConstraint(2.0)))
-    );
+      //.addConstraint(new CentripetalAccelerationConstraint(2.0)))
+    ));
   }
 //8 2.5 3.5
   @Override

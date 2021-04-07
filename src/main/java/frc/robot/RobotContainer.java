@@ -29,6 +29,7 @@ import frc.robot.commands.auto.WheelEightBall;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.intake.RaiseIntake;
+import frc.robot.commands.intake.SpinJustIntake;
 import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.magazine.RunMagazine;
@@ -121,13 +122,12 @@ public class RobotContainer {
      */
     private void setDefaultCommands() {
         drivetrain.setDefaultCommand(new RunCommand(
-                () -> drivetrain.arcade(pilot.getY(Hand.kLeft, CspController.Scaling.CUBED), pilot.getX(Hand.kRight, CspController.Scaling.SQUARED), pilot.getBumper(Hand.kLeft)),
+                () -> drivetrain.arcade(pilot.getY(Hand.kLeft, CspController.Scaling.LINEAR), pilot.getX(Hand.kRight, CspController.Scaling.SQUARED), pilot.getBumper(Hand.kLeft)),
                 drivetrain));
 
         turret.setDefaultCommand(new RunCommand(() -> turret.set(0.0), turret));
-        //shooter.setDefaultCommand(new RunCommand(() -> shooter.setVelocity(2000), shooter));
-        //magazine.setDefaultCommand(new RunCommand(() -> magazine.setVelocity(5000), magazine));
-    }
+        shooter.setDefaultCommand(new RunCommand(() -> shooter.setVelocity(3100), shooter));
+       }
 
     /**
      * Binds commands to buttons on controllers.
@@ -139,20 +139,34 @@ public class RobotContainer {
         pilot.getDpadDownButtonObj().whenPressed(new LowerIntake(intake));
         pilot.getDpadUpButtonObj().whenPressed(new RaiseIntake(intake));
 
-        pilot.getLtButtonObj().whileActiveContinuous(new AutoVelocities(shooter, limelight, turret, hood, true));
-        pilot.getLtButtonObj().whenInactive(new AutoVelocities(shooter, limelight, turret, hood, false));
+        //pilot.getLtButtonObj().whileActiveContinuous(new AutoVelocities(shooter, limelight, turret, hood, true));
+        //pilot.getLtButtonObj().whenInactive(new AutoVelocities(shooter, limelight, turret, hood, false));
 
-        //pilot.getYButtonObj().whileHeld(new RunMagazine(magazine, 1.0));
-        pilot.getYButtonObj().whileHeld(new SkillsAutoFire(shooter, magazine, intake, limelight, turret, hood, true));
+        pilot.getLtButtonObj().whileActiveContinuous(new AutoAim(turret, limelight, -1.3, true));
+        pilot.getLtButtonObj().whenInactive(new AutoAim(turret, limelight, -1.3, false));
+
+    
+        pilot.getYButtonObj().whenPressed(new SkillsAutoFire(shooter, magazine, intake, limelight, turret, hood, true));
         pilot.getYButtonObj().whenReleased(new SkillsAutoFire(shooter, magazine, intake, limelight, turret, hood, false));
 
+        pilot.getYButtonObj().whenPressed(new RunMagazine(magazine, 1.0));
         pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -1.0));
 
-        pilot.getBButtonObj().whileHeld(new RunCommand(() -> intake.spin(-1.0, -0.75), intake));
+        pilot.getBButtonObj().whileHeld(new RunCommand(() -> intake.spin(0.0, -1.0), intake));
         pilot.getBButtonObj().whenReleased(new RunCommand(() -> intake.spin(0.0, 0.0), intake));
 
-        pilot.getAButtonObj().whileHeld(new RunCommand(() -> intake.spin(0.0, 0.75), intake));
+        pilot.getAButtonObj().whileHeld(new RunCommand(() -> intake.spin(0.0, 1.0), intake));
         pilot.getAButtonObj().whenReleased(new RunCommand(() -> intake.spin(0.0, 0.0), intake));
+
+        pilot.getRtButtonObj().whileActiveContinuous(new RunCommand(() -> intake.spinIntake(-1.0), intake));
+        pilot.getRtButtonObj().whenInactive(new RunCommand(() -> intake.spinIntake(0.0), intake));
+
+
+        copilot.getLbButtonObj().whileHeld(new RunCommand(() -> intake.spinIntake(-1.0), intake));
+        copilot.getLbButtonObj().whenReleased(new RunCommand(() -> intake.spinIntake(-1.0), intake));
+
+        copilot.getLbButtonObj().whileHeld(new RunCommand(() -> intake.spinIntake(1.0), intake));
+        copilot.getLbButtonObj().whenReleased(new RunCommand(() -> intake.spinIntake(1.0), intake));
 
 
         //skills challenges
@@ -237,9 +251,9 @@ public class RobotContainer {
 
         SmartDashboard.putData("Set T Angle", new InstantCommand(() -> turret.setAngle(SmartDashboard.getNumber("Set Turret Angle", 0.0)), turret));
         SmartDashboard.putData("Set S Velocity", new InstantCommand(() -> shooter.setVelocity(SmartDashboard.getNumber("Set Shooter Velocity", 0.0)), shooter));
-        SmartDashboard.putData("Set M Voltage", new InstantCommand(() -> magazine.set(SmartDashboard.getNumber("Set Magazine Voltage", 0.0)), magazine));
-        SmartDashboard.putData("Set M Velocity", new InstantCommand(() -> magazine.setVelocity(SmartDashboard.getNumber("Set Magazine Velocity", 0.0)), magazine));
-        SmartDashboard.putData("Set M PIDs", new InstantCommand(() -> magazine.setPIDs(SmartDashboard.getNumber("Set Magazine P", 0.0), SmartDashboard.getNumber("Set Magazine D", 0.0)), magazine));
+        //SmartDashboard.putData("Set M Voltage", new InstantCommand(() -> magazine.set(SmartDashboard.getNumber("Set Magazine Voltage", 0.0)), magazine));
+        //SmartDashboard.putData("Set M Velocity", new InstantCommand(() -> magazine.setVelocity(SmartDashboard.getNumber("Set Magazine Velocity", 0.0)), magazine));
+        //SmartDashboard.putData("Set M PIDs", new InstantCommand(() -> magazine.setPIDs(SmartDashboard.getNumber("Set Magazine P", 0.0), SmartDashboard.getNumber("Set Magazine D", 0.0)), magazine));
     }
 
     /**
@@ -259,12 +273,12 @@ public class RobotContainer {
         autoChooser.addOption("Wheel 8-Ball", new WheelEightBall(drivetrain, shooter, turret, limelight, intake, magazine)
         );
 
-        autoChooser.addOption("Skills Barrel" , new SkillsBarrel(drivetrain));
+        /*autoChooser.addOption("Skills Barrel" , new SkillsBarrel(drivetrain));
         autoChooser.addOption("Skills Bounce", new SkillsBounce(drivetrain));
         autoChooser.addOption("Skills Slolam", new SkillsSlolam(drivetrain));
         //autoChooser.addOption("Galatic Search", new GalacticSearch(drivetrain, intake, limelight));
         
-        SmartDashboard.putData("Auto Chooser", autoChooser);
+        SmartDashboard.putData("Auto Chooser", autoChooser);*/
     }
 
     /**
