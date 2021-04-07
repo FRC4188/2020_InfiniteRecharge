@@ -10,29 +10,21 @@ import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
 import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstraint;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.FollowTrajectory;
-import frc.robot.commands.shooter.AutoFireQuantity;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Magazine;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Turret;
 import frc.robot.utils.Waypoints;
 import frc.robot.utils.WaypointsList;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class BlueRoutine extends SequentialCommandGroup {
-  /** Creates a new ToBlueRoutine. */
-  public BlueRoutine(Drivetrain drivetrain, Intake intake, Magazine magazine, Limelight limelight, Shooter shooter, Turret turret) {
+public class ShootingRoutine extends SequentialCommandGroup {
+  /** Creates a new ShootingRoutine. */
+  public ShootingRoutine(Drivetrain drivetrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    new FollowTrajectory(drivetrain, new Waypoints(List.of(drivetrain.getPose(), WaypointsList.SkillsAccuracy.TO_BLUE), false), 
-    new TrajectoryConfig(3.0, 1.0).addConstraint(new CentripetalAccelerationConstraint(1.0))),
-
-    new SkillsAutoFireQ(shooter, magazine, intake, limelight, turret, 3)
+      new FollowTrajectory(drivetrain, new Waypoints(List.of(WaypointsList.SkillsPowerPort.TO_REINTRO, WaypointsList.SkillsPowerPort.TO_SHOOT), false), 
+        new TrajectoryConfig(4.0, 1.5).addConstraint(new CentripetalAccelerationConstraint(1.0)))
     );
   }
 }

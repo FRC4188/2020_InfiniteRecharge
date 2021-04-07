@@ -299,12 +299,18 @@ public class WaypointsList {
     }
 
     public static final class SkillsAccuracy {
-        public static final Pose2d INIT_POSE = new Pose2d(0, 0, new Rotation2d()); //point in green zone against the wall
-        public static final Pose2d TO_REINTRO = new Pose2d(-6.83, 0.0, new Rotation2d());
+        public static final Pose2d INIT_POSE = new Pose2d(0, 0, new Rotation2d()); //point in green zone second tape 
+        public static final Pose2d TO_REINTRO = new Pose2d(-6.04, 0.0, new Rotation2d());
         public static final Pose2d TO_YELLOW = new Pose2d(-2.63, 0, new Rotation2d());
         public static final Pose2d TO_BLUE = new Pose2d(-3.96, 0.27, new Rotation2d());
         public static final Pose2d TO_RED = new Pose2d(-5.39, 0.45, new Rotation2d());
 
+    }
+
+    public static final class SkillsPowerPort {
+        public static final Pose2d INIT_POSE = new Pose2d(0, 0, new Rotation2d()); //point in shooting zone first tape
+        public static final Pose2d TO_SHOOT = new Pose2d(0.0, 0, new Rotation2d());
+        public static final Pose2d TO_REINTRO = new Pose2d(-3.61, 0, new Rotation2d());
     }
 
     public static final class GalacticSearch {

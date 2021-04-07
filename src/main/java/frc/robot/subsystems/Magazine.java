@@ -9,7 +9,11 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.controller.ArmFeedforward;
+import edu.wpi.first.wpilibj.controller.ProfiledPIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -20,7 +24,8 @@ public class Magazine extends SubsystemBase {
     // device initialization
     private final CANSparkMax magMotor = new CANSparkMax(11, MotorType.kBrushless);
     private final CANEncoder magEncoder = new CANEncoder(magMotor);
-    private final CANPIDController pid = new CANPIDController(magMotor);
+    private final ProfiledPIDController magPID = new ProfiledPIDController(0.0003, 0.0, 0.000002, new Constraints(MAX_VELOCITY, MAX_ACCELERATION));
+    private final SimpleMotorFeedforward magFF = new SimpleMotorFeedforward(kS, kV);
 
     private final DigitalInput topBeamA = new DigitalInput(0);
     private final DigitalInput topBeamB = new DigitalInput(1);
@@ -43,6 +48,8 @@ public class Magazine extends SubsystemBase {
     private static final double kD = 0;
     private static final double kF = 1.0 / MAX_VELOCITY;
     private static final double kI_ZONE = 0;
+    private static final double kS = 0.06;
+    private static final double kV = 1 / 4920;
     private static final double RAMP_RATE = 0.3; // seconds
 
     private boolean manual;
@@ -56,9 +63,13 @@ public class Magazine extends SubsystemBase {
         magMotor.setInverted(true);
         magMotor.setIdleMode(IdleMode.kBrake);
         setRampRate();
+        SmartDashboard.putNumber("Set Magazine Voltage", 0.0);
+        SmartDashboard.putNumber("Set Magazine Velocity", 0.0);
+        SmartDashboard.putNumber("Set Magazine P", 0.0); 
+        SmartDashboard.putNumber("Set Magazine D", 0.0);
 
         Notifier shuffle = new Notifier(() -> updateShuffleboard());
-        //shuffle.startPeriodic(0.1);
+        shuffle.startPeriodic(0.1);
     }
 
     /**
@@ -68,41 +79,19 @@ public class Magazine extends SubsystemBase {
     public void periodic() {
         //magMotor.setInverted(true);
         //updateShuffleboard();
-    }
-
-    public void configController() {
-        pid.setP(kP);
-        pid.setI(kI);
-        pid.setD(kD);
-        pid.setFF(kF);
-        pid.setIZone(kI_ZONE);
-        pid.setOutputRange(-1.0, 1.0);
-        pid.setSmartMotionMaxVelocity(MAX_VELOCITY, 0);
-        pid.setSmartMotionMaxAccel(MAX_ACCELERATION, 0);
-    }
-
-    public void testPIDConfig( double P, double I, double D) {
-        pid.setP(P);
-        pid.setI(I);
-        pid.setD(D);
+        SmartDashboard.putNumber("Magazine Velocity", getVelocity());
     }
 
     /**
      * Writes values to Shuffleboard.
      */
     public void updateShuffleboard() {
-        SmartDashboard.putNumber("Magazine velocity", magEncoder.getVelocity());
-        SmartDashboard.putNumber("M24 temp", magMotor.getMotorTemperature());
-        SmartDashboard.putBoolean("Top", (topBeamA.get() && topBeamB.get()));
-        SmartDashboard.putBoolean("Mid", (midBeamA.get() && midBeamB.get()));
         SmartDashboard.putBoolean("Chn. 0", topBeamA.get());
         SmartDashboard.putBoolean("Chn. 1", topBeamB.get());
         SmartDashboard.putBoolean("Chn. 2", entryBeamA.get());
         SmartDashboard.putBoolean("Chn. 3", midBeamA.get());
         SmartDashboard.putBoolean("Chn. 4", midBeamB.get());
         SmartDashboard.putBoolean("Chn. 5", entryBeamB.get());
-        SmartDashboard.putBoolean("Magazine manual", getManual());
-        SmartDashboard.putNumber("Magazine Position", magEncoder.getPosition()/TICKS_PER_INCH);
     }
 
     /**
@@ -112,10 +101,13 @@ public class Magazine extends SubsystemBase {
         magMotor.set(percent * reduction);
     }
 
-    public void setPosition(double position) {
-        pid.setReference(position, ControlType.kSmartMotion);
+    public void setVelocity(double velocity) {
+        magMotor.set(magPID.calculate(magEncoder.getVelocity(), velocity) + magFF.calculate(velocity));
     }
 
+    public void setPIDs(double kP, double kD) {
+        magPID.setPID(kP, 0, kD);
+    }
     /**
      * Configures magazine motor ramp rates.
      */
@@ -160,6 +152,6 @@ public class Magazine extends SubsystemBase {
     }
 
     public double getVelocity() {
-        return magEncoder.getVelocity() * TICKS_PER_INCH / 60;
+        return magEncoder.getVelocity();
     }
 }

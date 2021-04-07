@@ -5,14 +5,13 @@ import java.io.IOException;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.IntakeCamera;
 
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
  * documentation.
  */
-public class Robot extends TimedRobot {
+public class Robot extends TimedBase {
 
     private Command autonomousCommand;
     private RobotContainer robotContainer;
@@ -25,9 +24,6 @@ public class Robot extends TimedRobot {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-        //IntakeCamera intcam = new IntakeCamera();
-        //intcam.start();
     }
 
     @Override

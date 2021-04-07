@@ -122,14 +122,14 @@ public class Drivetrain extends SubsystemBase {
     /**
      * Writes values to Shuffleboard.
      */
-    private void updateShuffleboard() {
+    private void updateShuffleboard() {/*
         SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
         SmartDashboard.putString("Odometry", getPose().toString());
         SmartDashboard.putData("Calibrate Gyro", new InstantCommand(gyro::calibrate));
         SmartDashboard.putData("Zero Gyro", new InstantCommand(gyro::reset));
         SmartDashboard.putNumber("Left Velocity ", getLeftVelocity());
         SmartDashboard.putNumber("Right Velocity", getRightVelocity());
-        SmartDashboard.putNumber("Average Velocity", (getRightVelocity() + getLeftVelocity()) / 2);
+        SmartDashboard.putNumber("Average Velocity", (getRightVelocity() + getLeftVelocity()) / 2);*/
     }
 
     /**
