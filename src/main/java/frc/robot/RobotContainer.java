@@ -15,14 +15,6 @@ import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.auto.EightBall;
-import frc.robot.commands.skillschallenges.SkillsBounce;
-import frc.robot.commands.skillschallenges.SkillsBarrel;
-import frc.robot.commands.skillschallenges.SkillsSlolam;
-import frc.robot.commands.skillschallenges.skillsaccuracy.BlueRoutine;
-import frc.robot.commands.skillschallenges.skillsaccuracy.GreenRoutine;
-import frc.robot.commands.skillschallenges.skillsaccuracy.RedRoutine;
-import frc.robot.commands.skillschallenges.skillsaccuracy.ReintroRoutine;
-import frc.robot.commands.skillschallenges.skillsaccuracy.YellowRoutine;
 import frc.robot.commands.auto.TrenchEightBall;
 import frc.robot.commands.auto.TrenchSixBall;
 import frc.robot.commands.auto.WheelEightBall;
@@ -204,18 +196,10 @@ public class RobotContainer {
     private void putChooser() throws IOException {
         autoChooser.addOption("Do Nothing", null);
         
-        autoChooser.addOption("Left Trench 6-Ball", new TrenchSixBall(drivetrain, turret, shooter, magazine, intake, limelight)
-        );
-        autoChooser.addOption("Left Trench 8-Ball (A)", new TrenchEightBall(drivetrain, turret, shooter, magazine, intake, limelight)
-        );
-        autoChooser.addOption("Left Trench 8-Ball (B)", new EightBall(drivetrain, shooter, turret, magazine, intake, limelight)
-        );
-        autoChooser.addOption("Wheel 8-Ball", new WheelEightBall(drivetrain, shooter, turret, limelight, intake, magazine)
-        );
-
-        autoChooser.addOption("Skills Obstacle" , new SkillsBarrel(drivetrain));
-        autoChooser.addOption("Skills Bounce", new SkillsBounce(drivetrain));
-        autoChooser.addOption("Skills Slolam", new SkillsSlolam(drivetrain));
+        autoChooser.addOption("Left Trench 6-Ball", new TrenchSixBall(drivetrain, turret, shooter, magazine, intake, limelight));
+        autoChooser.addOption("Left Trench 8-Ball (A)", new TrenchEightBall(drivetrain, turret, shooter, magazine, intake, limelight));
+        autoChooser.addOption("Left Trench 8-Ball (B)", new EightBall(drivetrain, shooter, turret, magazine, intake, limelight));
+        autoChooser.addOption("Wheel 8-Ball", new WheelEightBall(drivetrain, shooter, turret, limelight, intake, magazine));
         
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }

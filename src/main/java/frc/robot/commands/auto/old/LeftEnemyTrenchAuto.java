@@ -15,7 +15,7 @@ import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.turret.AutoAim;
-import frc.robot.commands.turret.TurretAngle;
+import frc.robot.commands.turret.TurretToAngle;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
@@ -43,7 +43,7 @@ public class LeftEnemyTrenchAuto extends CspSequentialCommandGroup {
                 new ParallelDeadlineGroup(
                     new FollowTrajectory(drivetrain, WaypointsList.LEFT_TO_ENEMY_TRENCH),
                     new AutoMagazine(magazine, intake, true, true),
-                    new TurretAngle(turret, 240)
+                    new TurretToAngle(turret, 240)
                 ),
 
                 // Drives to a shooting position and revs up shooter to default rpm.

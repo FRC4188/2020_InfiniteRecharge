@@ -6,7 +6,7 @@ import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.turret.AutoAim;
-import frc.robot.commands.turret.TurretAngle;
+import frc.robot.commands.turret.TurretToAngle;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
@@ -31,7 +31,7 @@ public class MidDriveTowardAuto extends CspSequentialCommandGroup {
                 // Turns turret around and revs up shooter to default rpm.
                 new ParallelRaceGroup(
                     new SpinShooter(shooter, 3000),
-                    new TurretAngle(turret, 180)
+                    new TurretToAngle(turret, 180)
                 ),
 
                 // Auto aims toward the port and revs up shooter to 6000 rpm.

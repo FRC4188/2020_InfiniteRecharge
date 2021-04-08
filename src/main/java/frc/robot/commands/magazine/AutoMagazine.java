@@ -82,6 +82,16 @@ public class AutoMagazine extends CommandBase {
             intake.spin(1.0, 1.0);
             magazine.set(-0.5);
         }
+
+        if (forw) {
+            if (top && mid) intake.spinIndexer(-1.0);
+            else intake.spin(0.0, 0.0);
+
+            if (!top) magazine.set(0.75);
+            else magazine.set(0.0);
+            
+
+        }
     }
 
     @Override

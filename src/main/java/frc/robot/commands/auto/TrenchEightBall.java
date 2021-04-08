@@ -10,7 +10,7 @@ import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.shooter.AutoFireQuantity;
 import frc.robot.commands.shooter.SpinShooter;
-import frc.robot.commands.turret.TurretAngle;
+import frc.robot.commands.turret.TurretToAngle;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
@@ -25,7 +25,7 @@ public class TrenchEightBall extends CspSequentialCommandGroup {
     public TrenchEightBall (Drivetrain drivetrain, Turret turret, Shooter shooter, Magazine magazine, Intake intake, Limelight limelight) {
         addCommands(
             new ParallelDeadlineGroup(
-                new TurretAngle(turret, 180), 
+                new TurretToAngle(turret, 180), 
                 new SpinShooter(shooter, 4000),
                 new LowerIntake(intake)),
 
@@ -41,7 +41,7 @@ public class TrenchEightBall extends CspSequentialCommandGroup {
                 new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.INTO_RENDEVOUS,
                 new TrajectoryConfig(1.5, 1.0)
                 .addConstraint(new CentripetalAccelerationConstraint(1.0))),
-                new TurretAngle(turret, 0),
+                new TurretToAngle(turret, 0),
                 new SpinShooter(shooter, 3000)),
             
             new ParallelDeadlineGroup(

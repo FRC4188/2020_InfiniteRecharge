@@ -27,7 +27,8 @@ public class Turret extends SubsystemBase {
     // device initialization
     private final CANSparkMax turretMotor = new CANSparkMax(23, MotorType.kBrushless);
     private final CANEncoder turretEncoder = new CANEncoder(turretMotor);
-    private final ProfiledPIDController pid = new ProfiledPIDController(0.024, 0.003,0.01, new Constraints(MAX_VELOCITY, MAX_ACCELERATION));
+    private final ProfiledPIDController aimingPID = new ProfiledPIDController(0.024, 0.003,0.01, new Constraints(MAX_VELOCITY, MAX_ACCELERATION));  
+    private final ProfiledPIDController anglePID = new ProfiledPIDController(0.0, 0.0, 0.0, new Constraints(MAX_VELOCITY, MAX_ACCELERATION));
 
     // constants
     private static final double MAX_VELOCITY = 1.5; // rpm
@@ -77,7 +78,7 @@ public class Turret extends SubsystemBase {
     }
 
     private void updatePID() {
-        pid.setPID(
+        aimingPID.setPID(
         SmartDashboard.getNumber("Turret P", 0.0), 
         SmartDashboard.getNumber("Turret I", 0.0), 
         SmartDashboard.getNumber("Turret D", 0.0)
@@ -103,11 +104,11 @@ public class Turret extends SubsystemBase {
      * Turns turret to angle in degrees.
      */
     public void setAngle(double angle) {
-        set(pid.calculate(getPosition(), angle));
+        set(anglePID.calculate(getPosition(), angle));
     }
 
     public void trackTarget(double measure) {
-        set(pid.calculate(measure, 0));
+        set(aimingPID.calculate(measure, 0));
     }
 
     /**
