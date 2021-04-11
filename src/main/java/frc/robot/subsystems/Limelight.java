@@ -89,10 +89,9 @@ public class Limelight extends SubsystemBase {
      * Constructor for Limelight.
      */
     public Limelight() {
-        limelightTable = NetworkTableInstance.getDefault().getTable("limelight-csp");
-        SmartDashboard.putNumber("Set shooter speed", 0.0);        
+        limelightTable = NetworkTableInstance.getDefault().getTable("limelight-kyber");    
         Notifier shuffle = new Notifier(() -> updateShuffleboard());        
-        shuffle.startPeriodic(0.1);
+        shuffle.startPeriodic(0.2);
     }
 
     /**
@@ -107,8 +106,9 @@ public class Limelight extends SubsystemBase {
      */
     public void updateShuffleboard() {
         SmartDashboard.putNumber("Formula RPM", formulaRpm());
-        SmartDashboard.putNumber("Limelight distance reading", getDistance());
-        SmartDashboard.putNumber("Vertical Angle", getVerticalAngle());
+        SmartDashboard.putNumber("Distance", getDistance());
+        //SmartDashboard.putNumber("Vertical Angle", getVerticalAngle());
+        //SmartDashboard.putNumber("Horizontal Angle", getHorizontalAngle());
         SmartDashboard.putBoolean("Is Aimed", getIsAimed());
     }
 
@@ -156,8 +156,7 @@ public class Limelight extends SubsystemBase {
      * Returns the horizontal angle from the center of the camera to the target.
      */
     public double getHorizontalAngle() {
-        adjust = SmartDashboard.getNumber("Turret Aim adjust", -2.0);
-        return limelightTable.getEntry("tx").getDouble(-adjust);
+        return limelightTable.getEntry("tx").getDouble(0.0);
     }
 
     public double getSkew() {
@@ -194,13 +193,9 @@ public class Limelight extends SubsystemBase {
      */
     public double formulaRpm() {        
         //setRPM = (Math.pow(1.28449e-5, (getDistance() - 8.69353))) + (2.97767 * Math.pow((getDistance()+4.28663), 2)) + (-124.827 * (getDistance()-32.6752)) - 9.2825e7;
-        setRPM = (Math.pow(2.50852, ((0.135494 * getDistance()) + 3.20058)) + (7.7212e15 * Math.pow(getDistance(), -13.0483)) + 3209.97);
-        
-        if (setRPM > 6000) {
-            setRPM = 6000;
-        } else if (setRPM < 0) {
-            setRPM = 0;
-        }
+        //setRPM = getDistance() > 10.0 ? (Math.pow(2.50852, ((0.135494 * getDistance()) + 3.20058)) + (7.7212e15 * Math.pow(getDistance(), -13.0483)) + 3209.97) : 4500.0;
+        setRPM = (getDistance() > 8.2 && getDistance() < 20.6) ? (410.347 * Math.sin(0.245553 * getDistance() + 2.27388) + 3507.96) : 
+            ((getDistance() < 8.2) ? 2000 : 6000);
 
         return setRPM;
     }

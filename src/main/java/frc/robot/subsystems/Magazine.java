@@ -46,6 +46,8 @@ public class Magazine extends SubsystemBase {
     private static final double RAMP_RATE = 0.3; // seconds
 
     private boolean manual;
+    private int midCounter;
+    private int topCounter;
 
     private double reduction = 1;
 
@@ -91,18 +93,14 @@ public class Magazine extends SubsystemBase {
      * Writes values to Shuffleboard.
      */
     public void updateShuffleboard() {
-        SmartDashboard.putNumber("Magazine velocity", magEncoder.getVelocity());
-        SmartDashboard.putNumber("M24 temp", magMotor.getMotorTemperature());
+        //SmartDashboard.putNumber("Magazine velocity", magEncoder.getVelocity());
+        //SmartDashboard.putNumber("M24 temp", magMotor.getMotorTemperature());
         SmartDashboard.putBoolean("Top", (topBeamA.get() && topBeamB.get()));
         SmartDashboard.putBoolean("Mid", (midBeamA.get() && midBeamB.get()));
-        SmartDashboard.putBoolean("Chn. 0", topBeamA.get());
-        SmartDashboard.putBoolean("Chn. 1", topBeamB.get());
-        SmartDashboard.putBoolean("Chn. 2", entryBeamA.get());
-        SmartDashboard.putBoolean("Chn. 3", midBeamA.get());
-        SmartDashboard.putBoolean("Chn. 4", midBeamB.get());
-        SmartDashboard.putBoolean("Chn. 5", entryBeamB.get());
-        SmartDashboard.putBoolean("Magazine manual", getManual());
-        SmartDashboard.putNumber("Magazine Position", magEncoder.getPosition()/TICKS_PER_INCH);
+        //SmartDashboard.putBoolean("Magazine manual", getManual());
+        SmartDashboard.putBoolean("BallInMagazine", getBallInMagazine());
+        //SmartDashboard.putNumber("Mid Counter", midCounter);
+        //SmartDashboard.putNumber("Top Counter", topCounter);
     }
 
     /**
@@ -161,5 +159,19 @@ public class Magazine extends SubsystemBase {
 
     public double getVelocity() {
         return magEncoder.getVelocity() * TICKS_PER_INCH / 60;
+    }
+
+    public boolean getBallInMagazine() {
+        boolean ballInMagazine = false;
+        midCounter = 0;
+        topCounter = 0;
+
+        if (!midBeamClear()) midCounter++;
+        if (!topBeamClear()) topCounter++;
+
+        if ((topCounter + 1) == midCounter) ballInMagazine = true; //ball in magazine
+        else if (topCounter == midCounter) ballInMagazine = false; //ball has been shot
+
+        return ballInMagazine;
     }
 }

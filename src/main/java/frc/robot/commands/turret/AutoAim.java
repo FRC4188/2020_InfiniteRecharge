@@ -12,8 +12,7 @@ public class AutoAim extends CommandBase {
 
     private final Turret turret;
     private final Limelight limelight;
-    private double adjust;
-    private double offset;
+    private boolean cont;
 
     /**
      * Constructs new AutoAim command to turn turret to keep vision target centered.
@@ -21,12 +20,11 @@ public class AutoAim extends CommandBase {
      * @param turret - Turret subsystem to use.
      * @param limelight - Limelight subsystem to use.
      */
-    public AutoAim(Turret turret, Limelight limelight, double offset) {
+    public AutoAim(Turret turret, Limelight limelight, boolean cont) {
         addRequirements(turret);
         this.turret = turret;
         this.limelight = limelight;
-        SmartDashboard.putNumber("Turret Aim adjust", -3.0);
-        this.offset = offset;
+        this.cont = cont;
     }
 
     @Override
@@ -36,18 +34,12 @@ public class AutoAim extends CommandBase {
 
     @Override
     public void execute() {
-        if(limelight.hasTarget()) {
-            if((limelight.getSkew() < 24) || limelight.getSkew() > -24) adjust = SmartDashboard.getNumber("Turret Aim adjust", -3.0) - limelight.getOffset();
-            else adjust = SmartDashboard.getNumber("Turret Aim adjust", -3.0);
-            turret.set((-limelight.getHorizontalAngle() + adjust + offset) / 47.0);
-        } else {
-            turret.set(0);
-        }
+        turret.trackTarget(limelight.getHorizontalAngle());
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return (!cont);
     }
 
     @Override

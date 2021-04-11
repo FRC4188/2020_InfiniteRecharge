@@ -37,7 +37,7 @@ public class Intake extends SubsystemBase {
         resetEncoders();
         setRampRate();
         intakeMotor.setIdleMode(IdleMode.kCoast);
-        }
+    }
 
     /**
      * Runs every loop.

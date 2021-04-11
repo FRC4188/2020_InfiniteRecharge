@@ -1,6 +1,9 @@
 package frc.robot.commands.magazine;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpiutil.math.Vector;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Magazine;
 
@@ -39,8 +42,7 @@ public class AutoMagazine extends CommandBase {
         boolean mid = magazine.midBeamClear();
         boolean entry = magazine.entryBeamClear();
 
-        /*
-            if (forw) {
+            /*if (forw) {
                 if (!mid && top) {
                     intake.spin(-1.0, -1.0);
                     magazine.set(0.35);
@@ -66,10 +68,10 @@ public class AutoMagazine extends CommandBase {
                     magazine.set(-0.35);
                     intake.spin(1.0,0.0);
                 }
-            }
-            */
+            }*/
+            
         
-        if (forw) {
+        /*if (forw) {
             if (top) {
                 if(!entry) magazine.set(0.35);
                 else if (!mid) magazine.set(0.175);
@@ -81,16 +83,20 @@ public class AutoMagazine extends CommandBase {
         } else {
             intake.spin(1.0, 1.0);
             magazine.set(-0.5);
-        }
+        }*/
 
         if (forw) {
-            if (top && mid) intake.spinIndexer(-1.0);
-            else intake.spin(0.0, 0.0);
-
-            if (!top) magazine.set(0.75);
-            else magazine.set(0.0);
-            
-
+            if (!magazine.getBallInMagazine()) {
+                intake.spin(-1.0, -0.75);
+                magazine.set(0.5);
+            } else {
+                new WaitCommand(1.0);
+                intake.spin(-1.0, 0.0);
+                magazine.set(0.0);
+            }
+        } else {
+            intake.spin(1.0, 0.5);
+            magazine.set(-0.5);
         }
     }
 

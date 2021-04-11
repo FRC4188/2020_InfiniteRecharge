@@ -25,10 +25,11 @@ import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.shooter.AutoFire;
+import frc.robot.commands.shooter.AutoFireQuantity;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.ManualTurret;
-import frc.robot.commands.turret.TurretAngle;
+import frc.robot.commands.turret.TurretToAngle;
 import frc.robot.commands.turret.ZeroTurret;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
@@ -115,8 +116,9 @@ public class RobotContainer {
         drivetrain.setDefaultCommand(new RunCommand(
                 () -> drivetrain.arcade(pilot.getY(Hand.kLeft), pilot.getX(Hand.kRight), pilot.getBumper(Hand.kLeft)),
                 drivetrain));
-
-        shooter.setDefaultCommand(new SpinShooter(shooter, 4000.0));
+        turret.setDefaultCommand(new RunCommand(() -> turret.set(0.0), turret));;
+    
+        shooter.setDefaultCommand(new SpinShooter(shooter, 2000.0));
     }
 
     /**
@@ -129,13 +131,13 @@ public class RobotContainer {
         pilot.getDpadDownButtonObj().whenPressed(new LowerIntake(intake));
         pilot.getDpadUpButtonObj().whenPressed(new RaiseIntake(intake));
 
-        pilot.getYButtonObj().whenPressed(new AutoFire(shooter, magazine, intake, limelight, turret, true));
+        pilot.getYButtonObj().whileHeld(new AutoFire(shooter, magazine, intake, limelight, turret, true));
         pilot.getYButtonObj().whenReleased(new AutoFire(shooter, magazine, intake, limelight, turret, false));
 
         pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
         pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));
 
-        pilot.getBButtonObj().whenPressed(new AutoMagazine(magazine, intake, true, true));
+        pilot.getBButtonObj().whileHeld(new AutoMagazine(magazine, intake, true, true));
         pilot.getBButtonObj().whenReleased(new AutoMagazine(magazine, intake, true, false));
 
         pilot.getAButtonObj().whileHeld(new AutoMagazine(magazine, intake, false, true));
@@ -148,29 +150,24 @@ public class RobotContainer {
 
         pilot.getStartButtonObj().whenPressed(new KillAll());
 
-        //skills challenges bindings
-        /*copilot.getXButtonObj().whenPressed(new BlueRoutine(drivetrain, intake, magazine, limelight, shooter, turret));
-        copilot.getYButtonObj().whenPressed(new YellowRoutine(drivetrain, intake, magazine, limelight, shooter, turret));
-        copilot.getBButtonObj().whenPressed(new RedRoutine(drivetrain, intake, magazine, limelight, shooter, turret));
-        copilot.getAButtonObj().whenPressed(new GreenRoutine(intake, magazine, shooter, hood));
-        copilot.getRbButtonObj().whenPressed(new ReintroRoutine(drivetrain, intake, magazine));*/
-
         copilot.getStartButtonObj().whenPressed(new KillAll());
 
-        copilot.getAButtonObj().toggleWhenPressed(new FireBrake(climber));
+        copilot.getAButtonObj().whenPressed(new InstantCommand(() -> climber.engagePneuBrake(true), climber));
+        copilot.getAButtonObj().whenReleased(new InstantCommand(() -> climber.engagePneuBrake(false), climber));
 
         copilot.getBButtonObj().toggleWhenPressed(new ToggleHood(hood));
 
-        copilot.getXButtonObj().toggleWhenPressed(new AutoAim(turret, limelight, 0));
+        copilot.getXButtonObj().whileHeld(new AutoAim(turret, limelight, true));
+        copilot.getXButtonObj().whenReleased(new AutoAim(turret, limelight, false));
 
         copilot.getYButtonObj().toggleWhenPressed(new ToggleIntake(intake));
 
         copilot.getRtButtonObj().whileActiveContinuous(new AutoMagazine(magazine, intake, true, true));
         copilot.getLtButtonObj().whileActiveContinuous(new AutoMagazine(magazine, intake, false, true));
 
-        copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, 0.1));
+        copilot.getDpadLeftButtonObj().whileHeld(new ManualTurret(turret, 0.2));
         copilot.getDpadLeftButtonObj().whenReleased(new ManualTurret(turret, 0));
-        copilot.getDpadRightButtonObj().whileHeld(new ManualTurret(turret, -0.1));
+        copilot.getDpadRightButtonObj().whileHeld(new ManualTurret(turret, -0.2));
         copilot.getDpadRightButtonObj().whenReleased(new ManualTurret(turret, 0));
 
         copilot.getRbButtonObj().whileHeld(new ManualClimb(climber, -0.9));
@@ -178,14 +175,33 @@ public class RobotContainer {
         copilot.getLbButtonObj().whileHeld(new ManualClimb(climber, 0.6));
         copilot.getLbButtonObj().whenReleased(new ManualClimb(climber, 0));
 
-        copilot.getBackButtonObj().whenPressed(new ZeroTurret(turret));
+        //copilot.getBackButtonObj().whenPressed(new ZeroTurret(turret));
+        
+        buttonBox.getButton2Obj().whenPressed(new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3));
 
-        buttonBox.getButton1Obj().whenPressed(new TurretAngle(turret, 0));
+        buttonBox.getButton1Obj().whenPressed(new TurretToAngle(turret, 0));
         buttonBox.getButton3Obj().toggleWhenPressed(new SpinShooter(shooter, 3600));
-        buttonBox.getButton4Obj().whenPressed(new TurretAngle(turret, 180));
+        buttonBox.getButton4Obj().whenPressed(new TurretToAngle(turret, 180));
         buttonBox.getButton5Obj().toggleWhenPressed(new SpinShooter(shooter, 4550));
         buttonBox.getButton6Obj().toggleWhenPressed(new SpinShooter(shooter, 6000));
         buttonBox.getButton7Obj().toggleWhenPressed(new SpinShooter(shooter, 2250));
+
+        SmartDashboard.putData("Set Shooter PIDs", new RunCommand(() -> shooter.setPIDs(
+            SmartDashboard.getNumber("Set S P", 0.0),
+            SmartDashboard.getNumber("Set S I", 0.0),
+    
+            SmartDashboard.getNumber("Set S D", 0.0)), shooter));
+        SmartDashboard.putData("Set Shooter Velocity", new InstantCommand(() -> shooter.setVelocity(SmartDashboard.getNumber("Set S Velocity", 0.0)), shooter));
+
+        SmartDashboard.putData("Set Turret Angle PIDs", new RunCommand(() -> turret.setPIDs(
+            SmartDashboard.getNumber("Set T Angle P", 0.0),
+            SmartDashboard.getNumber("Set T Angle I", 0.0),
+            SmartDashboard.getNumber("Set T Angle D", 0.0)), turret));
+        SmartDashboard.putData("Set Turret Angle", new TurretToAngle(turret, SmartDashboard.getNumber("Set T Angle", 0.0)));
+
+        SmartDashboard.putData("Rezero Turret", new ZeroTurret(turret));
+
+        SmartDashboard.putData("Rezero Odometry", new InstantCommand(() -> drivetrain.reset(initialPose), drivetrain));
     }
 
     /**

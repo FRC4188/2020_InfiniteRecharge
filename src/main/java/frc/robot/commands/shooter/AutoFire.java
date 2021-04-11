@@ -2,6 +2,7 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
@@ -16,11 +17,8 @@ public class AutoFire extends CommandBase {
     private Turret turret;
     private Shooter shooter;
     private boolean cont;
-    private double THRESHOLD = 270.0;
-
-    private int midCounter = 0;
-    private int topCounter = 0;
-    private boolean ballInMagazine;
+    private double THRESHOLD = 100.0;
+    
 
     public AutoFire(Shooter shooter, Magazine magazine, Intake intake, Limelight limelight, Turret turret, boolean cont) {
         addRequirements(shooter, magazine, intake, turret);
@@ -53,25 +51,22 @@ public class AutoFire extends CommandBase {
             turret.set(0);
         }                
 
-        if (ready) magazine.set(1.0);
+        /*if (ready) magazine.set(1.0);
         else if (!top) magazine.set(0.25);
         else magazine.set(0.0);
 
         if (ready || (top && entry)) intake.spin(-0.5, 1.0);
-        else intake.spin(-0.5, -1.0);
+        else intake.spin(-0.5, -1.0);*/
 
-        if (!mid) midCounter++;
-        if (!top) topCounter++;
-      
-        if ((topCounter + 1) == midCounter) ballInMagazine = true;
-        else ballInMagazine = false;
-    
-        if ((topCounter == midCounter) && !ballInMagazine) {      //ball has been shot
-          magazine.set(0.75);
-          intake.spin(-1.0, -1.0);
+        if (ready && magazine.getBallInMagazine()) {
+            magazine.set(0.75);
+        } else if (!magazine.getBallInMagazine()) {
+            magazine.set(0.5);
+            intake.spin(-1.0, -0.5);
         } else {
-          magazine.set(0.0);
-          intake.spin(0.0, 0.0);
+            new WaitCommand(1.0);
+            magazine.set(0.0);
+            intake.spin(0.0, 0.0);
         }
     }
 
@@ -85,6 +80,6 @@ public class AutoFire extends CommandBase {
         turret.set(0.0);
         magazine.set(0.0);
         intake.spin(0.0, 0.0);
-        shooter.set(3500.0);
+        shooter.set(2000.0);
     }
 }

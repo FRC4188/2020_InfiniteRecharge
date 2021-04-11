@@ -22,24 +22,24 @@ public class TrenchSixBall extends CspSequentialCommandGroup {
         addCommands(
             new ParallelDeadlineGroup(
                 new TurretToAngle(turret, 180), 
-                new SpinShooter(shooter, 4000),
+                new SpinShooter(shooter, 2000),
                 new LowerIntake(intake)),
 
             new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3),
+
+            new SpinShooter(shooter, 2000),
             
             new ParallelDeadlineGroup(
                 new FollowTrajectory(drivetrain, WaypointsList.TrenchSixBall.DOWN_TRENCH),
-                new AutoMagazine(magazine, intake, true, true),
-                new SpinShooter(shooter, 3000)),
+                new AutoMagazine(magazine, intake, true, true)),
+
             new AutoMagazine(magazine, intake, true, false),
 
             new ParallelDeadlineGroup(
                 new FollowTrajectory(drivetrain, WaypointsList.TrenchSixBall.TO_SHOOT), 
-                new TurretToAngle(turret, 180),
-                new SpinShooter(shooter, 3000)),
-            
-            new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 5),
-            new SpinShooter(shooter, 3500)
+                new TurretToAngle(turret, 180)),
+
+            new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3)
         );
     }
 }

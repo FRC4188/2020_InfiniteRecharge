@@ -25,12 +25,12 @@ public class FireBrake extends CommandBase {
 
     @Override
     public void execute() {
-        climber.engagePneuBrake(false);
+        climber.engagePneuBrake(true);
     }
 
     @Override
     public void end(boolean interrupted) {
-        climber.engagePneuBrake(true);
+        climber.engagePneuBrake(false);
     }
 
     @Override

@@ -2,6 +2,7 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Magazine;
 import frc.robot.subsystems.Shooter;
@@ -18,7 +19,7 @@ public class AutoFireQuantity extends CommandBase {
 
     private int quantity;
 
-    private double THRESHOLD = 250.0;
+    private double THRESHOLD = 50.0;
 
     private boolean lastTop = true;
     
@@ -51,30 +52,38 @@ public class AutoFireQuantity extends CommandBase {
             turret.set(0);
         }                
 
-        if (ready) magazine.set(1.0);
+        /*if (ready) magazine.set(1.0);
         else if (top) magazine.set(0.25);
         else magazine.set(0.0);
 
         if (ready || (top && entry)) intake.spin(-0.5, -1.0);
-        else intake.spin(-0.5, 0.0);
+        else intake.spin(-0.5, 0.0);*/
 
-        if (!lastTop && top) quantity--;
+        if (ready && magazine.getBallInMagazine()) {
+            magazine.set(1.0);
+        } else if (!magazine.getBallInMagazine()) {
+            magazine.set(0.75);
+            intake.spin(-1.0, -0.5);
+        } else {
+            magazine.set(0.0);
+            intake.spin(0.0, 0.0);
+        }
+
+        if (top && !lastTop) quantity--;
 
         lastTop = top;
     }
 
     @Override
     public boolean isFinished() {
-        return (quantity==0);
+        return (quantity == 0);
     }
 
     @Override
     public void end(boolean interrupted) {
-        if(!interrupted) {
             magazine.set(0);
             intake.spin(0,0);
-            shooter.set(3500);
-        }
+            shooter.set(2000);
 
     }
 

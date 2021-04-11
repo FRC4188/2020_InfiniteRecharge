@@ -27,9 +27,9 @@ public class Turret extends SubsystemBase {
     // device initialization
     private final CANSparkMax turretMotor = new CANSparkMax(23, MotorType.kBrushless);
     private final CANEncoder turretEncoder = new CANEncoder(turretMotor);
-    private final ProfiledPIDController aimingPID = new ProfiledPIDController(0.024, 0.003,0.01, new Constraints(MAX_VELOCITY, MAX_ACCELERATION));  
-    private final ProfiledPIDController anglePID = new ProfiledPIDController(0.0, 0.0, 0.0, new Constraints(MAX_VELOCITY, MAX_ACCELERATION));
-
+    private final ProfiledPIDController aimingPID = new ProfiledPIDController(/*0.021*/ 0.035, 0.0, 0.0, new Constraints(MAX_VELOCITY, MAX_ACCELERATION));  
+    private final ProfiledPIDController anglePID = new ProfiledPIDController(0.015, 0.0, 0.0003, new Constraints());
+    //0.1, 0.15
     // constants
     private static final double MAX_VELOCITY = 1.5; // rpm
     private static final double MAX_ACCELERATION = 0.75; // rpm / sec
@@ -53,12 +53,11 @@ public class Turret extends SubsystemBase {
         Notifier shuffle = new Notifier(() -> updateShuffleboard());        
         shuffle.startPeriodic(0.1);
 
-        Notifier setPID = new Notifier(() -> updatePID());
-        setPID.startPeriodic(0.5);
+        SmartDashboard.putNumber("Set T Angle P", aimingPID.getP());
+        SmartDashboard.putNumber("Set T Angle I", aimingPID.getI());
+        SmartDashboard.putNumber("Set T Angle D", aimingPID.getD());
 
-        SmartDashboard.putNumber("Turret P", 0.024);
-        SmartDashboard.putNumber("Turret I", 0.003);
-        SmartDashboard.putNumber("Turret D", 1.0);
+        SmartDashboard.putNumber("Set T Angle", 0.0);
     }
 
     /**
@@ -73,16 +72,12 @@ public class Turret extends SubsystemBase {
      */
     private void updateShuffleboard() {
         SmartDashboard.putNumber("Turret pos (deg)", getPosition());
-        SmartDashboard.putNumber("Turret temp", turretMotor.getMotorTemperature());
-        SmartDashboard.putNumber("Turret raw vel", turretEncoder.getVelocity());
+        //SmartDashboard.putNumber("Turret temp", turretMotor.getMotorTemperature());
+        //SmartDashboard.putNumber("Turret raw vel", turretEncoder.getVelocity());
     }
 
-    private void updatePID() {
-        aimingPID.setPID(
-        SmartDashboard.getNumber("Turret P", 0.0), 
-        SmartDashboard.getNumber("Turret I", 0.0), 
-        SmartDashboard.getNumber("Turret D", 0.0)
-        );
+    public void setPIDs(double kP, double kI, double kD) {
+        aimingPID.setPID(kP, kI, kD);
     }
 
     /**

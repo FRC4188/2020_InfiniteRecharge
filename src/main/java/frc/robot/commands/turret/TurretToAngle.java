@@ -11,7 +11,7 @@ public class TurretToAngle extends CommandBase {
     private final Turret turret;
     private final double angle;
 
-    private static final double POS_TOLERANCE = 0.2; // degrees
+    private static final double POS_TOLERANCE = 5; // degrees
     private static final double VEL_TOLERANCE = 0.25; // degrees per sec
 
     /**

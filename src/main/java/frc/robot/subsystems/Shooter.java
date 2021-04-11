@@ -25,7 +25,7 @@ public class Shooter extends SubsystemBase {
     private static final double MAX_VELOCITY = 21300.0;
     private static final double kF = 1023 / MAX_VELOCITY;
     private static final double ENCODER_TICKS_PER_REV = 2048;
-    private static final double RAMP_RATE = 1.0; // seconds
+    private static final double RAMP_RATE = 2.0; // seconds
 
     private double reduction = 1;
 
@@ -49,6 +49,11 @@ public class Shooter extends SubsystemBase {
 
         Notifier shuffle = new Notifier(() -> updateShuffleboard());        
         shuffle.startPeriodic(0.1);
+
+        SmartDashboard.putNumber("Set S P", 0.0);
+        SmartDashboard.putNumber("Set S I", 0.0);
+        SmartDashboard.putNumber("Set S D", 0.0);
+        SmartDashboard.putNumber("Set S Velocity", 0.0);
     }
 
     /**
@@ -63,17 +68,17 @@ public class Shooter extends SubsystemBase {
      * Writes values to Shuffleboard.
      */
     private void updateShuffleboard() {
-        if (getLeftVelocity() == getRightVelocity()) {
-            SmartDashboard.putBoolean("Shooter motors equal speeds", true);
-            SmartDashboard.putNumber("Shooter RPM", getRightVelocity());
-        } else {
-            SmartDashboard.putBoolean("Shooter motors equal speeds", false);
-            SmartDashboard.putNumber("Left shooter rpm", getLeftVelocity());
-            SmartDashboard.putNumber("Right shooter rpm", getRightVelocity());
-        }
-        
+        SmartDashboard.putNumber("Shooter RPM", getRightVelocity());
     }
 
+    public void setPIDs(double kkP, double kkI, double kkD) {
+        leftShooter.config_kP(0, kkP, 10);
+        leftShooter.config_kI(0, kkI, 10);
+        leftShooter.config_kD(0, kkD, 10);
+        rightShooter.config_kP(0, kkP, 10);
+        rightShooter.config_kI(0, kkI, 10);
+        rightShooter.config_kD(0, kkD, 10);
+    }
     /**
      * Configures gains for SRX closed loop controller.
      */
@@ -109,8 +114,8 @@ public class Shooter extends SubsystemBase {
      * Sets shooter motors to brake mode.
      */
     public void setBrake() {
-        leftShooter.setNeutralMode(NeutralMode.Coast);
-        rightShooter.setNeutralMode(NeutralMode.Coast);
+        leftShooter.setNeutralMode(NeutralMode.Brake);
+        rightShooter.setNeutralMode(NeutralMode.Brake);
     }
 
     /**

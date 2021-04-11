@@ -40,8 +40,8 @@ public class Drivetrain extends SubsystemBase {
     private static final double kV = 2.12; // volt seconds / meter
     private static final double kA = 0.167; // volt seconds squared / meter
     private static final double kP = 3.0;//3.5;
-    private static final double AUTO_MAX_VEL = 8; // meters / second
-    private static final double AUTO_MAX_ACCEL = 3.5; // meters / second squared
+    private static final double AUTO_MAX_VEL = 5; // meters / second
+    private static final double AUTO_MAX_ACCEL = 1.5; // meters / second squared
     private static final double AUTO_MAX_CENTRIP = 1.5; // meters / second squared
     private static final double AUTO_MAX_VOLTAGE = 12; // volts
     private static final double ARCADE_MAX_VEL = 3; // meters / second
@@ -105,7 +105,7 @@ public class Drivetrain extends SubsystemBase {
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getGyroAngle()));
 
         Notifier shuffle = new Notifier(() -> updateShuffleboard());
-        shuffle.startPeriodic(0.1);
+        //shuffle.startPeriodic(0.1);
     }
 
     /**
