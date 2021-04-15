@@ -105,7 +105,7 @@ public class Drivetrain extends SubsystemBase {
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getGyroAngle()));
 
         Notifier shuffle = new Notifier(() -> updateShuffleboard());
-        //shuffle.startPeriodic(0.1);
+        shuffle.startPeriodic(0.1);
     }
 
     /**
@@ -121,12 +121,12 @@ public class Drivetrain extends SubsystemBase {
      * Writes values to Shuffleboard.
      */
     private void updateShuffleboard() {
-        SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
+        //SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
         SmartDashboard.putString("Odometry", getPose().toString());
-        SmartDashboard.putData("Calibrate Gyro", new InstantCommand(gyro::calibrate));
-        SmartDashboard.putData("Zero Gyro", new InstantCommand(gyro::reset));
-        SmartDashboard.putNumber("Left Velocity ", getLeftVelocity());
-        SmartDashboard.putNumber("Right Velocity", getRightVelocity());
+        //SmartDashboard.putData("Calibrate Gyro", new InstantCommand(gyro::calibrate));
+        //SmartDashboard.putData("Zero Gyro", new InstantCommand(gyro::reset));
+        //SmartDashboard.putNumber("Left Velocity ", getLeftVelocity());
+        //SmartDashboard.putNumber("Right Velocity", getRightVelocity());
     }
 
     /**

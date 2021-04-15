@@ -26,6 +26,7 @@ import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.magazine.RunMagazine;
 import frc.robot.commands.shooter.AutoFire;
 import frc.robot.commands.shooter.AutoFireQuantity;
+import frc.robot.commands.shooter.InMotionFire;
 import frc.robot.commands.shooter.SpinShooter;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.ManualTurret;
@@ -133,6 +134,9 @@ public class RobotContainer {
 
         pilot.getYButtonObj().whileHeld(new AutoFire(shooter, magazine, intake, limelight, turret, true));
         pilot.getYButtonObj().whenReleased(new AutoFire(shooter, magazine, intake, limelight, turret, false));
+
+       // pilot.getYButtonObj().whileHeld(new InMotionFire(drivetrain, shooter, turret, limelight));
+       // pilot.getYButtonObj().whenReleased(new InMotionFire(drivetrain, shooter, turret, limelight));
 
         pilot.getXButtonObj().whileHeld(new RunMagazine(magazine, -0.9));
         pilot.getXButtonObj().whenReleased(new RunMagazine(magazine, 0));

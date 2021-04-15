@@ -19,7 +19,7 @@ public class Shooter extends SubsystemBase {
     private WPI_TalonFX rightShooter = new WPI_TalonFX(22);
 
     // constants
-    private static final double kP = 0.35;
+    private static final double kP = 0.3;
     private static final double kI = 0.0;
     private static final double kD = 0.0;
     private static final double MAX_VELOCITY = 21300.0;
@@ -54,6 +54,8 @@ public class Shooter extends SubsystemBase {
         SmartDashboard.putNumber("Set S I", 0.0);
         SmartDashboard.putNumber("Set S D", 0.0);
         SmartDashboard.putNumber("Set S Velocity", 0.0);
+
+        SmartDashboard.putNumber("Quantity", 0.0);
     }
 
     /**
@@ -69,6 +71,7 @@ public class Shooter extends SubsystemBase {
      */
     private void updateShuffleboard() {
         SmartDashboard.putNumber("Shooter RPM", getRightVelocity());
+        
     }
 
     public void setPIDs(double kkP, double kkI, double kkD) {

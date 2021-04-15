@@ -83,7 +83,7 @@ public class Magazine extends SubsystemBase {
         pid.setSmartMotionMaxAccel(MAX_ACCELERATION, 0);
     }
 
-    public void testPIDConfig( double P, double I, double D) {
+    public void testPIDConfig(double P, double I, double D) {
         pid.setP(P);
         pid.setI(I);
         pid.setD(D);

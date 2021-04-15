@@ -72,6 +72,7 @@ public class AutoFireQuantity extends CommandBase {
         if (top && !lastTop) quantity--;
 
         lastTop = top;
+        SmartDashboard.putNumber("Quantity", quantity);
     }
 
     @Override
@@ -82,9 +83,7 @@ public class AutoFireQuantity extends CommandBase {
     @Override
     public void end(boolean interrupted) {
             magazine.set(0);
-            intake.spin(0,0);
+            intake.spin(0, 0);
             shooter.set(2000);
-
     }
-
 }
