@@ -28,7 +28,7 @@ public class Turret extends SubsystemBase {
     private final CANSparkMax turretMotor = new CANSparkMax(23, MotorType.kBrushless);
     private final CANEncoder turretEncoder = new CANEncoder(turretMotor);
     private final ProfiledPIDController aimingPID = new ProfiledPIDController(/*0.021*/ 0.035, 0.0, 0.0, new Constraints(MAX_VELOCITY, MAX_ACCELERATION));  
-    private final ProfiledPIDController anglePID = new ProfiledPIDController(0.015, 0.0, 0.0003, new Constraints());
+    private final ProfiledPIDController anglePID = new ProfiledPIDController(0.03, 0.0, 0.0046, new Constraints());
     //0.1, 0.15
     // constants
     private static final double MAX_VELOCITY = 1.5; // rpm
@@ -53,9 +53,9 @@ public class Turret extends SubsystemBase {
         Notifier shuffle = new Notifier(() -> updateShuffleboard());        
         shuffle.startPeriodic(0.1);
 
-        SmartDashboard.putNumber("Set T Angle P", aimingPID.getP());
-        SmartDashboard.putNumber("Set T Angle I", aimingPID.getI());
-        SmartDashboard.putNumber("Set T Angle D", aimingPID.getD());
+        SmartDashboard.putNumber("Set T Angle P", anglePID.getP());
+        SmartDashboard.putNumber("Set T Angle I", anglePID.getI());
+        SmartDashboard.putNumber("Set T Angle D", anglePID.getD());
 
         SmartDashboard.putNumber("Set T Angle", 0.0);
     }
@@ -77,7 +77,7 @@ public class Turret extends SubsystemBase {
     }
 
     public void setPIDs(double kP, double kI, double kD) {
-        aimingPID.setPID(kP, kI, kD);
+        anglePID.setPID(kP, kI, kD);
     }
 
     /**

@@ -35,7 +35,7 @@ public class Climber extends SubsystemBase {
     private static final int CRUISE_ACCEL = 15000;
     private static final int CRUISE_VEL = 15000;
     private static final double MAX_POSITION = 0;
-    private static final double MIN_POSITION = -197500;
+    private static final double MIN_POSITION = -200000;
 
     /**
      * Constructs a new Climber object and configures devices.
@@ -48,11 +48,11 @@ public class Climber extends SubsystemBase {
         climberLeftMotor.setInverted(true);
         climberLeftMotor.setNeutralMode(NeutralMode.Brake);
         climberRightMotor.setNeutralMode(NeutralMode.Brake);
+        
 
 
         // init
         controllerInit();
-        setBrake();
         setRampRate();
 
         // reset devices
@@ -77,6 +77,7 @@ public class Climber extends SubsystemBase {
         SmartDashboard.putNumber("Left climber velocity", getLeftVelocity());
         SmartDashboard.putNumber("Right climber velocity", getRightVelocity());
         SmartDashboard.putBoolean("Climber brake", !climberSolenoid.get());
+        SmartDashboard.putNumber("diff", Math.abs(getRightPosition() - getMinPosition()));
     }
 
     /**
@@ -229,6 +230,10 @@ public class Climber extends SubsystemBase {
      */
     public double getRightTemp() {
         return climberRightMotor.getTemperature();
+    }
+
+    public boolean getClimberBrake() {
+        return !climberSolenoid.get();
     }
 
 }

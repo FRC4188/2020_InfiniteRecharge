@@ -19,7 +19,7 @@ public class AutoFireQuantity extends CommandBase {
 
     private int quantity;
 
-    private double THRESHOLD = 50.0;
+    private double THRESHOLD = 150.0;
 
     private boolean lastTop = true;
     
@@ -59,7 +59,7 @@ public class AutoFireQuantity extends CommandBase {
         if (ready || (top && entry)) intake.spin(-0.5, -1.0);
         else intake.spin(-0.5, 0.0);*/
 
-        if (ready && magazine.getBallInMagazine()) {
+        /*if (ready && magazine.getBallInMagazine()) {
             magazine.set(1.0);
         } else if (!magazine.getBallInMagazine()) {
             magazine.set(0.75);
@@ -67,7 +67,28 @@ public class AutoFireQuantity extends CommandBase {
         } else {
             magazine.set(0.0);
             intake.spin(0.0, 0.0);
+        }*/
+        if (quantity <= 3) {
+            if (ready) {
+                magazine.set(1.0);
+                intake.spin(-0.4, -0.5);
+            } else {
+                magazine.set(0.0);
+                intake.spin(0, 0);
+            }
+        } else if (quantity >= 4) {
+            if (ready && magazine.getBallInMagazine()) {
+                magazine.set(1.0);
+            } else if (!magazine.getBallInMagazine()) {
+                magazine.set(0.75);
+                intake.spin(-1.0, -0.5);
+            } else {
+                magazine.set(0.0);
+                intake.spin(0.0, 0.0);
+            }
         }
+
+
 
         if (top && !lastTop) quantity--;
 
@@ -84,6 +105,6 @@ public class AutoFireQuantity extends CommandBase {
     public void end(boolean interrupted) {
             magazine.set(0);
             intake.spin(0, 0);
-            shooter.set(2000);
+            shooter.setVelocity(2500);
     }
 }

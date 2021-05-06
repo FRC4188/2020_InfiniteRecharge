@@ -123,6 +123,7 @@ public class Drivetrain extends SubsystemBase {
     private void updateShuffleboard() {
         //SmartDashboard.putNumber("Gyro Angle", getGyroAngle());
         SmartDashboard.putString("Odometry", getPose().toString());
+        SmartDashboard.putNumber("Drivetrain Velocity", (getLeftVelocity() + getRightVelocity()) / 2);
         //SmartDashboard.putData("Calibrate Gyro", new InstantCommand(gyro::calibrate));
         //SmartDashboard.putData("Zero Gyro", new InstantCommand(gyro::reset));
         //SmartDashboard.putNumber("Left Velocity ", getLeftVelocity());

@@ -19,13 +19,13 @@ public class Shooter extends SubsystemBase {
     private WPI_TalonFX rightShooter = new WPI_TalonFX(22);
 
     // constants
-    private static final double kP = 0.3;
+    private static final double kP = 1.0;
     private static final double kI = 0.0;
-    private static final double kD = 0.0;
+    private static final double kD = 600.0;
     private static final double MAX_VELOCITY = 21300.0;
-    private static final double kF = 1023 / MAX_VELOCITY;
+    private static final double kF = 0.75 * 1023 / 16220;
     private static final double ENCODER_TICKS_PER_REV = 2048;
-    private static final double RAMP_RATE = 2.0; // seconds
+    private static final double RAMP_RATE = 0.7; // seconds
 
     private double reduction = 1;
 
@@ -34,8 +34,11 @@ public class Shooter extends SubsystemBase {
      */
     public Shooter() {
 
+        
         // inversion
         leftShooter.setInverted(true);
+
+        leftShooter.follow(rightShooter);
 
         // setup encoders
         leftShooter.configSelectedFeedbackSensor(TalonFXFeedbackDevice.IntegratedSensor, 0, 10);
@@ -50,12 +53,16 @@ public class Shooter extends SubsystemBase {
         Notifier shuffle = new Notifier(() -> updateShuffleboard());        
         shuffle.startPeriodic(0.1);
 
-        SmartDashboard.putNumber("Set S P", 0.0);
-        SmartDashboard.putNumber("Set S I", 0.0);
-        SmartDashboard.putNumber("Set S D", 0.0);
+        SmartDashboard.putNumber("Set S P", kP);
+        SmartDashboard.putNumber("Set S I", kI);
+        SmartDashboard.putNumber("Set S D", kD);
         SmartDashboard.putNumber("Set S Velocity", 0.0);
+        SmartDashboard.putNumber("Set S Voltage", 0.0);
 
         SmartDashboard.putNumber("Quantity", 0.0);
+
+        SmartDashboard.putNumber("Formula RPM", 0.0);
+
     }
 
     /**

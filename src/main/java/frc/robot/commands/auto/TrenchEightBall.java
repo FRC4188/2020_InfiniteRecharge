@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.drive.FollowTrajectory;
 import frc.robot.commands.intake.LowerIntake;
+import frc.robot.commands.intake.RaiseIntake;
 import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.shooter.AutoFireQuantity;
 import frc.robot.commands.shooter.SpinShooter;
@@ -24,36 +25,34 @@ public class TrenchEightBall extends CspSequentialCommandGroup {
 
     public TrenchEightBall (Drivetrain drivetrain, Turret turret, Shooter shooter, Magazine magazine, Intake intake, Limelight limelight) {
         addCommands(
+            
             new ParallelDeadlineGroup(
-                new TurretToAngle(turret, 180), 
-                new SpinShooter(shooter, 4000),
+                new TurretToAngle(turret, 175), 
+                new SpinShooter(shooter, 3140),
                 new LowerIntake(intake)),
 
-            new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3),
+            new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 5)
             
-            new ParallelDeadlineGroup(
-                new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.DOWN_TRENCH),
-                new AutoMagazine(magazine, intake, true, true),
-                new SpinShooter(shooter, 3000)),
-            new AutoMagazine(magazine, intake, true, false),
+            /*new ParallelDeadlineGroup(
+                new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.DOWN_TRENCH, new TrajectoryConfig(4.0, 2.0)
+                    .addConstraint(new CentripetalAccelerationConstraint(1.5))),
+                new AutoMagazine(magazine, intake, true, true)),
 
-            new ParallelDeadlineGroup(
-                new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.INTO_RENDEVOUS,
-                new TrajectoryConfig(1.5, 1.0)
-                .addConstraint(new CentripetalAccelerationConstraint(1.0))),
-                new TurretToAngle(turret, 0),
-                new SpinShooter(shooter, 3000)),
+            new AutoMagazine(magazine, intake, true, false)*/
+
+            /*new ParallelDeadlineGroup(
+                new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.END_RENDEVOUS, new TrajectoryConfig(2.75, 1.26)
+                    .addConstraint(new CentripetalAccelerationConstraint(1.0))),
+                new AutoMagazine(magazine, intake, true, true)),
+
+            new AutoMagazine(magazine, intake, true, false),*/
+
+            /*new ParallelDeadlineGroup(
+                new TurretToAngle(turret, -29), 
+                new RaiseIntake(intake),
+                new SpinShooter(shooter, 3580)),
             
-            new ParallelDeadlineGroup(
-                new SequentialCommandGroup(
-                    new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.THROUGH_RENDEVOUS, drivetrain.getTrajectoryConfig().setEndVelocity(0.25)),
-                    new FollowTrajectory(drivetrain, WaypointsList.TrenchEightBall.TO_SHOOT, drivetrain.getTrajectoryConfig().setStartVelocity(0.25))),
-                new AutoMagazine(magazine, intake, true, true),
-                new SpinShooter(shooter, 4000)),
-
-            new AutoMagazine(magazine, intake, true, false),
-            new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 5),
-            new SpinShooter(shooter, 3500)
+            new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 5)*/
         );
     }
 

@@ -125,48 +125,48 @@ public class WaypointsList {
     );
 
     public static final class TrenchSixBall {
-        public static final Pose2d INITIAL_POSE = new Pose2d(0.3, 0.0, new Rotation2d());
+        public static final Pose2d INITIAL_POSE = new Pose2d(0, 0.0, new Rotation2d());
 
         public static final Waypoints DOWN_TRENCH = new Waypoints(
             List.of(
                 INITIAL_POSE,
-                new Pose2d(1.77, 1.68, new Rotation2d()),
-                new Pose2d(4.42, 1.68, new Rotation2d())
+                //new Pose2d(1.2, 1.2, Rotation2d.fromDegrees(32)),
+                new Pose2d(2.0, 1.57, new Rotation2d()),
+                new Pose2d(2.98, 1.57, new Rotation2d()),
+                new Pose2d(4.1, 1.58, new Rotation2d())
             ), false);
 
         public static final Waypoints TO_SHOOT = new Waypoints(
             List.of(
-                new Pose2d(4.42, 1.68, new Rotation2d()),
-                new Pose2d(0.3, 0, new Rotation2d())
+                new Pose2d(4.1, 1.58, new Rotation2d()),
+                INITIAL_POSE
             ), true);
     }
 
     public static final class TrenchEightBall {
-        public static final Pose2d INITIAL_POSE = new Pose2d(3.664413, 5.663597, new Rotation2d());
+        public static final Pose2d INITIAL_POSE = new Pose2d(0, 0, new Rotation2d());
 
         public static final Waypoints DOWN_TRENCH = new Waypoints(
             List.of(
                 INITIAL_POSE,
-                new Pose2d(6.4, 7.17481, new Rotation2d()),
-                new Pose2d(8.0, 7.1839, new Rotation2d())
+                new Pose2d(1.33, 1.32, Rotation2d.fromDegrees(37.5)),
+                new Pose2d(2.12, 1.60, new Rotation2d()),
+                new Pose2d(2.98, 1.60, new Rotation2d()),
+                new Pose2d(3.9, 1.60, new Rotation2d())
             ), false);
 
-        public static final Waypoints INTO_RENDEVOUS = new Waypoints(
+        public static final Waypoints END_RENDEVOUS = new Waypoints(
             List.of(
-                new Pose2d(7.85735, 6.262254, Rotation2d.fromDegrees(109.990414)),
-                new Pose2d(8.903125, 5.005867, Rotation2d.fromDegrees(-155.662961))
-            ), true);
-
-        public static final Waypoints THROUGH_RENDEVOUS = new Waypoints(
-            List.of(
-                new Pose2d(8.903125, 5.005867, Rotation2d.fromDegrees(-155.662961)),
-                new Pose2d(6.515633, 4.023848, Rotation2d.fromDegrees(-155.662961))
+                new Pose2d(4, 1.68, new Rotation2d()),
+                new Pose2d(4.58, 0.19, Rotation2d.fromDegrees(-82.7)),
+                new Pose2d(4.26, -1, Rotation2d.fromDegrees(-141.39)),
+                new Pose2d(3.2, -1.84, Rotation2d.fromDegrees(-156.3))
             ), false);
         
         public static final Waypoints TO_SHOOT = new Waypoints(
             List.of(
-                new Pose2d(6.677321, 4.163156, Rotation2d.fromDegrees(-155.662961)),
-                new Pose2d(5.26001, 4.191111, Rotation2d.fromDegrees(147.24539))
+                new Pose2d(3.38, -1.64, Rotation2d.fromDegrees(-156.3)),
+                new Pose2d(0.25, -1.06, Rotation2d.fromDegrees(130.93))
             ), false);
     }
 
