@@ -2,8 +2,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.CvSource;
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode.PixelFormat;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeCamera {
 
@@ -12,7 +13,7 @@ public class IntakeCamera {
 
     public void start() {
         // Creates UsbCamera and MjpegServer [1] and connects them
-        CameraServer.getInstance().startAutomaticCapture();
+        CameraServer.getInstance().startAutomaticCapture().setExposureAuto();
 
         // Creates the CvSink and connects it to the UsbCamera
         CvSink cvSink = CameraServer.getInstance().getVideo();

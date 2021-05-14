@@ -15,8 +15,9 @@ import frc.robot.commands.climb.FireBrake;
 import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.FollowTrajectory;
+import frc.robot.commands.auto.LTrenchSixBall;
+import frc.robot.commands.auto.MTrenchSixBall;
 import frc.robot.commands.auto.TrenchEightBall;
-import frc.robot.commands.auto.TrenchSixBall;
 import frc.robot.commands.auto.WheelEightBall;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.LowerIntake;
@@ -195,8 +196,11 @@ public class RobotContainer {
         buttonBox.getButton3Obj().toggleWhenPressed(new SpinShooter(shooter, 3600));
         buttonBox.getButton4Obj().whenPressed(new TurretToAngle(turret, 180));
         buttonBox.getButton5Obj().toggleWhenPressed(new SpinShooter(shooter, 4550));
-        buttonBox.getButton6Obj().toggleWhenPressed(new SpinShooter(shooter, 6000));
-        buttonBox.getButton7Obj().toggleWhenPressed(new SpinShooter(shooter, 2250));
+
+        buttonBox.getButton6Obj().whileHeld(new ManualClimb(climber, -0.9));
+        buttonBox.getButton6Obj().whenReleased(new ManualClimb(climber, 0.0));
+        buttonBox.getButton7Obj().whileHeld(new ManualClimb(climber, 0.6));
+        buttonBox.getButton7Obj().whenReleased(new ManualClimb(climber, 0.0));
 
         SmartDashboard.putData("Set Shooter PIDs", new RunCommand(() -> shooter.setPIDs(
             SmartDashboard.getNumber("Set S P", 0.0),
@@ -223,7 +227,8 @@ public class RobotContainer {
     private void putChooser() throws IOException {
         autoChooser.addOption("Do Nothing", null);
         
-        autoChooser.addOption("Left Trench 6-Ball", new TrenchSixBall(drivetrain, turret, shooter, magazine, intake, limelight));
+        autoChooser.addOption("Left Trench 6-Ball (M)", new MTrenchSixBall(drivetrain, turret, shooter, magazine, intake, limelight));
+        autoChooser.addOption("Left Trench 6-Ball (L)", new LTrenchSixBall(drivetrain, shooter, intake, magazine, limelight, turret));
         autoChooser.addOption("Left Trench 8-Ball", new TrenchEightBall(drivetrain, turret, shooter, magazine, intake, limelight));
         autoChooser.addOption("Wheel 8-Ball", new WheelEightBall(drivetrain, shooter, turret, limelight, intake, magazine));
         
