@@ -55,7 +55,7 @@ public class Magazine extends SubsystemBase {
      * Constructs new magazine object and configures devices.
      */
     public Magazine() {
-        magMotor.setInverted(true);
+        magMotor.setInverted(false);
         magMotor.setIdleMode(IdleMode.kBrake);
         setRampRate();
 
@@ -107,7 +107,7 @@ public class Magazine extends SubsystemBase {
      * Sets belt motor to a given percentage [-1.0, 1.0].
      */
     public void set(double percent) {
-        magMotor.set(percent * reduction);
+        magMotor.set(-percent * reduction);
     }
 
     public void setPosition(double position) {

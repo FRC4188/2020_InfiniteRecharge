@@ -20,7 +20,7 @@ public class Intake extends SubsystemBase {
     private Solenoid intakeSolenoid = new Solenoid(0);
 
     // constants
-    private static final double RAMP_RATE = 0.5; // seconds
+    private static final double RAMP_RATE = 0.15; // seconds
     private static final double INTAKE_TIMEOUT = 20;
 
     double intakeSet;
