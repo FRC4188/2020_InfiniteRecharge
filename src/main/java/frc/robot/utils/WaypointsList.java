@@ -124,7 +124,7 @@ public class WaypointsList {
             ), true
     );
 
-    public static final class TrenchSixBall {
+    public static final class MTrenchSixBall {
         public static final Pose2d INITIAL_POSE = new Pose2d(0, 0.0, new Rotation2d());
 
         public static final Waypoints DOWN_TRENCH = new Waypoints(
@@ -133,16 +133,34 @@ public class WaypointsList {
                 //new Pose2d(1.2, 1.2, Rotation2d.fromDegrees(32)),
                 new Pose2d(2.0, 1.57, new Rotation2d()),
                 new Pose2d(2.98, 1.57, new Rotation2d()),
-                new Pose2d(4.1, 1.58, new Rotation2d())
+                new Pose2d(4.1, 1.57, new Rotation2d())
             ), false);
 
         public static final Waypoints TO_SHOOT = new Waypoints(
             List.of(
-                new Pose2d(4.1, 1.58, new Rotation2d()),
+                new Pose2d(4.1, 1.57, new Rotation2d()),
                 INITIAL_POSE
             ), true);
     }
 
+    public static final class LTrenchSixBall {
+        public static final Pose2d INITIAL_POSE = new Pose2d(0, 0, new Rotation2d());
+
+        public static final Waypoints DOWN_TRENCH = new Waypoints(
+            List.of(
+                INITIAL_POSE,
+                //new Pose2d(1.2, 1.2, Rotation2d.fromDegrees(32)),
+                new Pose2d(2.0, 0.72, new Rotation2d()),
+                new Pose2d(2.98, 0.72, new Rotation2d()),
+                new Pose2d(4.1, 0.72, new Rotation2d())
+            ), false);
+
+        public static final Waypoints TO_SHOOT = new Waypoints(
+            List.of(
+                new Pose2d(4.1, 0.72, new Rotation2d()),
+                INITIAL_POSE
+            ), true);
+    }
     public static final class TrenchEightBall {
         public static final Pose2d INITIAL_POSE = new Pose2d(0, 0, new Rotation2d());
 

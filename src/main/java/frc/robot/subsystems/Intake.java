@@ -4,9 +4,12 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.CANSparkMax.IdleMode;
+
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.Coworking;
 /**
  * Class encapsulating intake function.
  */
@@ -37,6 +40,9 @@ public class Intake extends SubsystemBase {
         resetEncoders();
         setRampRate();
         intakeMotor.setIdleMode(IdleMode.kCoast);
+
+        Notifier shuffle = new Notifier(() -> updateShuffleboard());
+        //shuffle.startPeriodic(0.1);
     }
 
     /**
@@ -54,12 +60,15 @@ public class Intake extends SubsystemBase {
             intakeSolenoid.set(true);
         }
         */
+
+        Coworking.getInstance().intakeSpeed = getIntakeVelocity();
+        Coworking.getInstance().intakeSet = getIntakeSet();
     }
 
     /**
      * Prints values to ShuffleBoard.
      */
-    public void updateShuffleboard() {
+    private void updateShuffleboard() {
         SmartDashboard.putNumber("Intake Position", getIntakePosition());
         SmartDashboard.putNumber("Indexer Position", getIndexerPosition());
         //SmartDashboard.putNumber("PolyRoller Position", getPolyRollerPosition());
@@ -67,6 +76,7 @@ public class Intake extends SubsystemBase {
         SmartDashboard.putNumber("Intake Motor Set", intakeSet);
         SmartDashboard.putNumber("Intake Temp", intakeMotor.getMotorTemperature());
         SmartDashboard.putNumber("Indexer Temp", indexerMotor.getMotorTemperature());
+        SmartDashboard.putNumber("Intake Velocity", getIntakeVelocity());
     }
 
     /**
@@ -138,6 +148,14 @@ public class Intake extends SubsystemBase {
 
     public void setReduction(double reduction) {
         this.reduction = reduction;
+    }
+
+    public double getIntakeVelocity() {
+        return intakeEncoder.getVelocity();
+    }
+
+    public double getIntakeSet() {
+        return intakeMotor.get();
     }
 
     /**

@@ -195,7 +195,7 @@ public class Limelight extends SubsystemBase {
         //setRPM = (Math.pow(1.28449e-5, (getDistance() - 8.69353))) + (2.97767 * Math.pow((getDistance()+4.28663), 2)) + (-124.827 * (getDistance()-32.6752)) - 9.2825e7;
         //setRPM = getDistance() > 10.0 ? (Math.pow(2.50852, ((0.135494 * getDistance()) + 3.20058)) + (7.7212e15 * Math.pow(getDistance(), -13.0483)) + 3209.97) : 4500.0;
         setRPM = (getDistance() > 7.5 && getDistance() < 20.6) ? (410.347 * Math.sin(0.245553 * getDistance() + 2.27388) + 3507.96) : 
-            ((getDistance() < 8.2) ? 2000 : 6000);
+            ((getDistance() < 8.2) ? 2000 : 5600);
 
         return setRPM;
     }

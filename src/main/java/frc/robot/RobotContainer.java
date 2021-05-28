@@ -17,12 +17,15 @@ import frc.robot.commands.climb.ManualClimb;
 import frc.robot.commands.drive.CenterBall;
 import frc.robot.commands.drive.DriveCenterPort;
 import frc.robot.commands.drive.FollowTrajectory;
+import frc.robot.commands.auto.LTrenchSixBall;
+import frc.robot.commands.auto.MTrenchSixBall;
 import frc.robot.commands.auto.TrenchEightBall;
-import frc.robot.commands.auto.TrenchSixBall;
 import frc.robot.commands.auto.WheelEightBall;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.intake.RaiseIntake;
+import frc.robot.commands.intake.SpinIndexer;
+import frc.robot.commands.intake.SpinJustIntake;
 import frc.robot.commands.intake.ToggleIntake;
 import frc.robot.commands.magazine.AutoMagazine;
 import frc.robot.commands.magazine.RunMagazine;
@@ -130,6 +133,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         pilot.getRbButtonObj().whileHeld(new CenterBall(drivetrain, camera, () -> pilot.getY(Hand.kLeft)));
+        pilot.getLbButtonObj().whenPressed(new ToggleIntake(intake));
 
         pilot.getDpadDownButtonObj().whenPressed(new LowerIntake(intake));
         pilot.getDpadUpButtonObj().whenPressed(new RaiseIntake(intake));
@@ -188,16 +192,27 @@ public class RobotContainer {
         copilot.getLbButtonObj().whileHeld(new ManualClimb(climber, 0.6));
         copilot.getLbButtonObj().whenReleased(new ManualClimb(climber, 0));
 
-        //copilot.getBackButtonObj().whenPressed(new ZeroTurret(turret));
-        
-        //buttonBox.getButton2Obj().whenPressed(new AutoClimb(climber));
-        buttonBox.getButton2Obj().whileHeld(new InMotionFire(drivetrain, shooter, turret, limelight));
-        buttonBox.getButton1Obj().whenPressed(new TurretToAngle(turret, 0));
-        buttonBox.getButton3Obj().toggleWhenPressed(new SpinShooter(shooter, 3600));
-        buttonBox.getButton4Obj().whenPressed(new TurretToAngle(turret, 180));
-        buttonBox.getButton5Obj().toggleWhenPressed(new SpinShooter(shooter, 4550));
-        buttonBox.getButton6Obj().toggleWhenPressed(new SpinShooter(shooter, 6000));
-        buttonBox.getButton7Obj().toggleWhenPressed(new SpinShooter(shooter, 2250));
+        copilot.getBackButtonObj().whenPressed(new ZeroTurret(turret));
+
+        buttonBox.getButton2Obj().whenPressed(new SpinJustIntake(intake, -1.0))
+            .whenReleased(new SpinJustIntake(intake, 0.0));
+        buttonBox.getButton1Obj().whenPressed(new SpinIndexer(intake, -0.75))
+            .whenReleased(new SpinIndexer(intake, 0.0));
+        buttonBox.getButton3Obj().whenPressed(new SpinIndexer(intake, 0.75))
+            .whenReleased(new SpinIndexer(intake, 0.0));
+        buttonBox.getButton4Obj().whenPressed(new RunMagazine(magazine, 0.625))
+            .whenReleased(new RunMagazine(magazine, 0.0));
+        buttonBox.getButton5Obj().whenPressed(new SpinShooter(shooter, 3500.0))
+            .whenReleased(new SpinShooter(shooter, 2000.0));
+        buttonBox.getButton6Obj().whileHeld(new TurretToAngle(turret, 180.0));
+        buttonBox.getButton7Obj().whenPressed(new TurretToAngle(turret, 0.0));
+        buttonBox.getButton8Obj().whileHeld(new RunCommand(() -> {
+            intake.spin(0.0, 0.0);
+            magazine.set(0.0);
+            climber.set(0.0);
+            turret.set(0.0);
+            shooter.set(0.0);
+        }, intake, magazine, climber, turret, shooter));
 
         SmartDashboard.putData("Set Shooter PIDs", new RunCommand(() -> shooter.setPIDs(
             SmartDashboard.getNumber("Set S P", 0.0),
@@ -224,7 +239,8 @@ public class RobotContainer {
     private void putChooser() throws IOException {
         autoChooser.addOption("Do Nothing", null);
         
-        autoChooser.addOption("Left Trench 6-Ball", new TrenchSixBall(drivetrain, turret, shooter, magazine, intake, limelight));
+        autoChooser.addOption("Left Trench 6-Ball (M)", new MTrenchSixBall(drivetrain, turret, shooter, magazine, intake, limelight));
+        autoChooser.addOption("Left Trench 6-Ball (L)", new LTrenchSixBall(drivetrain, shooter, intake, magazine, limelight, turret));
         autoChooser.addOption("Left Trench 8-Ball", new TrenchEightBall(drivetrain, turret, shooter, magazine, intake, limelight));
         autoChooser.addOption("Wheel 8-Ball", new WheelEightBall(drivetrain, shooter, turret, limelight, intake, magazine));
         

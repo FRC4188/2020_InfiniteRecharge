@@ -48,8 +48,6 @@ public class Climber extends SubsystemBase {
         climberLeftMotor.setInverted(true);
         climberLeftMotor.setNeutralMode(NeutralMode.Brake);
         climberRightMotor.setNeutralMode(NeutralMode.Brake);
-        
-
 
         // init
         controllerInit();
@@ -58,6 +56,7 @@ public class Climber extends SubsystemBase {
         // reset devices
         resetEncoders();
 
+        engagePneuBrake(true);
     }
 
     /**

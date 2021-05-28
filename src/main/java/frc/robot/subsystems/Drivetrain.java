@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.LinearFilter;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -21,6 +22,7 @@ import edu.wpi.first.wpilibj.trajectory.constraint.CentripetalAccelerationConstr
 import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.utils.Coworking;
 
 /**
  * Class encapsulating drivetrain function.
@@ -146,10 +148,24 @@ public class Drivetrain extends SubsystemBase {
         rightMotor.setVoltage(rightVolts);
     }
 
+
+    boolean lastSet;
+    LinearFilter filter = LinearFilter.movingAverage(50);
     /**
      * Sets desired wheel speeds using closed loop control.
      */
     public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
+        boolean reduce = false;
+        boolean isSet = Coworking.getInstance().intakeSet != 0.0;
+        if (isSet) {
+            double speed = filter.calculate(Coworking.getInstance().intakeSpeed);
+            reduce = Math.abs(speed) < 950.0;
+        } else if (lastSet) {
+            filter = LinearFilter.movingAverage(50);
+        }
+
+        lastSet = isSet;
+
         double leftVel = speeds.leftMetersPerSecond;
         double rightVel = speeds.rightMetersPerSecond;
         SmartDashboard.putNumber("Left Vel Setpoint", leftVel);
@@ -160,7 +176,9 @@ public class Drivetrain extends SubsystemBase {
                 + leftFeedforward;
         double rightOutput = rightPid.calculate(getRightVelocity(), rightVel)
                 + rightFeedforward;
-        tankVolts(leftOutput, rightOutput);
+
+        if (!reduce) tankVolts(leftOutput, rightOutput);
+        else tankVolts(leftOutput * 0.8, rightOutput * 0.8);
     }
 
     public void setSpeeds(double left, double right) {
