@@ -33,6 +33,7 @@ import frc.robot.commands.shooter.AutoFire;
 import frc.robot.commands.shooter.AutoFireQuantity;
 import frc.robot.commands.shooter.InMotionFire;
 import frc.robot.commands.shooter.SpinShooter;
+import frc.robot.commands.test.MotorTest;
 import frc.robot.commands.turret.AutoAim;
 import frc.robot.commands.turret.ManualTurret;
 import frc.robot.commands.turret.TurretToAngle;
@@ -260,4 +261,7 @@ public class RobotContainer {
         return autoCommand;
     }
 
+    public Command getTestCommand() {
+        return new MotorTest(shooter, intake, magazine, turret);
+    }
 }
