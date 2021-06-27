@@ -28,7 +28,7 @@ public class MTrenchSixBall extends CspSequentialCommandGroup {
                 new LowerIntake(intake),
                 new SpinShooter(shooter, 3100)),
 
-            new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3),
+            new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3).withTimeout(5.0),
             
             new ParallelDeadlineGroup(
                 new FollowTrajectory(drivetrain, WaypointsList.MTrenchSixBall.DOWN_TRENCH, new TrajectoryConfig(4.0, 2.0)

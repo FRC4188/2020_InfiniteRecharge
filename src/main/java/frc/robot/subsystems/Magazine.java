@@ -19,8 +19,8 @@ public class Magazine extends SubsystemBase {
 
     // device initialization
     private final CANSparkMax magMotor = new CANSparkMax(11, MotorType.kBrushless);
-    private final CANEncoder magEncoder = new CANEncoder(magMotor);
-    private final CANPIDController pid = new CANPIDController(magMotor);
+    private final CANEncoder magEncoder = magMotor.getEncoder();
+    private final CANPIDController pid = magMotor.getPIDController();
 
     private final DigitalInput topBeamA = new DigitalInput(0);
     private final DigitalInput topBeamB = new DigitalInput(1);

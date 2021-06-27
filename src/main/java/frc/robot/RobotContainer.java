@@ -205,8 +205,8 @@ public class RobotContainer {
             .whenReleased(new RunMagazine(magazine, 0.0));
         buttonBox.getButton5Obj().whenPressed(new SpinShooter(shooter, 3500.0))
             .whenReleased(new SpinShooter(shooter, 2000.0));
-        buttonBox.getButton6Obj().whileHeld(new TurretToAngle(turret, 180.0));
-        buttonBox.getButton7Obj().whenPressed(new TurretToAngle(turret, 0.0));
+        buttonBox.getButton6Obj().whileHeld(new TurretToAngle(turret, 0.0));
+        buttonBox.getButton7Obj().whenPressed(new TurretToAngle(turret, 180.0));
         buttonBox.getButton8Obj().whileHeld(new RunCommand(() -> {
             intake.spin(0.0, 0.0);
             magazine.set(0.0);
