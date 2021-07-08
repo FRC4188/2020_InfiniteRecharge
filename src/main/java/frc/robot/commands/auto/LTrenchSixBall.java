@@ -33,24 +33,24 @@ public class LTrenchSixBall extends CspSequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelDeadlineGroup(
-        new TurretToAngle(turret, 190), 
+        new TurretToAngle(turret, 208.0), 
         new LowerIntake(intake),
-        new SpinShooter(shooter, 3100)),
+        new SpinShooter(shooter, 3100.0)),
 
     new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3),
     
     new ParallelDeadlineGroup(
-        new FollowTrajectory(drivetrain, WaypointsList.LTrenchSixBall.DOWN_TRENCH, new TrajectoryConfig(4.0, 1.75)
-            .addConstraint(new CentripetalAccelerationConstraint(1.5))),
+        new FollowTrajectory(drivetrain, WaypointsList.LTrenchSixBall.DOWN_TRENCH, new TrajectoryConfig(1.75, 1.25)
+        .addConstraint(new CentripetalAccelerationConstraint(1.5))),
         new AutoMagazine(magazine, intake, true, true)),
 
 
     new ParallelDeadlineGroup(
-        new FollowTrajectory(drivetrain, WaypointsList.LTrenchSixBall.TO_SHOOT, new TrajectoryConfig(4.0, 2.25)
-            .addConstraint(new CentripetalAccelerationConstraint(1.5))), 
+        new FollowTrajectory(drivetrain, WaypointsList.LTrenchSixBall.TO_SHOOT, new TrajectoryConfig(2.0, 2.25)
+        .addConstraint(new CentripetalAccelerationConstraint(1.5))), 
         new AutoMagazine(magazine, intake, true, true),    
-        new TurretToAngle(turret, 185),
-        new SpinShooter(shooter, 3100)),
+        new TurretToAngle(turret, 208.0),
+        new SpinShooter(shooter, 3100.0)),
 
     new AutoMagazine(magazine, intake, true, false),
 

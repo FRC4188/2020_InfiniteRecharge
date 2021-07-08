@@ -57,6 +57,7 @@ public class ManualClimb extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
+        climber.engagePneuBrake(true);
     }
 
     @Override

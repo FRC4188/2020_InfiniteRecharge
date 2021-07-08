@@ -150,15 +150,15 @@ public class WaypointsList {
             List.of(
                 INITIAL_POSE,
                 //new Pose2d(1.2, 1.2, Rotation2d.fromDegrees(32)),
-                new Pose2d(2.0, 0.72, new Rotation2d()),
-                new Pose2d(2.98, 0.72, new Rotation2d()),
-                new Pose2d(4.1, 0.72, new Rotation2d())
+                new Pose2d(2.0, 0.0, new Rotation2d()),
+                new Pose2d(2.98, 0.0, new Rotation2d()),
+                new Pose2d(4.1, 0.0, new Rotation2d())
             ), false);
 
         public static final Waypoints TO_SHOOT = new Waypoints(
             List.of(
-                new Pose2d(4.1, 0.72, new Rotation2d()),
-                INITIAL_POSE
+                new Pose2d(4.1, 0.0, new Rotation2d()),
+                new Pose2d(1.0, 0.0, new Rotation2d())
             ), true);
     }
     public static final class TrenchEightBall {
