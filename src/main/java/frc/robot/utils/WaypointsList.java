@@ -224,4 +224,29 @@ public class WaypointsList {
                 new Pose2d(5.73352, 5.862665, Rotation2d.fromDegrees(-169.963017))
             ), false);
     }
+
+    public static final class WheelFiveBall {
+        public static final Pose2d INITIAL_POSE = new Pose2d();
+        public static final Waypoints FIRST_PATH = new Waypoints(
+            List.of(
+                INITIAL_POSE,
+                new Pose2d(1.56, 0, Rotation2d.fromDegrees(-20)),
+                new Pose2d(2.25, -0.32, Rotation2d.fromDegrees(-31))
+            ), false);
+        public static final Waypoints SECOND_PATH = new Waypoints(
+            List.of(
+                new Pose2d(2.25, -0.32, Rotation2d.fromDegrees(-31)),
+                new Pose2d(1.56, 0, Rotation2d.fromDegrees(-20))
+            ), true);
+        public static final Waypoints THIRD_PATH = new Waypoints(
+            List.of(
+                new Pose2d(1.56, 0, Rotation2d.fromDegrees(-20)),
+                new Pose2d(2.4, -0.61, Rotation2d.fromDegrees(-44.5))
+            ), false);
+        public static final Waypoints FOURTH_PATH = new Waypoints(
+            List.of(
+                new Pose2d(2.4, -0.61, Rotation2d.fromDegrees(-44.5)),
+                new Pose2d(0.6, 2.87, Rotation2d.fromDegrees(-17))
+            ), true);
+    }
 }

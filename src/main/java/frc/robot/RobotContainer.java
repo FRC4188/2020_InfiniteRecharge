@@ -21,6 +21,7 @@ import frc.robot.commands.auto.LTrenchSixBall;
 import frc.robot.commands.auto.MTrenchSixBall;
 import frc.robot.commands.auto.TrenchEightBall;
 import frc.robot.commands.auto.WheelEightBall;
+import frc.robot.commands.auto.WheelFiveBall;
 import frc.robot.commands.hood.ToggleHood;
 import frc.robot.commands.intake.LowerIntake;
 import frc.robot.commands.intake.RaiseIntake;
@@ -243,7 +244,7 @@ public class RobotContainer {
         autoChooser.addOption("Left Trench 6-Ball (M)", new MTrenchSixBall(drivetrain, turret, shooter, magazine, intake, limelight));
         autoChooser.addOption("Left Trench 6-Ball (L)", new LTrenchSixBall(drivetrain, shooter, intake, magazine, limelight, turret));
         //autoChooser.addOption("Left Trench 8-Ball", new TrenchEightBall(drivetrain, turret, shooter, magazine, intake, limelight));
-        autoChooser.addOption("Wheel 8-Ball", new WheelEightBall(drivetrain, shooter, turret, limelight, intake, magazine));
+        autoChooser.addOption("Wheel 5-Ball", new WheelFiveBall(drivetrain, magazine, intake, shooter, limelight, turret));
         
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
