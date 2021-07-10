@@ -40,7 +40,7 @@ public class LTrenchSixBall extends CspSequentialCommandGroup {
     new AutoFireQuantity(shooter, turret, magazine, intake, limelight, 3),
     
     new ParallelDeadlineGroup(
-        new FollowTrajectory(drivetrain, WaypointsList.LTrenchSixBall.DOWN_TRENCH, new TrajectoryConfig(1.75, 1.25)
+        new FollowTrajectory(drivetrain, WaypointsList.LTrenchSixBall.DOWN_TRENCH, new TrajectoryConfig(1.25, 1.15)
         .addConstraint(new CentripetalAccelerationConstraint(1.5))),
         new AutoMagazine(magazine, intake, true, true)),
 
